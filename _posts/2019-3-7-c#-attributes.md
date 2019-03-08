@@ -9,6 +9,14 @@ title:  "C# Attributes and Properities"
 
  C# by contrast has first-class syntax support for a true "property"; a member whose usage is identical to a field, but that defines a getter/setter code block pair. This makes for a clear differentiation between the definition and usage of **"data members"** versus **"function members"**; anything the object has in terms of containing and storing data is modeled using either a public field or property, which have identical usage syntax (best practice is to use a property, especially since the introduction of the "auto-property" which is syntactical shorthand for a property that acts on a backing field). Anything the object does in the sense of producing or processing data is a method. The line blurs when you consider using read-only (or write-only) properties, but overall this feature of the language makes the intent of objects and their members much easier to understand.<br>
  
+ There are also abstract properities for derived class:
+ ```
+ public abstract string Name {
+         get;
+         set;
+      }
+ ```
+
  In a word, properties decouples data members and function and made class declaration clearly.
 
 
