@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "C# Delegate and Events"
+categories: C#
 ---
 
 

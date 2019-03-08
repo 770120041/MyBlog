@@ -1,6 +1,7 @@
 ---
 layout: post
-title:  "C# Attributes and Properities"
+title:  "C# Indexers"
+categories: C#
 ---
 ## Intro
 An indexer allows an object to be indexed such as an array. When you define an indexer for a class, this class behaves similar to a virtual array. You can then access the instance of this class using the array access operator ([ ]).

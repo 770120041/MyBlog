@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "C# Attributes and Properities"
+categories: C#
 ---
 
 # Properties
