@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Catelog
-permalink: /catelog/
+title: Catalog
+permalink: /catalog/
 ---
 <div class="container">
     {% for category in site.categories %}
