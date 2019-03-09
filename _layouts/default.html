@@ -29,20 +29,12 @@
           <nav>
             <a href="{{ site.baseurl }}/">Blog</a>
             <a href="{{ site.baseurl }}/about">About</a>
+            <a href="{{ site.baseurl }}/catalog">Catalog</a>
           </nav>
         </header>
       </div>
     </div>
-    <div class="container">
-        {% for category in site.categories %}
-        <h3>{{ category[0] }}</h3>
-        <ul>
-          {% for post in category[1] %}
-            <li><a href="myblog/{{post.url}}">{{ post.title }}</a></li>
-          {% endfor %}
-        </ul>
-      {% endfor %}
-    </div>
+    
     <div id="main" role="main" class="container">
       {{ content }}
     </div>
