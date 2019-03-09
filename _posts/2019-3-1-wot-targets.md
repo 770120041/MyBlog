@@ -12,6 +12,6 @@ categories: WOT
 | T10       | 3,510,000 | Obj.277   | 6,100,000 | 4,345,000 |
 | WZ111-4   | 3,510,000 | WZ111-5A  | 6,100,000 | 4,345,000 |
 
-<br>
-for 15% account, the total would be about 12,680,000 <br>
-and need to sell before 4.11 according to last year
+
+For 15% account, the total would be about 12,680,000 <br>
+And need to sell before 4.11 according to last year's anniversary celebration.
