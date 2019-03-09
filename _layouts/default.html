@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html>
   <head>
     <title>{% if page.title %}{{ page.title }} – {% endif %}{{ site.name }} – {{ site.description }}</title>
@@ -33,7 +33,16 @@
         </header>
       </div>
     </div>
-
+    <div>
+        {% for category in site.categories %}
+        <h3>{{ category[0] }}</h3>
+        <ul>
+          {% for post in category[1] %}
+            <li><a href="{{ post.url }}">{{ post.title }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endfor %}
+    </div>
     <div id="main" role="main" class="container">
       {{ content }}
     </div>

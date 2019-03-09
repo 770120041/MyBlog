@@ -3,6 +3,7 @@ layout: post
 title:  "Wot targets"
 categories: WOT
 ---
+
 ### Before Wargaming's 8th anniversary, vehecles replacement plan:
 | Before    | Price     | After     | Price     | Needed    |
 | :----:    |:----:     |:----:     |:----:     |:----:     | 
