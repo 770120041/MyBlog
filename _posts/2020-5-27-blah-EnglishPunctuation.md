@@ -51,7 +51,7 @@ categories: blah
 <hr>
 
 ## 括号 Parentheses 
-[]
+()
 <hr>
 
 # 引号
@@ -63,6 +63,6 @@ categories: blah
 "
 <hr>
 
-## 星号 ellipsis 
+## 星号 Asterisk
 *
 <hr>
