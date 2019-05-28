@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "cmd102 File"
+title:  "cmd104 Variables"
 categories: cmd
 ---
 ## Declaration
