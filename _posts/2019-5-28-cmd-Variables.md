@@ -36,6 +36,9 @@ The command line argument variables are * *%0: the name of the script/program as
 
 NOTE: DOS does support more than 9 command line arguments, however, you cannot directly read the 10th argument of higher. 
 
+Reference [here](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/shift) for document of shifting variabels.
+
+
 
 ## Tricks with Command Line Arguments
 Command Line Arguments also support some really useful optional syntax to run quasi-macros on command line arguments that are file paths. These macros are called variable substitution support and can resolve the path, timestamp, or size of file that is a command line argument. The documentation for this super useful feature is a bit hard to find – run ‘FOR /?’ and page to the end of the output.
