@@ -37,6 +37,8 @@ ECHO %*
 EXIT /B 0
 ```
 
+The %* batch parameter is a wildcard reference to all the arguments, not including %0, that are passed to the batch file.
+
 ## Calling a function
 We use the `CALL` keyword to invoke the quasi function labelled :tee. We can pass command line arguments just like we’re calling another batch file.
 
