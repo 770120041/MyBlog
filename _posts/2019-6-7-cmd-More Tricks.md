@@ -60,6 +60,11 @@ We can even combined the techniques. Notice how we use the () grouping construct
 :: variables
 PUSHD "%~dp0" >NUL && SET root=%CD% && POPD >NUL
 ```
+<hr>
 
-
-
+## Making a script sleep for N seconds
+You can use `PING.EXE` to fake a real nix style `sleep` command.
+```
+:: sleep for 2 seconds
+PING.EXE -N 2 127.0.0.1 > NUL
+```
