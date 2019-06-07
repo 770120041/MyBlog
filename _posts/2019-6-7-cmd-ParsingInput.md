@@ -11,32 +11,32 @@ Escape Character [Docs](https://www.robvanderwoude.com/escapechars.php)
 <hr>
 
 ## Comman shortcuts
-[docs]https://ss64.com/nt/syntax-args.html
+[docs](https://ss64.com/nt/syntax-args.html)
 
 
 here is a list of common shortcuts:
 
-%~f1 - expands %1 to a Fully qualified path name - C:\utils\MyFile.txt
+`%~f1` - expands %1 to a Fully qualified path name - C:\utils\MyFile.txt
 
-%~d1 - expands %1 to a Drive letter only - C:
+`%~d1` - expands %1 to a Drive letter only - C:
 
-%~p1 - expands %1 to a Path only - \utils\
+`%~p1` - expands %1 to a Path only - \utils\
 
-%~n1 - expands %1 to a file Name, or if only a path is present (with no trailing backslash) - the last folder in that path
+`%~n1` - expands %1 to a file Name, or if only a path is present (with no trailing backslash) - the last folder in that path
 
-%~x1 - expands %1 to a file eXtension only - .txt
+`%~x1` - expands %1 to a file eXtension only - .txt
 
-%~s1 - changes the meaning of f, n and x to reference the Short name (see note below)
+`%~s1` - changes the meaning of f, n and x to reference the Short name (see note below)
 
-%~1 - expand %1 removing any surrounding quotes (")
+`%~1` - expand %1 removing any surrounding quotes (")
 
-%~a1 - display the file attributes of %1
+`%~a1` - display the file attributes of %1
 
-%~t1 - display the date/time of %1
+`%~t1` - display the date/time of %1
 
-%~z1 - display the file size of %1
+`%~z1` - display the file size of %1
 
-%~$PATH:1 - search the PATH environment variable and expand %1 to the fully qualified name of the first match found.
+`%~$PATH:1` - search the PATH environment variable and expand %1 to the fully qualified name of the first match found.
 
 The modifiers above can be combined:
 
