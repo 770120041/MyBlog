@@ -108,6 +108,10 @@ We must know the internal working of both to decide which one is to be used.
 | Deletion time   | log(n) + Rebalance  | Same as search |
 {:.mbtablestyle}
 
+Unordered Map way to insert:
+
+`umap[key] = val`
+
 ## Pair
 This class couples together a pair of values, which may be of different types
 A pair is a specific case of a std::tuple with two elements
