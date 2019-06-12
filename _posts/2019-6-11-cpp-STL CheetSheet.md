@@ -4,11 +4,11 @@ title:  "CPP STL Cheetsheet"
 categories: CPP
 ---
 # Common Methods
-* Collection.empty() - Returns whether the set is empty.
-* Collection.size() - Returns the number of elements in the set.
-* Collection.begin() – Returns an iterator to the first element in the set.
-* Collection.end() – Returns an iterator to the theoretical element that follows last element in the set.
-* Collection.clear() – It is used to remove all the elements of the vector container
+* Container.empty() - Returns whether the set is empty.
+* Container.size() - Returns the number of elements in the set.
+* Container.begin() – Returns an iterator to the first element in the set.
+* Container.end() – Returns an iterator to the theoretical element that follows last element in the set.
+* Container.clear() – It is used to remove all the elements of the vector container
 <hr>
 
 ## Vector
