@@ -41,18 +41,31 @@ Parameters:
 <hr>
 
 ## Stack
-
+* top() – Returns a reference to the top most element of the stack,**not pop it out** – Time Complexity : O(1)
+* push(g) – Adds the element ‘g’ at the top of the stack – Time Complexity : O(1)
+* pop() – Deletes the top most element of the stack – Time Complexity : O(1)
 
 <hr>
 
 ## Queue
-
+* front
+* back
+* push_back
+* pop_front
 
 <hr>
 
 ## Deque
+* push_back   Add element at the end (public member function )
+* push_front  Insert element at beginning (public member function )
+* pop_back    Delete last element (public member function )
+* pop_front   Delete first element (public member function )
 
-
+Element access:
+* operator[] Access element (public member function )
+* at() Access element (public member function )
+* front() Access first element (public member function )  
+* back() Access last element (public member function )
 <hr>
 
 ## SET
@@ -96,6 +109,10 @@ map count() function in C++ STL– Returns the number of matches to element with
 map find() function in C++ STL– Returns an iterator to the element with key value ‘g’ in the map if found, else returns the iterator to end.
 
 Return Value: The function returns an iterator or a constant iterator which refers to the position where the key is present in the map. If the key is not present in the map container, it returns an iterator or a constant iterator which refers to map.end().
+
+<hr>
+
+## String
 
 <hr>
 
