@@ -110,7 +110,22 @@ We must know the internal working of both to decide which one is to be used.
 
 Unordered Map way to insert:
 
-`umap[key] = val`
+### Insert and [] works differently
+#### []
+it has overload the `[`  `umap[key] = val` 
+
+operator[] returns a reference to the element you are searching for. When no element exists, it creates a new default element. (So requires default constructor)
+
+When used to insert an element: myMap[key] = value;, the value will **override the old value** for the key.
+    
+#### Insert
+using insert( pair<T,T>(key,value) 
+`insert` Returns an iterator and a bool. The iterator is to the element. The bool indicates if a new element was inserted (true), or it already contained an element for the key (false).
+
+Using insert doesn't require a default constructor.
+
+When used to insert a new element: myMap.insert({key, value});, the **old value does not get updated** if key already exists in the map.
+
 
 ## Pair
 This class couples together a pair of values, which may be of different types
