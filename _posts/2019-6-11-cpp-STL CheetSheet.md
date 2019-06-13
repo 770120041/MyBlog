@@ -50,6 +50,10 @@ Parameters:
 
 <hr>
 
+## Deque
+
+
+<hr>
 
 ## SET
 [docs](https://www.geeksforgeeks.org/set-in-cpp-stl/)
