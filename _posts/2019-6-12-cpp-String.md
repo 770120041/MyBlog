@@ -10,3 +10,8 @@ we do have the guarantee that the variable will be initialized to an empty strin
 C++ strings allow you to directly initialize, assign, compare, and reassign with the intuitive operators, as well as printing and reading (e.g., from the user), as shown in the example below:
 
 ## Mutable
+
+## Methods
+
+
+## StringStream
