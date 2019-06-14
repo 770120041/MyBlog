@@ -171,3 +171,32 @@ for(auto i = 0 ; i < list2.size() ; i++ ){
     }
 }
 ```
+
+<hr>
+
+## Sort
+Sort(Beign,End, comparator)
+
+
+#### Comparator
+
+* Define using a Funciton
+```
+bool cmp(int a, int b)
+{
+    return occurrences[a] < occurrences[b];
+}
+
+```
+
+* Define using Lambda Function, the syntax begins with `[]`, after this is a normal function
+```
+void abssort(float* x, unsigned n) {
+    std::sort(x, x + n,
+        // Lambda expression begins
+        [](float a, float b) {
+            return (std::abs(a) < std::abs(b));
+        } // end of lambda expression
+    );
+}
+```
