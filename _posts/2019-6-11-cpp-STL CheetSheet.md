@@ -147,6 +147,13 @@ Using insert doesn't require a default constructor.
 
 When used to insert a new element: myMap.insert({key, value});, the **old value does not get updated** if key already exists in the map.
 
+<hr>
+
+## MultiMap
+Multimap is similar to map with an addition that multiple elements can have same keys. Rather than each element being unique, the key value and mapped value pair has to be unique in this case.
+
+
+<hr>
 
 ## Pair
 This class couples together a pair of values, which may be of different types
