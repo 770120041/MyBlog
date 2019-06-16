@@ -82,3 +82,42 @@ int search(vector<int> &nums,int target){
 ```
 
 <hr>
+
+## 81. Search in Rotated Sorted Array II
+The key is remove duplicate ones, also ,how to judge which part is sorted.
+
+For my implementation, if we remove duplicate ones from right, then if `nums[mid] <= nums[right]`, we can make sure right part is sorted! 
+
+#### Iterative Solution
+```
+ bool search(vector<int>& nums, int target) {
+    int left=0,right=nums.size()-1;
+    while(left<=right){
+        while(nums[left] == nums[right] && left<right){
+            right--;
+        }
+        int mid = (left+right)/2;
+        // printf("left=%d,right=%d,mid=%d\n",left,right,mid);
+        if(nums[mid] == target) return true;
+        // right part is sorted, if nums[right]==nums[mid], it can't be in right part because nums[mid] != target
+        if(nums[mid] <= nums[right]){
+            if(target > nums[mid] && target <= nums[right]){
+                left=mid+1;
+            }
+            else{
+                right=mid-1;
+            }
+        }
+        else{
+            // printf("left is sorted\n");
+            if(target >= nums[left] && target < nums[mid]){
+                right = mid-1;
+            }
+            else{
+                left = mid+1;
+            }
+        }
+    }
+    return false;
+}
+```
