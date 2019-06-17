@@ -252,3 +252,24 @@ def findMin(self, nums):
     return result
         
 ```
+Recursive Solution
+```
+class Solution(object):
+    def helper(self,nums,left,right,result):
+        if left+1 >= right:
+            result = min(result,nums[left],nums[right])
+            return result
+        
+        while nums[left] == nums[right] and left<right:
+            right -= 1
+        mid = (left+right)/2
+        result = min(nums[mid],result)
+        if nums[mid] <= nums[right]:
+            return self.helper(nums,left,mid,result)
+        else:
+            return self.helper(nums,mid,right,result)
+        
+    def findMin(self, nums):
+        n = len(nums)
+        return self.helper(nums,0,n-1,nums[0])
+```
