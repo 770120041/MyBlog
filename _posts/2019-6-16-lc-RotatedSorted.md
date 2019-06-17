@@ -88,6 +88,37 @@ The key is remove duplicate ones, also ,how to judge which part is sorted.
 
 For my implementation, if we remove duplicate ones from right, then if `nums[mid] <= nums[right]`, we can make sure right part is sorted! 
 
+
+#### Resurcive Solution
+```
+bool helper(vector<int> &nums,int start,int end,int target){
+    if(left > right) return false;
+    while(nums[left] == nums[right] && left<right){
+        right -- ;
+    }
+    int mid = (left+right)/2;
+    if(nums[mid] == target) return mid;
+    if(nums[mid] <= nums[right]){
+        if(target > nums[mid] && target <= nums[right]){
+            helper(vector<int> &nums, mid+1,right, target);
+        }
+        else{
+            helper(vector<int> &nums, left,mid-1, target);
+        }
+    }
+    else{
+        if(target >= nums[start] && target < nums[mid]){
+           helper(vector<int> &nums, left,mid-1, target);
+        }
+        else{
+            helper(vector<int> &nums, mid+1,right, target);
+        }
+    }
+}
+bool search(vector<int>& nums, int target) {
+    return helper()
+}
+```
 #### Iterative Solution
 ```
  bool search(vector<int>& nums, int target) {
@@ -121,3 +152,67 @@ For my implementation, if we remove duplicate ones from right, then if `nums[mid
     return false;
 }
 ```
+<hr>
+
+## 153. Find Minimum in Rotated Sorted Array
+The key is that minimum is either in `nums[0] or nums[nums.size()-1]` and less than all others, or it is less than its neighbors.
+
+Because we need to solve edge condition, like `nums[0] or nums[nums.size()-1]` are minimum, so using Python would be easier to write. For C++, we can add dummy element to postion 0 and n, and right shift the element, which would also solve this problem. For C, just creating array staring in postion 1.
+
+#### Iterative Solution
+```
+class Solution(object):
+    def findMin(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        n = len(nums)
+        if n < 2: return nums[0]
+        left,right = 0, n-1
+        while left+1<right:
+            mid = (left+right)/2
+            # print "left=",left," right=",right," mid=",mid
+            if nums[mid] < nums[mid-1] and mid < nums[mid+1]:
+                return nums[mid]
+            if nums[mid] < nums[right]:
+                right=mid
+            else:
+                left=mid
+        if nums[left]<nums[left+1] and nums[left] < nums[left-1]:
+            return nums[left]
+        return nums[right]
+```
+
+#### Recursive Solution
+```
+class Solution(object):
+    def helper(self,nums,left,right):
+        # print "left=%d,right=%d" %(left,right)
+        if left+1 >= right:
+            if nums[left] < nums[right]: 
+                return nums[left]
+            return nums[right]
+       
+        mid = (left+right)/2
+        
+        # print "mid=%d" %(mid)
+        if nums[mid] < nums[mid-1] and mid < nums[mid+1]:
+            return nums[mid]
+        
+        if nums[mid] < nums[right]:
+            return self.helper(nums,left,mid)
+        else:
+            return self.helper(nums,mid,right) 
+    def findMin(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        return self.helper(nums,0,len(nums)-1)
+        
+```
+
+<hr>
+
+## 153. Find Minimum in Rotated Sorted Array
