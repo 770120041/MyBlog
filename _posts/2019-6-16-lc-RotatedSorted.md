@@ -171,7 +171,7 @@ class Solution(object):
         if n < 2: return nums[0]
         left,right = 0, n-1
         while left+1<right:
-            mid = (left+right)/2
+            mid = (left+right)//2
             # print "left=",left," right=",right," mid=",mid
             if nums[mid] < nums[mid-1] and mid < nums[mid+1]:
                 return nums[mid]
@@ -194,7 +194,7 @@ class Solution(object):
                 return nums[left]
             return nums[right]
        
-        mid = (left+right)/2
+        mid = (left+right)//2
         
         # print "mid=%d" %(mid)
         if nums[mid] < nums[mid-1] and mid < nums[mid+1]:
@@ -215,4 +215,40 @@ class Solution(object):
 
 <hr>
 
-## 153. Find Minimum in Rotated Sorted Array
+## 154. Find Minimum in Rotated Sorted Array II
+The array may contain **duplicates**.
+
+Using same strategy to handle duplicates
+
+Do remember that we can using the way to find pivot to decrese the size of search by half.
+
+If we find the increasing part, then find its counterpart
+
+#### Iterative Solution
+```
+def findMin(self, nums):
+    """
+    :type nums: List[int]
+    :rtype: int
+    """
+    n = len(nums)
+    if n < 2: return nums[0]
+    result = nums[0]
+    left,right = 0, n-1
+    
+    while left+1<right:
+        while nums[left] == nums[right] and left < right:
+            right -= 1
+        mid = (left+right)/2
+        result = min(result,nums[mid])
+        
+        # right part is incresing
+        if nums[mid] <= nums[right]:
+            right = mid
+        else:
+            left = mid
+    result = min(result,nums[left],nums[right])
+    
+    return result
+        
+```
