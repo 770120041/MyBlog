@@ -92,6 +92,26 @@ Return Value: The function returns 1 or 0 as the set contains unique elements on
 
 <hr>
 
+## Unordered_map
+Set set is an ordered sequence of unique keys whereas unordered_set is a set in which key can be stored in any order, so unordered.
+Set is implemented as balanced tree structure that is why it is possible to maintain an order between the elements (by specific tree traversal). Time complexity of set operations is O(Log n) while for unordered_set, it is O(1).  
+
+Methods on unordered_set
+For unordered_set many function are defined among which most useful are size and empty for capacity, find for searching a key, insert and erase for modification.
+The Unordered_set allows only unique keys, for duplicate keys unordered_multiset should be used.
+
+If insert don't find, it will go to container.end()
+
+#### Go over the set
+```
+  for (const string& x : mySet) { 
+        cout << x 
+             << " "; 
+    }
+```
+ 
+<hr>
+
 ## Map
 Red-Black Tree for keys. So insert and delete are all O(logN)
 

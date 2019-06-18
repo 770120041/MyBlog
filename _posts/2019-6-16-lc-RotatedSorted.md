@@ -100,18 +100,18 @@ bool helper(vector<int> &nums,int start,int end,int target){
     if(nums[mid] == target) return mid;
     if(nums[mid] <= nums[right]){
         if(target > nums[mid] && target <= nums[right]){
-            helper(vector<int> &nums, mid+1,right, target);
+            return helper(vector<int> &nums, mid+1,right, target);
         }
         else{
-            helper(vector<int> &nums, left,mid-1, target);
+            return helper(vector<int> &nums, left,mid-1, target);
         }
     }
     else{
         if(target >= nums[start] && target < nums[mid]){
-           helper(vector<int> &nums, left,mid-1, target);
+            return helper(vector<int> &nums, left,mid-1, target);
         }
         else{
-            helper(vector<int> &nums, mid+1,right, target);
+            return helper(vector<int> &nums, mid+1,right, target);
         }
     }
 }
