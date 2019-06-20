@@ -227,3 +227,21 @@ void abssort(float* x, unsigned n) {
     );
 }
 ```
+<hr>
+
+## Priority Queue
+```
+template<
+    class T,
+    class Container = std::vector<T>,
+    class Compare = std::less<typename Container::value_type>
+> class priority_queue;
+```
+
+#### Functions
+* top() accesses the top element 
+* empty() checks whether the underlying container is empty 
+* size() returns the number of elements 
+
+* push() inserts element and sorts the underlying container 
+* pop() removes the top element 
