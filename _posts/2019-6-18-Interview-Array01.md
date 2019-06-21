@@ -147,3 +147,34 @@ public:
 ```
 
 Using lowerBound, time coplexity is O(n*logn) because BST search is O(logn)
+
+##  122. Best Time to Buy and Sell Stock II
+We can consider that how to get every possible profit.  Once we encouter `nums[i]<nums[i-1]`, we 
+begin to consider the `nums[i-1]` as the new buying price. The reason can be easily see when drawing a graph.
+
+```
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int totalSum = 0;
+        int lastSum = 0;
+        if(prices.size()<=1){
+            return 0;
+        }
+        
+        int lastMin = prices[0];
+        for(int i=1;i<prices.size();i++){
+            if(prices[i] < prices[i-1]){
+                totalSum += lastSum;
+                lastSum = 0;
+                lastMin = prices[i];
+            } 
+            else{
+                lastSum = max(lastSum,prices[i]-lastMin);
+            }
+        }
+    
+        return totalSum+lastSum;
+    }
+};
+```
