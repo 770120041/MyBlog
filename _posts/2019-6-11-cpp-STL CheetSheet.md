@@ -245,3 +245,27 @@ template<
 
 * push() inserts element and sorts the underlying container 
 * pop() removes the top element 
+
+<hr>
+
+## lower_bound
+
+**This is not suitable for STL using Hashmap, because HashMap don't have comparator**
+Syntax:
+```
+template< class ForwardIt, class T, class Compare >
+constexpr ForwardIt lower_bound( ForwardIt first, ForwardIt last, const T& value, Compare comp );
+```
+Returns an iterator pointing to the first element in the range [first, last) that is not less than (i.e. greater or equal to) value, or last if no such element is found.
+
+The range [first, last) must be partitioned with respect to the expression element < value or comp(element, value), i.e., all elements for which the expression is true must precede all elements for which the expression is false. A fully-sorted range meets this criterion.
+
+The first version uses operator< to compare the elements, the second version uses the given comparison function comp.
+
+#### Parameters
+```
+
+* first, last	-	iterators defining the partially-ordered range to examine
+* value	-	value to compare the elements to
+* comp	-	binary predicate which returns ​true if the first argument is less than (i.e. is ordered before) the second. 
+

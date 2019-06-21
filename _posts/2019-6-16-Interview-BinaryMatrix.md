@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Search Sorted Matrix"
-categories: lc
+categories: Interview
 ---
 ## 74. Search a 2D Matrix
 Binary search 

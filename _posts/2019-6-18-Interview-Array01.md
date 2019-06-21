@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "Arrays 01"
-categories: lc
+title:  "Leetcode Arrays 01"
+categories: Interview
 ---
 ##  189. Rotate Array
 ```
@@ -119,4 +119,31 @@ int hIndex(vector<int>& citations) {
     return i;
 }
 ```
+<hr>
 
+## 220. Contains Duplicate III
+First idea: find from nums[i]-t to nums[i]+t for each position; Time complexity would be O(n*t)
+
+If t is large, then too slow
+
+If we scan postion max(0,i-k) and min(n-1,i+k), then time complexity is O(n*k)
+
+```
+class Solution {
+public:
+    bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
+        map<long long ,int> uMap;
+        int j=0;
+        for(int i=0;i<nums.size();i++){
+            if(i-j >k) uMap.erase(nums[j++]);
+            auto it = uMap.lower_bound((long long)nums[i]-t);
+            if(it != uMap.end() && abs(it->first - nums[i]) <= t) return true;
+            uMap[nums[i]] = i;
+        }
+        
+        return false;
+    }
+};
+```
+
+Using lowerBound, time coplexity is O(n*logn) because BST search is O(logn)

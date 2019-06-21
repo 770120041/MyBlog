@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "DFS 01 "
-categories: lc
+categories: Interview
 ---
 ## 77. Combinations
 
