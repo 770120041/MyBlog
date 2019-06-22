@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Leetcode Record"
+title:  "Lintcode Record"
 categories: Interview
 ---
 ## Solved
@@ -9,6 +9,12 @@ categories: Interview
 * 188
 * 309
 * 42
+
+* 754 
+* 128
+* 164
+* 135 
+* 330
 ## Reviewed
 
 
