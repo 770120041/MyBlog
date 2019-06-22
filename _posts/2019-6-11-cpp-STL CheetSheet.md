@@ -48,10 +48,10 @@ Parameters:
 <hr>
 
 ## Queue
-* front
-* back
-* push_back
-* pop_front
+* front() Mostly used for checking the head of queue
+* back()
+* push_back()
+* pop_front()
 
 <hr>
 
