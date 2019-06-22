@@ -1,5 +1,10 @@
-## Blog
-url: https://770120041.github.io/myblog/
+## Zhe Liu's Blog
+URL: https://770120041.github.io/myblog/
+
+A simple personel blog
+
+
+
 
 ## About
 Personal blog forked from [jekyll-now](https://github.com/barryclark/jekyll-now)
