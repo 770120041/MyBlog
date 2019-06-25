@@ -164,3 +164,31 @@ public:
     }
 };
 ```
+
+## 139. Word Break
+Brute force, but use an array to record the history of brute force.
+```
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        int n = s.size();
+        vector<bool> dp(n+1,false);
+        //dp[i] 1到i之间可以可以break
+        dp[0] = true;
+        unordered_set<string> wordSet;
+        for(auto s: wordDict){
+            wordSet.insert(s);
+        }
+        for(int i=1;i<=n;i++){
+            for(int j=0;j<i;j++){
+                // 0-j is a break string  ,j-i is a break string
+                if(dp[j]&& wordSet.count(s.substr(j,i-j))){
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[n];
+    }
+};
+```
