@@ -192,3 +192,25 @@ public:
     }
 };
 ```
+
+## 279. Perfect Squares
+Dp means the minimum number of perfect squres forming number i.
+
+Must start from dp[0] = 0, we can validate that dp[i+j*j] = dp[4] = 1. so i need to be 0
+
+The complexity is O(N*sqrt(N))
+```
+class Solution {
+public:
+    int numSquares(int n) {
+        vector<int> dp(n+1,INT_MAX);
+        dp[0] = 0;
+        for(int i=0;i<=n;i++){
+            for(int j=1;i+j*j<=n;j++){
+                dp[i+j*j] = min(dp[i+j*j],dp[i]+1);
+            }
+        }
+        return dp[n];
+    }
+};
+```

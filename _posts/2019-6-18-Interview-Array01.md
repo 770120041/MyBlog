@@ -200,3 +200,34 @@ public:
     }
 };
 ```
+
+## 334. Increasing Triplet Subsequence
+DP is to use dp[i] as the numbers that smaller than i, O(n) to get the result of dp
+
+Or we can use two numbers to maintain the two large elements
+
+```
+class Solution {
+public:
+    bool increasingTriplet(vector<int>& nums) {
+        int m1=INT_MAX,m2=INT_MAX;
+        for(int i=0;i<nums.size();i++){
+            if(nums[i] > m1) return true;
+            else if (nums[i] > m2) m1 = nums[i];
+            else{
+                // m1 = INT_MAX;
+                m2 = nums[i];
+            }
+        }
+        return false;
+    }
+};
+```
+There are one thing that need to be considered, 
+```
+else{
+    // m1 = INT_MAX;
+    m2 = nums[i];
+}
+```
+Why we don't need to update m1 = INT_MAX. The reason is that if `nums[i] > m1`, then there is some numbers before m1 that is smaller than m1(otherwise `m1 = INT_MAX`), if we update m1, we may miss some solutions.
