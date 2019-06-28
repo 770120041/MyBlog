@@ -194,7 +194,7 @@ public:
 ```
 
 ## 279. Perfect Squares
-Dp means the minimum number of perfect squres forming number i.
+Dp[i] means the minimum number of perfect squres forming number i.
 
 Must start from dp[0] = 0, we can validate that dp[i+j*j] = dp[4] = 1. so i need to be 0
 

@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Search Sorted Matrix"
+title:  "Leetcode Search Sorted Matrix"
 categories: Interview
 ---
 ## 74. Search a 2D Matrix
