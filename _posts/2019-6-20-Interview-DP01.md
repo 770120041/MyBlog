@@ -193,6 +193,8 @@ public:
 };
 ```
 
+<hr>
+
 ## 279. Perfect Squares
 Dp[i] means the minimum number of perfect squres forming number i.
 
@@ -215,7 +217,72 @@ public:
 };
 ```
 
-## 312. Burst Balloons
-https://www.cnblogs.com/grandyang/p/5006441.html
+<hr>
 
 ## 375. Guess Number Higher or Lower II
+We can see that
+1. If only one number, we don't need to guess, `cost = 0 `
+2. If 2 number, we can guess the one that's smaller, `cost = smal one`
+3. If 3 number, we can guess the middle one 
+4. if more than 3, we can guess the one the not in the border
+
+#### Iteration DP
+```
+class Solution {
+public:
+    int getMoneyAmount(int n) {
+        //n+2 for border condition, dp[i][j] means from i to j
+        vector<vector<int>> dp(n+2,vector<int>(n+2,0));
+        // if only one number, then no need to guess, cost = 0
+        // if two numbers, guess the small one
+        // if three numbers, guess the middle one
+        for(int len = 1; len <= n-1 ; len++ ){
+            for(int j = 1 ; j <= n - len ; j++ ){
+                //from j to j+len
+                int GlobalMin = INT_MAX;
+                for(int k = j+1; k < j+len ; k++){
+                    int x = k + max(dp[j][k-1], dp[k+1][j+len]);
+                    GlobalMin = min(GlobalMin, x);
+                }
+            dp[j][j+len] = len == 1? j : GlobalMin;
+            }
+        }        
+        return dp[1][n];
+    }
+};
+```
+#### Recursive Iterative
+```
+class Solution {
+public:
+    int DFS(vector<vector<int>>&dp, int left,int right){
+        if(left>=right) return 0 ;
+        if(dp[left][right]) return dp[left][right];
+        if(left+1 == right){
+            dp[left][right] = left;
+            return left;
+        }
+        int globalMin = INT_MAX;
+        for(int k=left+1;k<right;k++){
+            int x = k + max( DFS(dp,left,k-1), DFS(dp,k+1,right) );
+            globalMin = min(globalMin, x);
+        }
+        dp[left][right] = globalMin;
+        return globalMin;
+    }
+    
+    int getMoneyAmount(int n) {
+        //n+2 for border condition, dp[i][j] means from i to j
+        vector<vector<int>> dp(n+2,vector<int>(n+2,0));
+        // if only one number, then no need to guess, cost = 0
+        // if two numbers, guess the small one
+        // if three numbers, guess the middle one
+        return DFS(dp,1,n);
+    }
+};
+```
+
+<hr>
+
+## 312. Burst Balloons
+https://www.cnblogs.com/grandyang/p/5006441.html
