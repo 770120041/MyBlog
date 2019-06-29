@@ -20,6 +20,13 @@ Accessing Front and Back: vector::front() and vector::back() in C++ STL
 
 3. erase() – It is used to remove elements from a container from the specified position or range.
 4. insert() – It inserts new elements before the element at the specified position
+```iterator insert (iterator position, const value_type& val);
+
+void insert (iterator position, size_type n, const value_type& val);
+
+template <class InputIterator>
+void insert (iterator position, InputIterator first, InputIterator last);
+```
 5. swap() – It is used to swap the contents of one vector with another vector of same type. Sizes may differ.
 6. emplace() – It extends the container by inserting new element at position
 The vector::emplace() is an STL in C++ which extends container by inserting new element at position. Reallocation happens only if there is a need of more space. Here the container size increases by one.

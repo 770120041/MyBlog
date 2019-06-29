@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Leetcode DP01"
+title:  "Leetcode DP One dimension"
 categories: Interview
 ---
  
@@ -251,7 +251,7 @@ public:
     }
 };
 ```
-#### Recursive Iterative
+#### Recursive DP
 ```
 class Solution {
 public:
@@ -285,4 +285,93 @@ public:
 <hr>
 
 ## 312. Burst Balloons
-https://www.cnblogs.com/grandyang/p/5006441.html
+[Blog solution](https://www.cnblogs.com/grandyang/p/5006441.html)
+#### Iterative DP
+```
+class Solution {
+public:
+    int maxCoins(vector<int>& nums) {
+        int n = nums.size(); 
+        if(n==0) return 0;
+        // from 0 to n+1， insert 1 to front and back
+        nums.insert(nums.begin(),1);
+        nums.push_back(1);
+        // we need dp[1][n]
+        vector<vector<int>> dp(n+2,vector<int>(n+2,0));
+        for(int len=0;len<=n;len++){
+            for(int j=1;j<=n-len;j++){
+                int globalMax = INT_MIN;
+                for(int k=j;k<=j+len;k++){
+                    int x = dp[j][k-1]+dp[k+1][j+len]+nums[k]*nums[j-1]*nums[j+len+1];
+                    globalMax = max(globalMax, x);
+                }
+                dp[j][j+len] = globalMax;
+            }
+        }
+        return dp[1][n];
+    }
+};
+```
+Same as last problem, DP in a interval. `DP[i][j]` means that all ballons are bursted in this interval. So, we need to make sure that `int x = dp[j][k-1]+dp[k+1][j+len]+nums[k]*nums[j-1]*nums[j+len+1];`, becasue when we calculate burst position k and add its neighbors, we need to make sure all its neighbors are actually bursted.
+
+We try from `len=0` because we need to calculate single number situation.
+
+And for k, `k=j and k = j+len`, because we are accessing `dp[k+1][j+len]`, and `k+1 > j+len`, then we can make sure its 0
+
+
+#### Recursive DP
+```
+class Solution {
+public:
+    int DP(vector<int> &nums,vector<vector<int>>& dp,int left,int right){
+        if(left > right) return 0;
+        if(dp[left][right]) return dp[left][right];
+        int globalMax = INT_MIN;
+        for(int k=left;k<=right;k++){
+            int x = nums[k]*nums[left-1]*nums[right+1]+DP(nums,dp,left,k-1)+DP(nums,dp,k+1,right);
+            globalMax = max(globalMax,x);
+        }
+        dp[left][right] = globalMax;
+        return globalMax;
+    }
+    int maxCoins(vector<int>& nums) {
+        int n = nums.size(); 
+        if(n==0) return 0;
+        // from 0 to n+1， insert 1 to front and back
+        nums.insert(nums.begin(),1);
+        nums.push_back(1);
+        vector<vector<int>> dp(n+2,vector<int>(n+2,0));
+        return DP(nums,dp,1,n);
+    }
+};
+```
+
+
+## 322. Coin Change
+This problem seems we can use greedy, but when `coins = {9, 6, 5, 1} and Value = 11`, greedy would fail.
+
+This is a bag problem template usage, so we can use dp
+
+#### Iterative
+```
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        if(amount == 0) return 0;
+        //dp[i] means number of coins
+        vector<long long> dp(amount+2,INT_MAX-1);
+        // we start from 0 to amount, and return dp[amount]
+        dp[0] = 0;
+        for(long long i=0;i<amount;i++){
+            for(int j=0;j<coins.size();j++){
+                if(i+coins[j] <= (long long)amount && dp[i] != INT_MAX-1){
+                    dp[i+coins[j]] = min(dp[i]+1,dp[i+coins[j]]);
+                }
+            }
+        }
+        if(dp[amount] == INT_MAX-1) return -1;
+        return dp[amount];
+    }
+};
+```
+
