@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "Rotated Binary sorted Array"
-categories: lc
+title:  "Leetcode Rotated Binary sorted Array"
+categories: Interview
 ---
 
 ## 33. Search in Rotated Sorted Array
