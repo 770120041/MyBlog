@@ -132,3 +132,47 @@ string getHint(string secret, string guess) {
 }
 ```
 <hr>
+
+
+## 200. Number of Islands
+
+```
+class Solution {
+public:
+    int xneighbor[4] = {1,-1,0,0};
+    int yneighbor[4] = {0,0,1,-1};
+    void DFS(vector<vector<char>>& grid,int x,int y,int n,int m){
+        if(grid[x][y] == '0') return;
+        grid[x][y] = '0';
+        for(int i=0;i<4;i++){
+            int xNext = x+xneighbor[i];
+            int yNext = y+yneighbor[i];
+            if(xNext<0 || xNext>=n || yNext<0 || yNext>=m ){
+                continue;
+            }
+            if(grid[xNext][yNext] == '1'){
+                DFS(grid,xNext,yNext,n,m);
+            }
+        }
+    }
+    
+    int numIslands(vector<vector<char>>& grid) {
+        int n = grid.size();
+        if(n==0) return 0;
+        int m = grid[0].size();
+        if(m==0) return 0;
+        
+        vector<vector<char>> isvisited(grid);
+        int result = 0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(isvisited[i][j] == '1'){
+                    result ++;
+                    DFS(isvisited,i,j,n,m);
+                }
+            }
+        }
+        return result;
+    }
+};
+```
