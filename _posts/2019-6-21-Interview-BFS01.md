@@ -53,3 +53,69 @@ public:
     }
 };
 ```
+
+
+## 286	Walls and Gates
+
+
+#### DFS
+```
+void DFS(vector<vector<int>> &rooms,int i,int j,int m,int n, int dis){
+        if(i<0 or i>= m or j<0 or j>=n or rooms[i][j] < dis){
+            return;
+        }
+        rooms[i][j] = dis;
+        DFS(rooms,i-1,j,m,n,dis+1);
+        DFS(rooms,i+1,j,m,n,dis+1);
+        DFS(rooms,i,j-1,m,n,dis+1);
+        DFS(rooms,i,j+1,m,n,dis+1);
+    } 
+void wallsAndGates(vector<vector<int>> &rooms) {
+    // write your code here
+    int m = rooms.size();
+    if(m==0) return;
+    int n = rooms[0].size();
+    if(n==0) return ;
+    for(int i=0;i<m;i++){
+        for(int j=0;j<n;j++){
+            if(rooms[i][j] == 0){
+                DFS(rooms,i,j, m ,n ,0);
+            }
+        }
+    }
+}
+```
+
+#### BFS simple solution.
+```
+typedef struct{
+    int x;
+    int y;
+    int dis;
+}Point;
+void wallsAndGates(vector<vector<int>> &rooms) {
+    // write your code here
+    int m = rooms.size();
+    int n = rooms[0].size();
+    for(int i=0;i<m;i++){
+        for(int j=0;j<n;j++){
+            if(rooms[i][j] == 0){
+                queue<Point> myQueue;
+                myQueue.push(Point{i,j,0});
+                while(!myQueue.empty()){
+                    Point cur = myQueue.front();
+                    myQueue.pop();
+                    if(cur.x < 0 or cur.x >= m or cur.y < 0 or cur.y >= n or rooms[cur.x][cur.y] < cur.dis){
+                        continue;
+                    }
+                    rooms[cur.x][cur.y] = cur.dis;
+                    myQueue.push(Point{cur.x,cur.y+1,cur.dis+1});
+                    myQueue.push(Point{cur.x,cur.y-1,cur.dis+1});
+                    myQueue.push(Point{cur.x+1,cur.y,cur.dis+1});
+                    myQueue.push(Point{cur.x-1,cur.y,cur.dis+1});
+                }
+            }
+        }
+    }
+}
+```
