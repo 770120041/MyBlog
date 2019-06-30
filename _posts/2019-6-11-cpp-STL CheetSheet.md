@@ -140,6 +140,28 @@ Return Value: The function returns an iterator or a constant iterator which refe
 <hr>
 
 ## String
+#### Erase
+```
+sequence (1)	
+ string& erase (size_t pos = 0, size_t len = npos);
+character (2)	
+iterator erase (iterator p);
+range (3)	
+     iterator erase (iterator first, iterator last);
+```
+
+How to remove redundent white space
+```
+for(int i=s.size()-1;i>=0;i--){
+            if(s[i] == ' ' && s[i] == s[i-1]){
+                s.erase(s.begin()+i);
+            }
+        }
+```
+Remember to do it from back to front, because the size of s is changed dymamically
+(stack overflow)[https://stackoverflow.com/questions/20073312/how-to-remove-multiple-spaces-from-a-c-program-and-put-one-space-instead-it]
+
+#### Substring
 
 <hr>
 
