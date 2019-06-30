@@ -176,3 +176,55 @@ public:
     }
 };
 ```
+
+## 130. Surrounded Regions
+Similiar to Question 200, but this time we need to transform all islands who is not connected to edges. So one way is to search all islands, and if it connected to edges, then roll back(also use a bool to remember if visited). But it will be easier if we scan all edge islands first, and mark all islands who is connected to edges as `M`, then it will be as simple as question 200
+```
+class Solution {
+public:
+    void DFS(vector<vector<char>>& board,int i,int j,int m,int n,char target ){
+        if(i<0 or i >=m or j<0 or j>=n or board[i][j] == 'X' or board[i][j] == 'M'){
+            return ;
+        }
+        board[i][j] = target;
+        DFS(board,i+1,j,m,n,target);
+        DFS(board,i-1,j,m,n,target);
+        DFS(board,i,j+1,m,n,target);
+        DFS(board,i,j-1,m,n,target);
+    }
+    void solve(vector<vector<char>>& board) {
+        int m = board.size();
+        if(m==0) return;
+        int n = board[0].size();
+        if(n==0) return;
+        
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                // only scan edges
+                if(i == 0 or i == m-1 or j==0 or j == n-1){
+                    if(board[i][j] == 'O'){
+                        DFS(board,i,j,m,n,'M');
+                    }
+                }
+            }
+        }
+        
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                // only scan edges
+                if(board[i][j] == 'O'){
+                    DFS(board,i,j,m,n,'X');
+                }
+            }
+        }
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                // only scan edges
+                if(board[i][j] == 'M'){
+                    board[i][j] = 'O';
+                }
+            }
+        }
+    }
+};
+```
