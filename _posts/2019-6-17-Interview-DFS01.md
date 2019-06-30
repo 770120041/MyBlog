@@ -262,8 +262,7 @@ The idea is cal the depth and cal the sum at the same time. When we reach the le
 
 #### DFS ugly solution
 ```
-
- #include <stdio.h>
+#include <stdio.h>
 class Solution {
 public:
     int DFS(NestedInteger nestedInteger,long long& result){
@@ -320,6 +319,8 @@ public:
 
 #### BFS tricky solution
 Using weighted and unweighed, so the that each layer can be added to weighted by depth times.
+
+Remeber to add interger first then go to its child, this makes it possible to add depth times cur integer.
 ```
 class Solution {
 public:
