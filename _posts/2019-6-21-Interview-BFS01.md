@@ -56,8 +56,6 @@ public:
 
 
 ## 286	Walls and Gates
-
-
 #### DFS
 ```
 void DFS(vector<vector<int>> &rooms,int i,int j,int m,int n, int dis){
