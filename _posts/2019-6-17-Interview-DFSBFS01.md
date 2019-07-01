@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Leetcode DFS 01 "
+title:  "Leetcode DFS BFS "
 categories: Interview
 ---
 ## 77. Combinations
@@ -321,6 +321,8 @@ public:
 Using weighted and unweighed, so the that each layer can be added to weighted by depth times.
 
 Remeber to add interger first then go to its child, this makes it possible to add depth times cur integer.
+
+**Here remeber to clean the queue every time before add to weighted! This is a way to go throguh all nodes with same layer!!**
 ```
 class Solution {
 public:
@@ -342,4 +344,161 @@ public:
         return weighted;
     }
 };
-``
+```
+
+
+## 752. Open the Lock
+DFS not working, because find the neares is too slow. (using visited to record, if the next search is slower then DFS this pos, but this may be still O(K^N))
+
+BFS
+```
+class Solution {
+public:
+    int openLock(vector<string>& deadends, string target) {
+        unordered_set<string> visited;
+        // unordered_set<string> deadendsSet;
+        for(auto s: deadends){
+            visited.insert(s);
+        }
+        if(visited.count(target) || visited.count("0000")) return -1;
+        char coor[] = {'9','0','1','2','3','4','5','6','7','8','9','0'};
+        queue<string> mQueue;
+        queue<int> cQueue;
+        mQueue.push("0000");
+        cQueue.push(0);
+        visited.insert("0000");
+        while(!mQueue.empty()){
+            auto curString = mQueue.front();
+            mQueue.pop();
+            auto curCount = cQueue.front();
+            cQueue.pop();
+            // cout<<curString <<" "<<curCount<<endl;
+            if(curString == target){
+                return curCount;
+            }
+            for(int i=0;i<4;i++){
+                auto next = curString;
+                next[i] = coor[curString[i]-'0'];
+                if(!visited.count(next)){
+                    visited.insert(next);
+                    mQueue.push(next);
+                    cQueue.push(curCount+1);
+                }
+                next[i] = coor[curString[i]-'0'+2];
+                if(!visited.count(next)){
+                    visited.insert(next);
+                    mQueue.push(next);
+                    cQueue.push(curCount+1);
+                }
+            }
+        }
+        return -1;
+    }
+};
+```
+
+## 127. Word Ladder
+Crap 
+
+This problem is bad because `start='a',end='c',list=[a,b,c]` result in 2.
+
+So a->a is also counted as one transform.
+
+```
+class Solution {
+public:
+    bool check(string a,string b){
+        int cnt = 0;
+        for(int i=0;i<a.size();i++){
+            if(a[i] != b[i]) cnt++;
+            if(cnt == 2) return false;
+        }
+        return true;
+    }
+    typedef struct{
+        string str;
+        int cnt;
+    }Node;
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        queue<Node> myQueue;
+        int n=wordList.size();
+        myQueue.push(Node{beginWord,1});
+        vector<bool> visited(n,false);
+        while(!myQueue.empty()){
+            Node cur = myQueue.front();
+            myQueue.pop();
+            
+            if(cur.str == endWord) return cur.cnt;
+            for(int i=0;i<n;i++){
+                if(!visited[i] && check(cur.str,wordList[i])){
+                    visited[i] = true;
+                    myQueue.push(Node{wordList[i],cur.cnt+1});
+                }
+            }
+        }
+        return 0;
+    }
+};
+```
+
+## 126. Word Ladder II
+Brute force BFS with recording all neighbors: TLE
+```
+class Solution {
+public:
+    typedef struct{
+        string str;
+        int dis;
+        vector<string> list;
+    }Node;
+    vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) {
+        int n = wordList.size();
+        unordered_set<string> visited;
+        vector<vector<string>> result;
+        unordered_map<string,unordered_set<string>> neighbors;
+        
+        // enumerate all neighbors
+        vector<string> addToNeighbor(wordList);
+        addToNeighbor.push_back(beginWord);
+        for(int i=0;i<addToNeighbor.size();i++){
+            unordered_set<string> tmpNeighbor;
+            for(int j=0;j<beginWord.size();j++){
+                string tmpString = addToNeighbor[i];
+                for(int k=0;k<26;k++){
+                    tmpString[j] = 'a'+k;
+                    tmpNeighbor.insert(tmpString);
+                }
+            }
+            neighbors[addToNeighbor[i]] = tmpNeighbor;
+        }
+        
+        // vector<bool> visited(n,false);
+        queue<Node> myQueue;
+        vector<string> init;
+        init.push_back(beginWord);
+        myQueue.push( Node{beginWord,0,init});
+        while(!myQueue.empty()){
+            int size = myQueue.size();
+            for(int m=0;m<size;m++){
+                Node cur = myQueue.front(); myQueue.pop();
+                visited.insert(cur.str);
+                if(cur.str == endWord){
+                    result.push_back(cur.list);
+                    continue;
+                }
+                vector<string> nextList(cur.list);
+                for(int i=0;i<n;i++){
+                    if(visited.count(wordList[i]) == 0 and neighbors[cur.str].count(wordList[i]) == 1){
+                        nextList.push_back(wordList[i]);
+                        myQueue.push(Node{wordList[i],cur.dis+1,nextList});
+                        nextList.pop_back();
+                    }
+                }
+            }
+            if(!result.empty()) break;
+        }
+        return result;
+    }
+};
+```
+

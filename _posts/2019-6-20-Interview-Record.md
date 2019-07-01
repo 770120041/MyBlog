@@ -27,6 +27,16 @@ categories: Interview
 * 902 
 * 729
 
+* 707
+* 710
+* 712
+* 713
+* 714
+* 715
+* 718
+
+* 126
+
 ## Reviewed
 https://cspiration.com/leetcodeClassification#10306
 
@@ -34,7 +44,10 @@ https://cspiration.com/leetcodeClassification#10306
 Array 330
 #### 1.3.2. String
 375
+#### 1.3.4. Tree
+
 #### 1.3.6. Dynamic Programming
 做完一维
 
 #### 1.3.10. DFS & BFS
+还剩两个N-queen
