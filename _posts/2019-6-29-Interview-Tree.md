@@ -95,7 +95,6 @@ public:
 
 ## 94. Binary Tree Inorder Traversal
 The trick is add a dummy TreeNode to the stack for the middle one.
-
 ```
 vector<int> inorderTraversal(TreeNode* root) {
     stack <TreeNode*> myStack;
@@ -116,6 +115,8 @@ vector<int> inorderTraversal(TreeNode* root) {
     return result;
 }
 ```
+Same trick for post order 
+
 
 ## 102. Binary Tree Level Order Traversal
 

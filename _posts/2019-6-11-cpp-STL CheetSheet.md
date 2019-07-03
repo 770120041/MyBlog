@@ -163,6 +163,21 @@ Remember to do it from back to front, because the size of s is changed dymamical
 
 #### Substring
 
+
+#### lfind & rfind
+```
+size_t rfind (const string& str, size_t pos = npos) const;
+size_t rfind (const char* s, size_t pos = npos) const;
+size_t rfind (const char* s, size_t pos, size_t n) const;
+size_t rfind (char c, size_t pos = npos) const;
+```
+**rfind** Searches the string for the last occurrence of the sequence specified by its arguments.
+
+When pos is specified, the search only includes sequences of characters that begin at or before position pos, ignoring any possible match beginning after pos.
+
+
+**rfind** Searches the string for the first occurrence of the sequence specified by its arguments.
+
 <hr>
 
 ## Unordered Map
