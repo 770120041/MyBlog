@@ -163,3 +163,35 @@ public:
     }
 };
 ```
+
+<hr>
+
+## 113. Path Sum II
+
+Brute Force
+```
+class Solution {
+public:
+    void DFS(TreeNode* root,vector<vector<int>> &result,vector<int> &path,int curSum,int target){
+        if(!root) return;
+        curSum += root->val;
+        path.push_back(root->val);
+        if(curSum == target and !root->left and !root->right){
+            // substitute tmp
+            result.push_back(path);
+        }
+        else{
+            DFS(root->left,result,path,curSum,target);
+            DFS(root->right,result,path,curSum,target);
+        }
+        // pop current node
+        path.pop_back();
+    }
+    vector<vector<int>> pathSum(TreeNode* root, int sum) {
+        vector<vector<int>> result;
+        vector<int> path;
+        DFS(root,result,path,0,sum);        
+        return result;
+    }
+};
+```
