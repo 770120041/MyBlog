@@ -196,3 +196,86 @@ public:
     }
 };
 ```
+
+<hr>
+
+## 298 Binary Tree Longest Consecutive Sequence
+
+```
+class Solution {
+public:
+    /**
+     * @param root: the root of binary tree
+     * @return: the length of the longest consecutive sequence path
+     */
+    void DFS(int &result, TreeNode* root, int lastCnt,int lastValue){
+        if(!root){
+            return ;
+        }
+        if(root->val == lastValue + 1){
+            lastCnt++;
+        }
+        else{
+            lastCnt = 1;
+        }
+        result = max(result,lastCnt);
+        lastValue = root->val;
+        DFS(result,root->left,lastCnt,lastValue);
+        DFS(result,root->right,lastCnt,lastValue);
+    }
+    int longestConsecutive(TreeNode * root) {
+        int result = 0;
+        if(!root) return 0;
+        DFS(result,root,0,root->val-1);
+        return result;
+        // write your code here
+    }
+};
+```
+
+<hr>
+
+## 235. Lowest Common Ancestor of a Binary Search Tree
+Find left and right, mark the first found node as the result.
+
+`If(curState.first), then TreeNode p exists. If(curState.second), then node q exits in current State`
+Our goal is to find the first node that have both curState.first and curState.scond is true.
+
+```
+class Solution {
+public:
+    bool find = false;
+    TreeNode* result;
+    pair<bool,bool> Helper(TreeNode* root, TreeNode*p, TreeNode* q,pair<bool,bool> curState){
+        if(!root){
+            return curState;
+        }
+        pair<bool,bool> leftResult = Helper(root->left,p,q,curState);
+        pair<bool,bool> rightResult = Helper(root->right,p,q,curState);
+        if(root == p){
+            curState.first = true;
+        }
+        if(root == q){
+            curState.second = true;
+        }
+        curState.first = (leftResult.first or rightResult.first or curState.first);
+        curState.second = (leftResult.second or rightResult.second or curState.second);
+        // cout<<root->val<<endl;
+        // cout<<curState.first<<" "<<curState.second<<endl;
+        if(curState.first and curState.second){
+            if(find == false){
+                find = true;
+                result = root;
+            }
+        }
+        return curState;
+    }
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        Helper(root,p,q,pair<bool,bool>{false,false});
+        return result;
+    }
+};
+```
+
+Need to attention 614
+## 614. Binary Tree Longest Consecutive Sequence II

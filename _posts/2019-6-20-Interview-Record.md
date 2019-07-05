@@ -36,7 +36,10 @@ categories: Interview
 * 718
 
 * 126
-
+* 722
+* 721
+* 725
+* 726
 ## Reviewed
 https://cspiration.com/leetcodeClassification#10306
 
