@@ -277,5 +277,233 @@ public:
 };
 ```
 
-Need to attention 614
+<hr>
+
 ## 614. Binary Tree Longest Consecutive Sequence II
+Firstly, use `pair<int,int>` to denote the number of incresing nodes and decresing nodes.
+
+And get the situation of two sub trees.
+
+If `current->val == parent->val +1`, then return the correct increasing nodes values.
+Else if `current->val == parent->val-1`, find the correct decreasing node values;
+Else this node will not help the parent to form a sequence, just return `{0,0}`
+
+```
+class Solution {
+public:
+    /**
+     * @param root: the root of binary tree
+     * @return: the length of the longest consecutive sequence path
+     */
+     
+    pair<int,int> helper(TreeNode*root,TreeNode*parent,int &res){
+        if(!root){
+            return pair<int,int>{0,0};
+        }
+        auto leftState = helper(root->left,root,res);
+        auto rightState = helper(root->right,root,res);
+        res = max(res,leftState.first+rightState.second+1);
+        res = max(res,leftState.second+rightState.first+1);
+        int inc=0,rec=0;
+        if(root->val==parent->val + 1){
+            inc = max(leftState.first,rightState.first)+1;
+        }
+        else if (root->val == parent->val -1){
+            rec = max(leftState.second,rightState.second)+1;
+        }
+        return {inc,rec};
+    }
+    int longestConsecutive2(TreeNode * root) {
+        // write your code here
+        int result = 0;
+        helper(root,root,result);
+        return result;
+    }
+};
+```
+
+<hr>
+
+## 108. Convert Sorted Array to Binary Search Tree
+```
+class Solution {
+public:
+    TreeNode* convert(vector<int>&nums,int left,int right){
+        if(left>right) return NULL;
+        int mid = (left+right)/2;
+        TreeNode* root = new TreeNode(nums[mid]);
+        root->left = convert(nums,left,mid-1);
+        root->right = convert(nums,mid+1,right);
+        return root;
+    }
+    TreeNode* sortedArrayToBST(vector<int>& nums) {
+        TreeNode* root;
+        int left=0,right = nums.size()-1;
+        root = convert(nums,left,right);
+        return root;
+    }
+};
+```
+
+<hr>
+
+## 124. Binary Tree Maximum Path Sum
+Careful about the condition, easier than the 614 problem
+```
+int CalRootPathSum(TreeNode* root,int &result){
+    if(!root) return 0;
+    int leftVal = CalRootPathSum(root->left,result);
+    int rightVal = CalRootPathSum(root->right,result);
+    //cal max possible childVal
+    int maxChildVal = max(leftVal,rightVal);
+    int calResultValue = max(maxChildVal,leftVal+rightVal);
+    result =max( max(calResultValue+root->val,root->val),result);
+    
+    if(maxChildVal>0) return maxChildVal+root->val;
+    return root->val;
+}
+int maxPathSum(TreeNode* root) {
+    int result = INT_MIN ;
+    CalRootPathSum(root,result);
+    return result;
+}
+```
+
+<hr>
+
+## 250.	Count Univalue Subtrees(LintCode 921)
+Brute force, record all child values and put it in a set
+
+#### Brute force  
+```
+unordered_set<int>* DFS(int&result, TreeNode* root,TreeNode*parent){
+    unordered_set<int> *returnSet = new unordered_set<int>;
+    if(!root) returnSet->insert(parent->val);
+    
+    else{
+        unordered_set<int>* leftValue = DFS(result,root->left,root);
+        unordered_set<int>* rightValue = DFS(result,root->right,root);
+        //it is pure
+        if(leftValue->size() == 1 and leftValue->count(root->val) == 1 and rightValue->size() == 1 and rightValue->count(root->val) == 1){
+            // cout<<root->val<<endl;
+            result ++;
+        }
+        for(auto it = leftValue->begin(); it!=leftValue->end();it++){
+            // cout<<"inserted:"<<*it<<endl;
+            returnSet->insert(*it);
+        }
+        for(auto it = rightValue->begin(); it!=rightValue->end();it++){
+            returnSet->insert(*it);
+            // cout<<"inserted:"<<*it<<endl;
+
+        }
+        returnSet->insert(root->val);
+        
+        delete(leftValue);
+        delete(rightValue);
+    }
+    
+    return returnSet;
+}
+int countUnivalSubtrees(TreeNode * root) {
+    // write your code here
+    if(!root) return 0;
+    int result = 0;
+    DFS(result,root,root);
+    return result;
+}
+```
+
+#### Simplified Version
+```
+//return if all subtree from current node is uni-value
+bool DFS(int&result, TreeNode* root,TreeNode*parent){
+    if(!root) return true;
+    bool left = DFS(result,root->left,root);
+    bool right = DFS(result,root->right,root);
+    if(left and right){
+        result++;
+    }
+    if(!left or !right or root->val != parent->val){
+        return false;
+    }
+    return true;
+}
+int countUnivalSubtrees(TreeNode * root) {
+    // write your code here
+    if(!root) return 0;
+    int result = 0;
+    DFS(result,root,root);
+    return result;
+}
+```
+
+<hr>
+
+## 366.Find Leaves of Binary Tree(Lintcode 650)
+Using Hash, O(n) time and O(N) space for a tree with N nodes
+#### Brute Force
+```
+int calHeight(TreeNode* root, unordered_map<int,vector<int>>& uMap){
+    if(!root) return 0;
+    int left = calHeight(root->left,uMap);
+    int right = calHeight(root->right,uMap);
+    int height = max(left,right)+1;
+    auto it=uMap.find(height);
+    if(it == uMap.end()){
+        vector<int> tmp;
+        tmp.push_back(root->val);
+        uMap[height] = tmp;
+    }
+    else{
+        uMap[height].push_back(root->val);
+    }
+    return height;
+}
+vector<vector<int>> findLeaves(TreeNode * root) {
+    // write your code here
+    vector<vector<int>> result;
+    unordered_map<int,vector<int>> umap;
+    calHeight(root,umap);
+    int n = umap.size();
+    for(int i=1;i<=n;i++){
+        vector<int> tmp;
+        for(int j=0;j<umap[i].size();j++){
+            tmp.push_back(umap[i][j]);
+        }
+        result.push_back(tmp);
+    }
+    return result;
+}
+```
+
+<hr>
+
+## 337 House Robber III	
+This problem is don't matter for layer, don't be cheated by the test example!!!
+
+This problem matters about directly connected! So we need to split all directly connected nodes. And do a combiniation sum. 
+
+#### Don't work!
+Don't work because this cannot find maximum in differnt sub-trees and different layer, for example 
+`[2,1,3,null,4]`
+```
+void DFS(int&result, int curSum,TreeNode*root, bool canSteal){
+    if(!root) return;
+    //Steal current node, then next child we can't add
+    if(canSteal){
+        DFS(result,curSum+root->val,root->left,false);
+        DFS(result,curSum+root->val,root->left,false);
+        result = max(curSum+root->val,result);
+    }
+    //don't steal current node
+    DFS(result,curSum,root->left,true);
+    DFS(result,curSum,root->right,true);
+    result = max(curSum,result);
+}
+int rob(TreeNode* root) {
+    int result = 0;
+    DFS(result,0,root,true);
+    return result;
+}
+```
