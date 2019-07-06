@@ -480,11 +480,14 @@ vector<vector<int>> findLeaves(TreeNode * root) {
 <hr>
 
 ## 337 House Robber III	
+[Sample solution](https://www.cnblogs.com/grandyang/p/5275096.html)
+
 This problem is don't matter for layer, don't be cheated by the test example!!!
 
 This problem matters about directly connected! So we need to split all directly connected nodes. And do a combiniation sum. 
 
 #### Don't work!
+
 Don't work because this cannot find maximum in differnt sub-trees and different layer, for example 
 `[2,1,3,null,4]`
 ```
@@ -505,5 +508,64 @@ int rob(TreeNode* root) {
     int result = 0;
     DFS(result,0,root,true);
     return result;
+}
+```
+
+#### Brute Force
+The return value of DFS here is tricky, it means that from current subtree(including the root node), the maximum possible value. Remember to use a hash map here otherwise it will TLE.
+
+Time O(N), space O(N)
+```
+class Solution {
+public:
+    // don't steal current node or steal current node
+    // return the maximum number of that from current subtree node can steal
+    int DFS(TreeNode* root,unordered_map<TreeNode*,int>& uMap){
+        if(!root) return 0;
+        int val = 0;
+        auto it = uMap.find(root);
+        if(it == uMap.end()){
+            if(root->left){
+                val += DFS(root->left->left,uMap) + DFS(root->left->right,uMap);
+            }
+            if(root->right){
+                val += DFS(root->right->left,uMap) + DFS(root->right->right,uMap);
+            }
+            val = max(val+root->val, DFS(root->left,uMap)+DFS(root->right,uMap));
+            uMap[root] = val;
+        }
+        else{
+            val = uMap[root];
+        }
+        return val;
+    }
+    int rob(TreeNode* root) {
+        unordered_map<TreeNode*,int> uMap;
+        return DFS(root,uMap);
+    }
+};
+```
+
+#### Tricky Solution
+We can imitate Leetcode 235, return a pair, the first numebr is including this node, the second number is don't include this node.
+
+The tricky part is that it don't steal this node. You can steal child or not steal child, choose the maximum solution.
+
+Time:O(N), Space:O(1)
+```
+ pair<int,int> DFS(TreeNode* root){
+    if(!root) return {0,0};
+    auto left = DFS(root->left);
+    auto right = DFS(root->right);
+    int stealThis = root->val + left.second + right.second;
+    // if don't steal this node. For the child, you can steal child or not, select the maximum value here
+    int notStealThis = max(left.first,left.second)+max(right.first,right.second);
+    // printf("%d %d %d %d %d\n",root->val,left.first,left.second,right.first,right.second);
+    return {stealThis,notStealThis};
+}
+int rob(TreeNode* root) {
+    auto result = DFS(root);
+    // printf("%d %d\n",result.first,result.second);
+    return max(result.first,result.second);
 }
 ```
