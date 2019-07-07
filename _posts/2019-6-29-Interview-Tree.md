@@ -244,34 +244,21 @@ Our goal is to find the first node that have both curState.first and curState.sc
 ```
 class Solution {
 public:
-    bool find = false;
-    TreeNode* result;
-    pair<bool,bool> Helper(TreeNode* root, TreeNode*p, TreeNode* q,pair<bool,bool> curState){
-        if(!root){
-            return curState;
+    pair<bool,bool> DFS(TreeNode* root,TreeNode*p,TreeNode* q,TreeNode** Result){
+        if(!root) return {false,false};
+        auto left = DFS(root->left,p,q,Result);
+        auto right = DFS(root->right,p,q,Result);
+        bool containsP = root == p or left.first or right.first;
+        bool containsQ = root == q or left.second or right.second;
+        //if not find the target yet, then this is the result, otherwise skip this.
+        if((*Result) == NULL and containsP and containsQ ){
+            *Result = root;
         }
-        pair<bool,bool> leftResult = Helper(root->left,p,q,curState);
-        pair<bool,bool> rightResult = Helper(root->right,p,q,curState);
-        if(root == p){
-            curState.first = true;
-        }
-        if(root == q){
-            curState.second = true;
-        }
-        curState.first = (leftResult.first or rightResult.first or curState.first);
-        curState.second = (leftResult.second or rightResult.second or curState.second);
-        // cout<<root->val<<endl;
-        // cout<<curState.first<<" "<<curState.second<<endl;
-        if(curState.first and curState.second){
-            if(find == false){
-                find = true;
-                result = root;
-            }
-        }
-        return curState;
+        return {containsP,containsQ};
     }
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        Helper(root,p,q,pair<bool,bool>{false,false});
+        TreeNode* result = NULL;
+        DFS(root,p,q,&result);
         return result;
     }
 };
@@ -569,3 +556,139 @@ int rob(TreeNode* root) {
     return max(result.first,result.second);
 }
 ```
+
+## 103 Binary Tree Zigzag Level Order Traversal	
+One idea is to not reverse the whole vector, but push from right to left. But his is a big mistake
+becasue `[1,2,3,4,null,null,5]`, because 2 was pushed to queue prior to 3, so 4 will be pushed to queue earlier than 5. Which is a big mistake for this solution
+#### failed solution
+```
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> result;
+        queue<TreeNode*> myQueue;
+        myQueue.push(root);
+        bool right = true;
+        while(!myQueue.empty()){
+            vector<int> tmp;
+            int n = myQueue.size();
+            for(int i=0;i<n;i++){
+                TreeNode* curNode = myQueue.front(); myQueue.pop();
+                if(!curNode) continue;
+                if(right){
+                    myQueue.push(curNode->right);
+                    myQueue.push(curNode->left);
+                }
+                else{
+                    myQueue.push(curNode->left);
+                    myQueue.push(curNode->right);
+                }
+                tmp.push_back(curNode->val);
+            }
+            right = !right;
+            if(tmp.size()){
+                result.push_back(tmp);            
+            }
+        }
+        return result;
+    }
+};
+```
+
+#### passed easy solution
+```
+ vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+    vector<vector<int>> result;
+    queue<TreeNode*> myQueue;
+    myQueue.push(root);
+    bool right = false;
+    while(!myQueue.empty()){
+        vector<int> tmp;
+        int n = myQueue.size();
+        for(int i=0;i<n;i++){
+            TreeNode* curNode = myQueue.front(); myQueue.pop();
+            if(!curNode) continue;
+            myQueue.push(curNode->left);
+            myQueue.push(curNode->right);
+            tmp.push_back(curNode->val);
+        }
+        cout<<right<<endl;
+        if(right){
+            reverse(tmp.begin(),tmp.end());
+        }
+        else{;}
+        if(tmp.size()) result.push_back(tmp);
+        right = !right;
+        
+    }
+    return result;
+}
+```
+
+## 199. Binary Tree Right Side View
+Bad idea is to recursion search the tree, if there is a right node, then travel right node,else 
+travel left node. But if the left tree's height is higher than right tree, this method will fail.
+We must use BFS to travel the whole tree
+```
+ void helper(vector<int> & result,TreeNode* root){
+    if(!root) return;
+    result.push_back(root->val);
+    if(!root->right) helper(result,root->left);
+    else helper(result,root->right);
+}
+vector<int> rightSideView(TreeNode* root) {
+    vector<int> result;
+    helper(result,root);
+    return result;
+}
+```
+
+#### BFS
+Time O(N), Space O(1)(if we exclude the necessary O(h) space for result)
+```
+vector<int> rightSideView(TreeNode* root) {
+    vector<int> result;
+    queue<TreeNode*> myQueue;
+    myQueue.push(root);
+    while(!myQueue.empty()){
+        int n = myQueue.size();
+        int lastVal = INT_MIN;
+        bool exist = false;
+        for(int i=0;i<n;i++){
+            TreeNode* curNode = myQueue.front(); myQueue.pop();
+            if(!curNode) continue;
+            exist = true;
+            lastVal = curNode->val;
+            myQueue.push(curNode->left);
+            myQueue.push(curNode->right);
+        }
+        if(exist){
+            result.push_back(lastVal); 
+        }
+    }
+    
+    return result;
+}
+```
+
+## 98 Validate Binary Search Tree
+#### Simple DFS
+```
+// each left subtree has a upper bound, and right subtree has a lower bound
+bool helper(TreeNode* root,long long  lower,long long upper){
+    if(!root) return true;
+    return (root->val > lower && root->val < upper) and helper(root->left,lower,root->val) and helper(root->right,root->val,upper) ;
+}
+bool isValidBST(TreeNode* root) {
+    long long minINF = INT_MIN*1e5;
+    long long maxINF = INT_MAX*1e5;
+    return helper(root,minINF,maxINF);
+}
+```
+
+## 109 Convert Sorted List to Binary Search Tree
+Convert to 108, using an array to store all values: Space:O(n), Time:O(N), it is easy
+
+Another solution is to use a fast-slow pointer to get the midpoint of linkedlist, thus we can recursively solve this problem. Time: O(N^2), Space:O(1)
+
+#### 
