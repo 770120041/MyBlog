@@ -691,4 +691,55 @@ Convert to 108, using an array to store all values: Space:O(n), Time:O(N), it is
 
 Another solution is to use a fast-slow pointer to get the midpoint of linkedlist, thus we can recursively solve this problem. Time: O(N^2), Space:O(1)
 
-#### 
+#### fast-slow pointer Solution
+```
+ // include head but not include tail
+    TreeNode* convert(ListNode* head, ListNode* tail){
+        if(head == NULL or head == tail) return NULL;
+        ListNode* slow,*fast;
+        slow = fast = head;
+        while(fast!= tail and fast->next!= tail){
+            fast = fast->next->next;
+            slow = slow->next;
+        }
+        TreeNode* cur = new TreeNode(slow->val);
+        cur->left = convert(head,slow);
+        cur->right = convert(slow->next, tail);
+        return cur;
+    }
+    TreeNode* sortedListToBST(ListNode* head) {
+        return convert(head,NULL);
+    }
+```
+
+
+## 230. Kth Smallest Element in a BST
+
+```
+int kthSmallest(TreeNode* root, int k) {
+    stack<TreeNode*> myStack;
+    myStack.push(root);
+    int cnt = 0;
+    while(!myStack.empty()){
+        TreeNode* curRoot = myStack.top();
+        myStack.pop();
+        if(!curRoot) continue;
+        if(!curRoot->left and !curRoot->right){
+            cnt ++;
+            if(cnt == k) return curRoot->val;
+            continue;
+        }
+        myStack.push(curRoot->right);
+        TreeNode* tmp = new TreeNode(curRoot->val);
+        myStack.push(tmp);
+        myStack.push(curRoot->left);
+    }
+    return 0;
+}
+```
+
+#### Follow up:
+What if the BST is modified (insert/delete operations) often and you need to find the kth smallest frequently? How would you optimize the kthSmallest routine?
+
+Answer: maintain the rank for each node, the meaning of rank is that how much nodes are smalller than current node, which is the number of nodes of left subtree. Maintain this is O(logn) for insertion and deletion, and by using rank, it takes O(logn) to find the kth smallest element.
+(Geek for Geeks answer)[https://www.geeksforgeeks.org/find-k-th-smallest-element-in-bst-order-statistics-in-bst/]
