@@ -19,16 +19,15 @@ categories: Interview
 * 801
 * 802
 * 803 
-
 * 352   
 * 354
 
 * 749
 * 902 
 * 729
-
 * 707
 * 710
+
 * 712
 * 713
 * 714
@@ -42,6 +41,19 @@ categories: Interview
 * 726
 
 * 581 
+* 730
+* 728
+* 731
+* 732
+
+* 733
+* 734
+* 735
+* 736
+* 738
+
+* 740
+* 862
 ## Reviewed
 https://cspiration.com/leetcodeClassification#10306
 
@@ -50,7 +62,7 @@ Array 330
 #### 1.3.2. String
 375
 #### 1.3.4. Tree
-104
+337
 #### 1.3.6. Dynamic Programming
 做完一维
 
