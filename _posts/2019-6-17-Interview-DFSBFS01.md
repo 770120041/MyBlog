@@ -502,3 +502,80 @@ public:
 };
 ```
 
+## 78. Subsets
+No repeat, so Index increase monotaneously. When curIndex reaches n, its done.
+```
+void DFS(vector<vector<int>>&result,vector<int> &nums,vector<int> cur ,int curIndex,int n){
+    result.push_back(cur);
+    if(curIndex == n) return;
+    for(int i=curIndex;i<n;i++){
+        cur.push_back(nums[i]);
+        DFS(result,nums,cur,i+1,n);
+        cur.pop_back();
+    }
+}
+vector<vector<int>> subsets(vector<int>& nums) {
+    vector<vector<int>> result;
+    vector<int> empty;
+    DFS(result,nums,empty,0,nums.size());
+    return result;        
+}
+```
+
+## 90. Subsets II
+The key to this is: 如果不是这个DFS的第一个数而且上一个数和这一个相同，那么跳过。原因是：每一次递归都给当前的vector增加了一个数字，但如果两个数字相同，那么比如`[1,2,2]`,就会把`[1,2],[1,2]`一起加入，这是不对的。加一个if就可以避免这种情况。
+```
+void DFS(vector<vector<int>>&result, vector<int> &nums,vector<int> cur,int curIndex, int n){
+    result.push_back(cur);
+    if(curIndex == n){
+        return;
+    }
+    for(int i=curIndex;i<n;i++){
+        // duplicates
+        if(i>curIndex && nums[i-1] == nums[i]){
+            continue;
+        }
+        cur.push_back(nums[i]);
+        DFS(result,nums,cur,i+1,n);
+        cur.pop_back();
+    }
+    
+}
+vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+    sort(nums.begin(),nums.end());
+    vector<int> empty;
+    vector<vector<int>> result;
+    DFS(result,nums,empty,0,nums.size());
+    return result;
+}
+```
+
+## 22 Generating Parenthesis
+```
+// how many left used
+void DFS(vector<string>&result,string cur,int left,int right,int n){
+    if(left+right == 2*n){
+        result.push_back(cur);
+        return;
+    }
+    if(left < n){
+        DFS(result,cur+"(",left+1,right,n);
+    }
+    if(right < left){
+        DFS(result,cur+")",left,right+1,n);
+    }
+}
+vector<string> generateParenthesis(int n) {
+    vector<string> result;
+    string cur;
+    DFS(result,"",0,0,n);
+    return result;
+}
+```
+
+## 518. Coin Change 2
+Can't use DP, because `dp[5]!=dp[0]+dp[3]+dp[4]`, there may be some overlap situations. Because `dp[4]` may already contains `dp[3]`. But we want not duplicate combinations
+``` 
+amount = 5, coins = [1, 2, 5]
+```
+So bruteforce search
