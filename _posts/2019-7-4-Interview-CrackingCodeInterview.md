@@ -5,7 +5,7 @@ categories: Interview
 ---
 
 
-##第一章数组
+##Chapter 1 Array
 手动实现一个resizable array
 手动实现一个hashtable
 
@@ -21,7 +21,7 @@ Permutation of duplicated string
 
 cc 1.9
 
-## 第二章
+## Chapter 2 Linked List
 实现链表，最好能够用一个wrapper封装head，不然如果有多个人使用了这个head，但head修改了这些用户并不知道
 
 2.1 follow up
@@ -30,11 +30,11 @@ cc 1.9
 2.6 开数组
 2.7开hash
 
-## 第三章
+## Chapter 3 Stacks and Quques
 3.2 min o（1）？
 3.5 每次pop要on？
 
-## 第四章
+## Chapter 4 Trees and Graphs
 记住什么是complete binary tree和full binary  tree， perfect binary tree
 如何判断是不是complted， full 和 perfect
 都是用queue做level order traversal
@@ -197,3 +197,165 @@ def wrapper(x,y):
 ```
 4. 8.13?
 5. 8.14??
+
+## Chapter 9. System Design and Scalability
+Skip
+
+## Chapter 10. Sorting and Searching
+#### MergeSort
+```
+void mergesort(vector<int>& array){
+    vector<int> helper(array.size(),0);
+    mergeSort(array,helper,0,array.size()-1);
+}
+void mergeSort(vector<int>&arr,vector<int>&helper,int low,int high){
+    if(low >= high) return;
+    int mid=(low+hight)/2;
+    mergeSort(arr,helper,low,mid);
+    mergeSort(arr,helper,mid+1,,high);
+    mergeHelper(arr,helper,low,mid,hight);
+}
+void mergeHelper(vector<int>& arr,vector<int>&helper,int low,int mid,int hight){
+    for(int i = low ; i <= hight ; i++){
+        helper[i] = arr[i];
+    }
+    int first = low,second = mid+1;
+    int cur = low;
+    while(first<= mid or second <= right){
+        if(first <= mid and second <= right){
+            if(helper[first] < helper[second]){
+                arr[cur] = helper[first];
+                first++;
+            }
+            else{
+                arr[cur] = helper[second];
+                second++;
+            }
+        }
+        else if( first <= mid){
+            arr[cur] = helper[first];
+            first++;
+        }
+        else{
+            arr[cur] = helper[second];
+            second++;
+        }
+        cur++;
+    }
+}
+```
+
+#### QuickSort
+```
+//contains left & right
+void quickSort(vector<int>&arr, int left, int right){
+    if( left >= right) return;
+    int index = partition(arr,left, right);
+    // index is already in the right place
+    if( index - 1 > left){
+        quickSort(arr,left,index-1);
+    }
+    if( index + 1 < right){
+        quickSort(arr,index+1,right);
+    }
+}
+
+void partition(vector<int>&arr, int left,int right){
+    int mid = (left+right)/2;
+    int pivot = arr[mid];
+    int l = left,r = right;
+    while(l <= r){
+        while(arr[left] < pivot){
+            l++;
+        }
+        while(arr[r] > pivot){
+            r--;
+        }
+        if(l<=r){
+            swap(arr[l],arr[r]);
+            l++;
+            r--;
+        }
+    }
+    return l;
+}
+```
+
+## Chapter 11. Test
+Skipped
+
+
+## Chapter 12. C++
+Skipped
+
+## Chapter 13 Java
+Skipped
+
+
+## Chapter 14. Databases
+Skipped
+
+## Chapter 15. Threads and Locks
+Skipped
+
+## Chapter 16. Moderate
+* 16.1 Swap Number with XOR: a = a^b b = a^b a = a^b
+* 16.2 Hash??
+* 16.3 Intersection??
+* 16.4 Tic Tac Win??
+* 16.5 计算5的数量
+* 16.6 Smallest Difference, Sort and compute diff
+* 16.7 Number Max:??
+* 16.8 English Int可以试试
+* 16.9 Operations 试试
+* 16.10 Living People 建立一个100的数组，count
+* 16.11 ？？
+* 16.12 不会
+* 16.13 不会
+* 16.14 不会
+* 16.15 leetcode guess原题
+* 16.16 原题
+* 16.17 O(n)在线更新
+* 16.18 双射
+* 16.21 target is known: so sort both first, then for each one binary search, O(nlogn)
+
+* 16.23 rand7 from rand5
+This is equivalent to Adam Rosenfield's solution, but may be a bit more clear for some readers. It assumes rand5() is a function that returns a statistically random integer in the range 1 through 5 inclusive.
+```
+int rand7()
+{
+    int vals[5][5] = {
+        { 1, 2, 3, 4, 5 },
+        { 6, 7, 1, 2, 3 },
+        { 4, 5, 6, 7, 1 },
+        { 2, 3, 4, 5, 6 },
+        { 7, 0, 0, 0, 0 }
+    };
+
+    int result = 0;
+    while (result == 0)
+    {
+        int i = rand5();
+        int j = rand5();
+        result = vals[i-1][j-1];
+    }
+    return result;
+}
+```
+How does it work? Think of it like this: imagine printing out this double-dimension array on paper, tacking it up to a dart board and randomly throwing darts at it. If you hit a non-zero value, it's a statistically random value between 1 and 7, since there are an equal number of non-zero values to choose from. If you hit a zero, just keep throwing the dart until you hit a non-zero. That's what this code is doing: the i and j indexes randomly select a location on the dart board, and if we don't get a good result, we keep throwing darts.
+
+Like Adam said, this can run forever in the worst case, but statistically the worst case never happens. 
+
+```
+int i;
+do
+{
+  i = 5 * (rand5() - 1) + rand5();  // i is now uniformly random between 1 and 25
+} while(i > 21);
+// i is now uniformly random between 1 and 21
+return i % 7 + 1;  // result is now uniformly random between 1 and 7
+```
+
+* 16.24 二分搜索
+* 16.25 LRU cache
+* 16.26 计算器
