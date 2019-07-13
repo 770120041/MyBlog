@@ -54,12 +54,18 @@ categories: Interview
 
 * 740
 * 862
+* 770-777
+* 780
+* 781-785
+
+* 786-796
+
 ## Reviewed
 https://cspiration.com/leetcodeClassification#10306
 
 #### 1.3.1. Array
 Array 330
-#### 1.3.2. String
+#### 1.3.2. String  
 375
 #### 1.3.4. Tree
 337
