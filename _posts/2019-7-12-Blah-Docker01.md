@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Docker"
+title:  "Docker-Concepts"
 categories: Blah
 ---
 # What's a VM
@@ -20,6 +20,12 @@ It is low performance because of it has lots of overhead. But the new technology
 
 # Why Docker
 When a VM boots up, it needs to start its kernel and user processes, it takes a long time. But if the host and VM have same kernel, then we just need to redirect kernel IO, not hardware IO, it is called Operating-system-level virtualization, container.
+
+* Containers are great for continuous integration and continuous delivery (CI/CD) workflows.
+
+* They use Docker to push their applications into a test environment and execute automated and manual tests.
+
+* When testing is complete, getting the fix to the customer is as simple as pushing the updated image to the production environment.
 
 让我们来回顾虚拟机的概念，在虚拟机的系统中，虚拟机认为自己有独立的文件系统，进程系统，内存系统，等等一系列，所以为了让容器接近虚拟机，也需要有独立的文件系统，进程系统，内存系统，等等一系列，为了达成这一目的，主机系统采用的办法是：只要隔离容器不让它看到主机的文件系统，进程系统，内存系统，等等一系列，那么容器系统就是一个接近虚拟机的玩意了
 
@@ -48,3 +54,14 @@ Docker uses host OS kernel, there is no custom or additional kernel inside conta
 # Docker creation
 (知乎-提高篇)[https://zhuanlan.zhihu.com/p/22403015]
 
+
+https://docs.docker.com/get-started/part2/
+
+# Docker Engine
+Docker Engine is a client-server application with these major components:
+
+* A server which is a type of long-running program called a daemon process (the `dockerd` command).
+
+* A REST API which specifies interfaces that programs can use to talk to the daemon and instruct it what to do.
+
+* A command line interface (CLI) client (the `docker` command). 
