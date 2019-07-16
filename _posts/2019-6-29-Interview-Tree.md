@@ -459,12 +459,12 @@ int countUnivalSubtrees(TreeNode * root) {
 Using Hash, O(n) time and O(N) space for a tree with N nodes
 #### Brute Force
 ```
-int calHeight(TreeNode* root, unordered_map<int,vector<int>>& uMap){
+int calHeight(TreeNode*root,unordered_map<int,vector<int>>& uMap){
     if(!root) return 0;
     int left = calHeight(root->left,uMap);
     int right = calHeight(root->right,uMap);
     int height = max(left,right)+1;
-    auto it=uMap.find(height);
+    auto it = uMap.find(height);
     if(it == uMap.end()){
         vector<int> tmp;
         tmp.push_back(root->val);
@@ -476,17 +476,11 @@ int calHeight(TreeNode* root, unordered_map<int,vector<int>>& uMap){
     return height;
 }
 vector<vector<int>> findLeaves(TreeNode * root) {
-    // write your code here
     vector<vector<int>> result;
-    unordered_map<int,vector<int>> umap;
-    calHeight(root,umap);
-    int n = umap.size();
-    for(int i=1;i<=n;i++){
-        vector<int> tmp;
-        for(int j=0;j<umap[i].size();j++){
-            tmp.push_back(umap[i][j]);
-        }
-        result.push_back(tmp);
+    unordered_map<int,vector<int>> uMap;
+    calHeight(root,uMap);
+    for(int i=1;i<=uMap.size();i++){
+        result.push_back(uMap[i]);
     }
     return result;
 }
