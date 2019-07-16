@@ -400,6 +400,34 @@ int countUnivalSubtrees(TreeNode * root) {
     return result;
 }
 ```
+### Brute force without pointer
+```
+unordered_set<int> DFS(TreeNode* root, int&result){
+    unordered_set<int> empty;
+    if(!root){
+        return empty;
+    }
+    auto left = DFS(root->left,result);
+    auto right = DFS(root->right,result);
+    if( (left.size() ==0 or (left.size() == 1 and left.count(root->val) == 1)) and ((right.size() == 1 and right.count(root->val) == 1) or right.size()==0)){
+        result++;
+    }
+    for(auto it = left.begin();it!=left.end();it++){
+        empty.insert(*it);
+    }
+    for(auto it = right.begin();it!=right.end();it++){
+        empty.insert(*it);
+    }
+    empty.insert(root->val);
+    return empty;
+}
+int countUnivalSubtrees(TreeNode * root) {
+    // write your code here
+    int result = 0;
+    DFS(root,result);
+    return result;
+}
+```
 
 #### Simplified Version
 ```

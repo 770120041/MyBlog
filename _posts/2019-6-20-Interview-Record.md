@@ -74,3 +74,6 @@ Array 330
 
 #### 1.3.10. DFS & BFS
 还剩两个N-queen
+
+### 错题
+* 33. Search in Rotated Sorted Array
