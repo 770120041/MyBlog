@@ -765,3 +765,59 @@ What if the BST is modified (insert/delete operations) often and you need to fin
 
 Answer: maintain the rank for each node, the meaning of rank is that how much nodes are smalller than current node, which is the number of nodes of left subtree. Maintain this is O(logn) for insertion and deletion, and by using rank, it takes O(logn) to find the kth smallest element.
 (Geek for Geeks answer)[https://www.geeksforgeeks.org/find-k-th-smallest-element-in-bst-order-statistics-in-bst/]
+
+
+## 
+```
+class Codec {
+public:
+
+    void inOrder(TreeNode* root, string &result){
+        if(!root) result += " # ";
+        else{
+            result += " "+to_string(root->val)+" ";
+            inOrder(root->left,result);
+            inOrder(root->right,result);
+        }
+    }
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        string result;
+        inOrder(root,result);
+        return result;
+    }
+
+   
+    void split(string data,char delim,queue<string>&elem,bool skipEmpty){
+        istringstream iss(data);
+        for(string item; getline(iss,item,delim); ){
+            if(skipEmpty and item.size()==0) continue;
+            else elem.push(item);
+        }
+    }
+     TreeNode* deserializeHelper(queue<string> &data){
+        if(0 == data.size()){
+            return NULL;
+        }
+        string curString = data.front();
+         data.pop();
+        if(curString == "#"){
+            return NULL;
+        }
+        else{
+            int x;
+            sscanf(curString.c_str(),"%d",&x);
+            TreeNode* cur = new TreeNode(x);
+            cur->left = deserializeHelper(data);
+            cur->right = deserializeHelper(data);
+            return cur;
+        }
+    }
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        queue<string> elem;
+        split(data,' ',elem,true);
+        return deserializeHelper(elem);
+    }
+};
+```

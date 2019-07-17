@@ -178,6 +178,27 @@ When pos is specified, the search only includes sequences of characters that beg
 
 **rfind** Searches the string for the first occurrence of the sequence specified by its arguments.
 
+#### transform to string
+```
+string to_string (int val);
+string to_string (long val);
+string to_string (long long val);
+string to_string (unsigned val);
+string to_string (unsigned long val);
+string to_string (unsigned long long val);
+string to_string (float val);
+string to_string (double val);
+string to_string (long double val);
+```
+#### String split 
+```
+void split(const string &str, char delim, vector<string> &elems, bool skip_empty = true) {
+    istringstream iss(str);
+    for (string item; getline(iss, item, delim); )
+        if (skip_empty && item.empty()) continue;
+        else elems.push_back(item);
+}
+```
 <hr>
 
 ## Unordered Map
