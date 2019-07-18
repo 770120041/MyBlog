@@ -767,7 +767,12 @@ Answer: maintain the rank for each node, the meaning of rank is that how much no
 (Geek for Geeks answer)[https://www.geeksforgeeks.org/find-k-th-smallest-element-in-bst-order-statistics-in-bst/]
 
 
-## 
+## 297. Serialize and Deserialize Binary Tree
+The key to this problem is how we process the recursion.
+
+One trick is to remove the current value when we are proceeding. So just use a queue to do that.
+
+First parse all strings to a queue. Then remove the token one by one from queue head, with the same order we push the token in.
 ```
 class Codec {
 public:
@@ -820,4 +825,70 @@ public:
         return deserializeHelper(elem);
     }
 };
+```
+
+
+## 285. Inorder Successor in BST(Lintcode: 448)
+
+#### Brute Force for none-BST
+```
+//state 0: not found, state 1: next , state2: found
+void findNext(TreeNode* cur,TreeNode* p, int &state,TreeNode** result){
+    if(!cur) return;
+    findNext(cur->left,p,state,result);
+    if(state == 1){
+        state = 2;
+        *result = cur;
+        return ;
+    }
+    if(state == 0 and p == cur){
+        state = 1;
+    }
+    findNext(cur->right,p,state,result);
+}
+TreeNode * inorderSuccessor(TreeNode * root, TreeNode * p) {
+    // write your code here
+    TreeNode* result = NULL;
+    int state = 0;
+    findNext(root,p,state,&result);
+    return result;
+}
+```
+
+ 
+#### If it is BST, find next larger number!
+1. if right subtree exist, find min of right subtree 
+2. The succssor must be an ancestor(or not exist if this node is the laregst of the whole tree).
+ (because its an BST tree, this case means that p is the smallest node in a **leftpart** of a subtree, we need to find the root of this subtree)
+
+```
+TreeNode* findMin(TreeNode* root){
+        if(root->left){
+            findMin(root->left);
+        }
+        else{
+            return root;
+        }
+    }
+    // if right subtree exist, find min of right subtree
+    // else the next min needs to be an ancestor. (because its an BST tree, this case
+    // means that p is the smallest node in a leftpart of a subtree, we need to find the root of this subtree)
+TreeNode * inorderSuccessor(TreeNode * root, TreeNode * p) {
+    if(p->right){
+        return findMin(p->right);
+    }
+    TreeNode* succ = NULL;
+    
+    while(root){
+        if(p->val < root->val){
+            succ = root;
+            root = root->left;
+        }
+        else if(p->val > root->val){
+            root = root->right;
+        }
+        else break;
+    }
+    return succ;
+}
 ```
