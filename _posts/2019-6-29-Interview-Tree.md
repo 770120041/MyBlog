@@ -766,6 +766,7 @@ What if the BST is modified (insert/delete operations) often and you need to fin
 Answer: maintain the rank for each node, the meaning of rank is that how much nodes are smalller than current node, which is the number of nodes of left subtree. Maintain this is O(logn) for insertion and deletion, and by using rank, it takes O(logn) to find the kth smallest element.
 (Geek for Geeks answer)[https://www.geeksforgeeks.org/find-k-th-smallest-element-in-bst-order-statistics-in-bst/]
 
+<hr>
 
 ## 297. Serialize and Deserialize Binary Tree
 The key to this problem is how we process the recursion.
@@ -827,6 +828,7 @@ public:
 };
 ```
 
+<hr>
 
 ## 285. Inorder Successor in BST(Lintcode: 448)
 
@@ -862,33 +864,199 @@ TreeNode * inorderSuccessor(TreeNode * root, TreeNode * p) {
  (because its an BST tree, this case means that p is the smallest node in a **leftpart** of a subtree, we need to find the root of this subtree)
 
 ```
-TreeNode* findMin(TreeNode* root){
-        if(root->left){
-            findMin(root->left);
-        }
-        else{
-            return root;
-        }
+TreeNode* minNode(TreeNode* root){
+    if(root->left){
+        return minNode(root->left);
     }
-    // if right subtree exist, find min of right subtree
-    // else the next min needs to be an ancestor. (because its an BST tree, this case
-    // means that p is the smallest node in a leftpart of a subtree, we need to find the root of this subtree)
+    return root;
+}
 TreeNode * inorderSuccessor(TreeNode * root, TreeNode * p) {
+    // write your code here
     if(p->right){
-        return findMin(p->right);
+        return minNode(p->right);
     }
-    TreeNode* succ = NULL;
-    
+    TreeNode* succsor = NULL;
     while(root){
-        if(p->val < root->val){
-            succ = root;
+        if(root->val > p->val){
+            succsor = root;
             root = root->left;
         }
-        else if(p->val > root->val){
+        else if(root->val < p->val){
             root = root->right;
+        }
+        else{
+            break;
+        }
+    }
+    return succsor;
+}
+```
+
+<hr>
+
+## 270. Closest Binary Search Tree Value(Lintcode: 900)
+#### Brute Force 
+O(N)
+```
+void DFS(double&diff,int& result,TreeNode*root,double target){
+    if(!root) return;
+    if(diff > abs(root->val-target)){
+        diff = abs(root->val-target);
+        result = root->val;
+    }
+    DFS(diff,result,root->left,target);
+    DFS(diff,result,root->right,target);
+}
+int closestValue(TreeNode * root, double target) {
+    // write your code here
+    double diff = INT_MAX;
+    int result = root->val;
+    DFS(diff,result,root,target);
+    return result;
+}
+```
+
+#### Approach this node
+O(h)
+```
+//Find succssor and predecessor
+int closestValue(TreeNode * root, double target) {
+    // write your code here
+    TreeNode* tmpRoot = root;
+    int result = root->val;
+    double diff = 1e30;
+    while(tmpRoot){
+        if(abs(tmpRoot->val - target) < diff){
+            diff = abs(tmpRoot->val - target);
+            result = tmpRoot->val;
+        }
+        if(tmpRoot->val > target){
+            tmpRoot = tmpRoot->left;
+        }
+        else if(tmpRoot->val < target){
+            tmpRoot = tmpRoot->right;
         }
         else break;
     }
-    return succ;
+    return result;
+}
+```
+<hr>
+
+## 272.Closest Binary Search Tree Value II	(Lintcode 901)
+
+#### Brute Force
+```
+void inOrder(vector<int>&nums,TreeNode* root){
+    if(!root) return;
+    inOrder(nums,root->left);
+    nums.push_back(root->val);
+    inOrder(nums,root->right);
+}
+int BinarySearch(vector<int> &nums,double target){
+    int left=0,right= nums.size()-1;
+    while(left+1<right){
+        int mid = (left+right)/2;
+        if(nums[mid]>target){
+            right = mid;
+        }
+        else{
+            left = mid;
+        }
+    }
+    if(abs(nums[left]-target) < abs(nums[right]-target)){
+        return left;
+    }
+    return right;
+}
+vector<int> closestKValues(TreeNode * root, double target, int k) {
+    vector<int> nums;
+    inOrder(nums,root);
+    int pos = BinarySearch(nums,target);
+    vector<int> result;
+    while(k>0){
+        result.push_back(nums[pos]);
+        k--;
+        int next = pos;
+        if(pos-1>=0 and pos+1<=nums.size()-1){
+            if(abs(target-nums[pos-1])<abs(target-nums[pos+1])){
+                next = pos-1;
+            }
+        }
+        else if(pos+1>nums.size()-1){
+            next = pos-1;
+        }
+        nums.erase(nums.begin()+pos);
+        pos = next;
+    }
+    return result;
+}
+```
+
+#### Tricky
+Create a queue size K, once its full pop the front.
+
+When we do an inorder traversal, add nodes in the path to the queue.
+
+## 99. Recover Binary Search Tree
+
+#### Brute Force
+```
+/*
+class Solution {
+public:
+    
+    void inOrder(vector<pair<int,TreeNode*>>&nums,TreeNode* root){
+        if(!root) return;
+        inOrder(nums,root->left);
+        nums.push_back({root->val,root});
+        inOrder(nums,root->right);
+    }
+    void recoverTree(TreeNode* root) {
+        vector<pair<int,TreeNode*>> nums;
+        inOrder(nums,root);
+        vector<int> nums2;
+        for(int i=0;i<nums.size();i++){
+            nums2.push_back(nums[i].first);
+        }
+        sort(nums2.begin(),nums2.end());
+        TreeNode* a=NULL,*b=NULL;
+        for(int i=0;i<nums2.size();i++){
+            if(nums2[i] != nums[i].first){
+                if(!a){
+                    a = nums[i].second;
+                }
+                else{
+                   b = nums[i].second;
+                    break;
+                }
+            }
+        }
+        swap(a->val,b->val);
+    }
+};
+```
+
+<hr>
+
+## Morris Traversal
+Using Morris Traversal, we can traverse the tree without using stack and recursion. The idea of Morris Traversal is based on Threaded Binary Tree(线索二叉树). In this traversal, we first create links to Inorder successor and print the data using these links, and finally revert the changes to restore original tree.
+### Threaded Binary TRee
+[GfG threaded ](https://www.geeksforgeeks.org/threaded-binary-tree/)
+
+#### How to create a Threaded Binary Tree
+```
+void createThreadedTree(TreeNode* cur,TreeNode **pre){
+    if(!cur) return;
+    createThreadedTree(cur->left,pre);
+    if(*pre){
+        *pre->next = cur;
+        *pre = NULL;
+    }
+    
+    if(!cur->right){
+        *pre = cur;
+    }
+    createThreadedTree(cur->right,pre);
 }
 ```
