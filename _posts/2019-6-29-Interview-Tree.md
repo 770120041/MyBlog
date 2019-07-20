@@ -998,6 +998,53 @@ Create a queue size K, once its full pop the front.
 
 When we do an inorder traversal, add nodes in the path to the queue.
 
+<hr>
+
+## Morris Traversal
+Using Morris Traversal, we can traverse the tree without using stack and recursion. The idea of Morris Traversal is based on Threaded Binary Tree(线索二叉树). In this traversal, we first create links to Inorder successor and print the data using these links, and finally revert the changes to restore original tree.
+### Threaded Binary Tree
+[GfG threaded ](https://www.geeksforgeeks.org/threaded-binary-tree/)
+
+
+#### How to convert a Given Binary Tree to Threaded Binary Tree?
+If left don't exist, then add current node. 
+
+Else, find the previous for this node. Then go throught the left tree. If previous already find, then `previous->next = cur`, and all the left subtree has already been visited. Visit current node and visit right subtree
+
+
+Codes for inorder traversal
+```
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode *root) {
+        vector<int> res;
+        if (!root) return res;
+        TreeNode *cur, *pre;
+        cur = root;
+        while (cur) {
+            if (!cur->left) {
+                res.push_back(cur->val);
+                cur = cur->right;
+            } else {
+                pre = cur->left;
+                while (pre->right && pre->right != cur) pre = pre->right;
+                if (!pre->right) {
+                    pre->right = cur;
+                    cur = cur->left;
+                } else {
+                    pre->right = NULL;
+                    res.push_back(cur->val);
+                    cur = cur->right;
+                }
+            }
+        }
+        return res;
+    }
+};
+```
+
+<hr>
+
 ## 99. Recover Binary Search Tree
 
 #### Brute Force
@@ -1037,26 +1084,48 @@ public:
 };
 ```
 
-<hr>
 
-## Morris Traversal
-Using Morris Traversal, we can traverse the tree without using stack and recursion. The idea of Morris Traversal is based on Threaded Binary Tree(线索二叉树). In this traversal, we first create links to Inorder successor and print the data using these links, and finally revert the changes to restore original tree.
-### Threaded Binary TRee
-[GfG threaded ](https://www.geeksforgeeks.org/threaded-binary-tree/)
+#### Morris Traversal(TODO:need review)
+We need to find two nodes that are not in place, the characteristic 
+of those two nodes is that they are not in order in the coresponding 
+position of an array.
 
-#### How to create a Threaded Binary Tree
 ```
-void createThreadedTree(TreeNode* cur,TreeNode **pre){
-    if(!cur) return;
-    createThreadedTree(cur->left,pre);
-    if(*pre){
-        *pre->next = cur;
-        *pre = NULL;
+// Now O(1) space complexity
+class Solution {
+public:
+    void recoverTree(TreeNode* root) {
+        TreeNode *first = NULL, *second = NULL, *parent = NULL;
+        TreeNode *cur, *pre;
+        cur = root;
+        while (cur) {
+            if (!cur->left) {
+                if (parent && parent->val > cur->val) {
+                    if (!first) first = parent;
+                    // those two numbers might be adjacent, might not. 
+                    // So if I do else{second = parent;break}, the second might be NULL if it is adjacnet
+                    second = cur;
+                }
+                parent = cur;
+                cur = cur->right;
+            } else {
+                pre = cur->left;
+                while (pre->right && pre->right != cur) pre = pre->right;
+                if (!pre->right) {
+                    pre->right = cur;
+                    cur = cur->left;
+                } else {
+                    pre->right = NULL;
+                    if (parent->val > cur->val) {
+                        if (!first) first = parent;
+                        second = cur;
+                    }
+                    parent = cur;
+                    cur = cur->right;
+                }
+            }
+        }
+        swap(first->val, second->val);
     }
-    
-    if(!cur->right){
-        *pre = cur;
-    }
-    createThreadedTree(cur->right,pre);
-}
+};
 ```
