@@ -3,7 +3,10 @@ layout: post
 title:  "Leetcode DP One dimension"
 categories: Interview
 ---
- 
+## 70. Climbing Stairs
+`dp[i] = dp[i-1]+dp[i-2]+dp[i], and initially dp = 0 and set dp[1]=dp[2] = 1    `
+
+
  Using Simple Array to DP
 ## 55. Jump Game
 Starts at 0, reaches at n(the length of array), note **not n-1**
