@@ -5,7 +5,7 @@ categories: Interview
 ---
 
 
-##Chapter 1 Array
+## Chapter 1 Array
 手动实现一个resizable array
 手动实现一个hashtable
 
@@ -143,7 +143,7 @@ int getNextPrime(vector<bool> &nums){
 Skiped
 ## Chapter 8 Recursion and DP
 
-#### Problems:
+### Problems:
 #### Hanuta
 ```
 Node = {1:"A",2:"B",3:"C"}
@@ -180,8 +180,10 @@ def tripleStep(n):
     return a[n-1]
 ```
 2. 8.3 ??
-3. 8.5 Recursive multiply with +,-,<<,>>
+3. 8.5 
+
 ```
+Recursive multiply with +,-,<<,>>
 def recursiveMultiply(x,y):
     if y == 1:
         return x
@@ -195,6 +197,7 @@ def wrapper(x,y):
     print("multiply %d and %d" %(x,y))
     print(recursiveMultiply(x,y))
 ```
+
 4. 8.13?
 5. 8.14??
 
@@ -203,6 +206,7 @@ Skip
 
 ## Chapter 10. Sorting and Searching
 #### MergeSort
+
 ```
 void mergesort(vector<int>& array){
     vector<int> helper(array.size(),0);

@@ -202,8 +202,12 @@ void split(const string &str, char delim, vector<string> &elems, bool skip_empty
 <hr>
 
 ## Unordered Map
+
+**Note** vector can't be key but can be value for maps 
+
 When it comes to efficiency, there is a huge difference between maps and unordered maps.
 We must know the internal working of both to decide which one is to be used.
+
 
 | | map  | unordered_map |
 | :--: | :--: | :--: |

@@ -28,41 +28,31 @@ categories: Interview
 * 707
 * 710
 
-* 712
-* 713
-* 714
-* 715
+* 712-715
 * 718
 
 * 126
 * 722
 * 721
 * 725
-* 726
-
-* 581 
-* 730
 * 728
-* 731
-* 732
 
-* 733
-* 734
-* 735
-* 736
+* 726
+* 581 
 * 738
-
 * 740
 * 862
+
+
+* 730-736
 * 770-777
-* 780
-* 781-785
+* 780-785
 
 * 786-796
 * 797-805
 * 805-815
 * 816-820
-* 821-830
+* 821-837
 
 ## Reviewed
 https://cspiration.com/leetcodeClassification#10306
@@ -70,9 +60,11 @@ https://cspiration.com/leetcodeClassification#10306
 #### 1.3.1. Array
 Array 330
 #### 1.3.2. String  
-375
+249
 #### 1.3.4. Tree
-337
+finished 99 
+#### 1.3.5. Backtracking
+finished 291
 #### 1.3.6. Dynamic Programming
 做完一维
 
