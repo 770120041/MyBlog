@@ -333,4 +333,54 @@ public:
 
 <hr>
 
-## 249 Group Shifted String(Lintcode)
+## 249 Group Shifted String(Lintcode 922)
+#### Brute Force
+```
+class Solution {
+public:
+    /**
+     * @param strings: a string array
+     * @return: return a list of string array
+     */
+    using vs = vector<string>;
+    using vvs = vector<vector<string>>;
+    bool canShift(string a,string b){
+        int n = a.size();
+        if(a.size() != b.size()){
+            return false;
+        }
+        int diff = b[0]-a[0];
+        for(int i=0;i<n;i++){
+            int target = a[i]+diff;
+            if(target < 'a'){
+                target+=26;
+            }
+            if(target > 'z'){
+                target -= 26;  
+            } 
+            if(target != b[i]) return false;   
+        }
+        return true;
+        
+    }
+    vector<vector<string>> groupStrings(vector<string> &strings) {
+        vvs result;
+        for(auto str:strings){
+            bool exist = false;
+            for(int i=0;i<result.size();i++){
+                if(canShift(result[i][0],str)){
+                    result[i].push_back(str);
+                    exist = true;
+                    break;
+                }
+            }
+            if(!exist){
+                vs tmp;
+                tmp.push_back(str);
+                result.push_back(tmp);
+            }
+        }
+        return result;
+    }
+};
+```
