@@ -52,7 +52,7 @@ categories: Interview
 * 797-805
 * 805-815
 * 816-820
-* 821-837
+* 821-842
 
 ## Reviewed
 https://cspiration.com/leetcodeClassification#10306
@@ -60,7 +60,7 @@ https://cspiration.com/leetcodeClassification#10306
 #### 1.3.1. Array
 Array 330
 #### 1.3.2. String  
-finished 249
+finished 38
 #### 1.3.4. Tree
 finished 99 
 #### 1.3.5. Backtracking
