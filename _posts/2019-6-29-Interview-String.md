@@ -540,3 +540,70 @@ public:
 
 <hr>
 
+## 358. Rearrange String k Distance Apart	
+For each character, we can count how frequent it has been used.
+
+The principle is that: Each time, we fill the string with the character that appeared most frequently. Then keep on fill the string until we have k positions filled or reach the end of the string. 
+
+To get the maximum number of appearence, we can use a priority queue to do that.
+
+
+```
+class Solution {
+public:
+    string rearrangeString(string str, int k) {
+        string result;
+        int len = result.size();
+        unordered_map<char,int> uMap;
+        priority_queue<int,char> pq;
+        for(auto s : str){
+            uMap[s]++;
+        }
+        for(auto it=uMap.begin(); it!= uMap.end();it++){
+            pq.push({it->second,it->first});
+        }
+        while(!pq.empty()){
+            int cnt = min(k,len);
+            vector<pair<int,char>> usedPair;
+            for(int i=0;i<cnt;i++){
+                if(pq.empty()) return "";
+                auto t = pq.top(); pq.pop();
+                result.push_back(t->second);
+                if(t->first-->0) usedPair.push_back(t);
+                len--;
+            }
+            for(auto a:usedPair) pq.push_back(a);
+        }
+        return result;
+    }
+};
+```
+
+## 316. Remove Duplicate Letters
+Push to result first, if find a possible smaller one, pop the result out and replenish the result.
+```
+class Solution {
+public:
+    string removeDuplicateLetters(string s) {
+        unordered_map<char,int> uMap;
+        for(auto c:s){
+            uMap[c] ++;
+        }
+        string result;
+        vector<bool> visited(26,false);
+        for(int i=0;i<s.size();i++){
+            char cur = s[i];
+            uMap[cur]--;
+            if(visited[cur-'a']) continue;
+            // it is smaller than the rear and rear is going to appear again
+            while(result.size() > 0 and cur < result.back() and uMap[result.back()]>0){
+                visited[result.back()-'a'] = false;
+                result.pop_back();
+            }
+            result.push_back(cur);
+            visited[cur-'a'] = true;
+        }
+        return result;   
+    }
+};
+```
