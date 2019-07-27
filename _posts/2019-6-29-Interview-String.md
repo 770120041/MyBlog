@@ -579,6 +579,8 @@ public:
 };
 ```
 
+<hr>
+
 ## 316. Remove Duplicate Letters
 Push to result first, if find a possible smaller one, pop the result out and replenish the result.
 ```
@@ -607,3 +609,68 @@ public:
     }
 };
 ```
+
+<hr>
+
+## 271.Encode and Decode Strings(Lintcode 659)
+The trick is to use an escape character and a deliminator. If we don't use an escape but only use and deliminiator. For example, we parse ':' to "::" and use ':' to indicate the seperator of different stirng, then if the test is `["::::", "::::::::;;::;;;:;", ":", "yes"]`, it can't parse.
+
+So the delim is only valid when it follows an escape character.
+#### Solution
+```
+class Solution {
+public:
+    /*
+     * @param strs: a list of strings
+     * @return: encodes a list of strings to a single string.
+     */
+    string encode(vector<string> &strs) {
+        // we need one character as the escape characeter and one deliminator
+        // if we use only delim, then if the whole string is only consisted of the delim, then we can't parse it.
+        char delim = ';';
+        char escape = ':';
+        string result;
+        for(auto str:strs){
+            for(auto c: str){
+                result.push_back(c);
+                if(c == escape){
+                    result.push_back(escape);
+                }
+            }
+            result.push_back(escape);
+            result.push_back(delim);
+        }
+        return result;
+    }
+
+    /*
+     * @param str: A string
+     * @return: dcodes a single string to a list of strings
+     */
+    vector<string> decode(string &str) {
+        char delim = ';';
+        char escape = ':';
+        // cout<<str<<endl;
+        vector<string> result;
+        string cur;
+        for(int i=0;i<str.size();i++){
+            if(str[i] == escape){
+                i++;
+                if(str[i] == escape){
+                }
+                else{
+                    result.push_back(cur);
+                    cur.clear();
+                    continue;
+                }
+            }
+            cur.push_back(str[i]);
+        }
+        return result;
+    }
+};
+```
+
+<hr>
+
+

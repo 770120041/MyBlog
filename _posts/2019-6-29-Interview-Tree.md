@@ -774,6 +774,8 @@ The key to this problem is how we process the recursion.
 One trick is to remove the current value when we are proceeding. So just use a queue to do that.
 
 First parse all strings to a queue. Then remove the token one by one from queue head, with the same order we push the token in.
+
+**Note**: Must use queue, if use vector, it would be TLE
 ```
 class Codec {
 public:

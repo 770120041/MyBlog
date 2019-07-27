@@ -296,6 +296,7 @@ void abssort(float* x, unsigned n) {
     );
 }
 ```
+
 <hr>
 
 ## Priority Queue
@@ -306,6 +307,7 @@ template<
     class Compare = std::less<typename Container::value_type>
 > class priority_queue;
 ```
+Example: `priority_queue<int, std::vector<int>, std::greater<int> >`
 
 #### Functions
 * top() accesses the top element 
