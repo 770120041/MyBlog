@@ -48,13 +48,15 @@ categories: Interview
 * 770-777
 * 780-850
 
+15+70+35 
+
 ## Reviewed
 https://cspiration.com/leetcodeClassification#10306
 
 #### 1.3.1. Array
 Array 330
 #### 1.3.2. String  
-finished 38
+到提高
 #### 1.3.4. Tree
 finished 99 
 #### 1.3.5. Backtracking

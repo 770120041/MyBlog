@@ -673,4 +673,165 @@ public:
 
 <hr>
 
+## 168. Excel Sheet Column Title
+```
+class Solution {
+public:
+    string convertToTitle(int n) {
+        string result;
+        while(n){
+            int a = n%26;
+            if(a == 0){
+                result.push_back('Z');
+                n = n/26 - 1;
+
+            }
+            else{
+                result.push_back(a+'A'-1);
+                n /= 26;
+            }
+        }
+        reverse(result.begin(),result.end());
+        return result;
+    }
+};
+```
+
+<hr>
+
+## 12. Integer to Roman
+#### Greedy
+```
+class Solution {
+public:
+    string CalHundred(int& num,int base,vector<string>&str,vector<int>&val){
+        int cur = num % base;
+        num /= base;
+        string result;
+        for(int i=val.size()-1;i>=0;i--){
+            if(cur >= val[i]){
+                int a = cur/val[i];
+                cur = cur%val[i];
+                if(val[i] == 100){
+                    result += str[a-1]+" Hundred";
+                }
+                else{
+                    if(result.size()) result += " ";
+                    result += str[i];
+                }
+            }
+        }
+        return result;
+    }
+    string numberToWords(int num) {
+        if(num == 0) return "Zero";
+        vector<string> str{"One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety","Hundred"};
+        vector<int> val{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,30,40,50,60,70,80,90,100};
+        string result;
+        int base = 1000;
+        if(num){
+            result = CalHundred(num,base,str,val) + result;
+        }
+        //thousand
+        if(num){            
+            string tmp = CalHundred(num,base,str,val);
+            if(tmp.size()>0){
+                string middle = " Thousand";
+                if(result.size()) middle += " ";
+                result = tmp+ middle + result;
+            }
+            else{;}
+        }
+        //million
+        if(num){
+            string tmp = CalHundred(num,base,str,val);
+            if(tmp.size()>0){
+                string middle = " Million";
+                if(result.size()) middle += " ";
+                result = tmp+ middle + result;
+            }
+            else{;}
+        }
+        //billion
+        if(num){            
+            string tmp = CalHundred(num,base,str,val);
+            if(tmp.size()>0){
+                string middle = " Billion";
+                if(result.size()) middle += " ";
+                result = tmp+ middle + result;
+            }
+            else{;}
+        }
+        return result;
+    }
+};
+```
+
+<hr>
+
+## 246. Strobogrammatic Number(Lint 644)
+Rotate 180 means we need to read it in reverse order. So we need to both check for each pos and check if the reverse number still get same value
+
+For this question, pay attention to border condition, like only one number
+#### Solution
+```
+class Solution {
+public:
+    /**
+     * @param num: a string
+     * @return: true if a number is strobogrammatic or false
+     */
+    void initMap(unordered_map<char,char>&uMap){
+        uMap['0'] = '0';
+        uMap['1'] = '1';
+        uMap['6'] = '9';
+        uMap['9'] = '6';
+        uMap['8'] = '8';
+
+    }
+    bool isStrobogrammatic(string &num) {
+        unordered_map<char,char> uMap;
+        initMap(uMap);
+        for(int l=0,r=num.size()-1;l<=r;l++,r--){
+            if(uMap.find(num[l]) == uMap.end()
+            or uMap.find(num[r]) == uMap.end()
+            or uMap[num[l]] != num[r]
+            ){
+                cout<<l<<" "<<r<<endl;
+                return false;
+            }
+        }
+        return true;
+    }
+};
+```
+
+<hr>
+
+## 247. Strobogrammatic NumberII(Lint 776)
+
+#### dfS
+```
+vector<string> helper(int n,int m){
+    if(n == 0) return vector<string>{""};
+    if(n == 1) return vector<string>{"0","1","8"};
+    vector<string> last = helper(n-2,m);
+    vector<string> result;
+    for(int i=0;i<last.size();i++){
+        string s = last[i];
+        if(n != m) result.push_back("0"+s+"0");
+        result.push_back("8"+s+"8");
+        result.push_back("1"+s+"1");
+        result.push_back("6"+s+"9");
+        result.push_back("9"+s+"6");
+    }
+    return result;
+}
+vector<string> findStrobogrammatic(int n) {
+    return helper(n,n);
+}
+```
+
+<hr>
+
 
