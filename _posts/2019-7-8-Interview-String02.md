@@ -231,4 +231,42 @@ public:
 
 <hr>
 
-## 76 Minimum Window Substring    
+## *76 Minimum Window Substring    
+[blog](https://www.cnblogs.com/grandyang/p/4340948.html)
+
+Using a hash map to check if all the requirement is met.
+
+If `target[c]<=0`, means this character is fulfilled.
+#### Sliding Windows
+```
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        string result;
+        unordered_map<char,int> target;
+        for(auto c:t) target[c]++;
+        for(int l=0,r=0,cnt = 0,minLen=INT_MAX;r<s.size();r++){
+            if(target.find(s[r]) == target.end()) continue;
+            target[s[r]]--;
+            if(target[s[r]]>=0) cnt++;
+            while(cnt == t.size()){
+                if(target.find(s[l]) == target.end()) l++;
+                else if(target[s[l]] + 1 <= 0) target[s[l++]]++;
+                else{
+                    if(r-l+1 < minLen){
+                        minLen = r-l+1;
+                        result = s.substr(l,minLen);
+                    }
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+};
+```
+
+<hr>
+
+## *30. Substring with Concatenation of All Words
+
