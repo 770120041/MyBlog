@@ -46,9 +46,9 @@ categories: Interview
 
 * 730-736
 * 770-777
-* 780-850
+* 780-862
 
-15+70+35 
+15+70+35  + 8
 
 ## Reviewed
 https://cspiration.com/leetcodeClassification#10306
@@ -56,7 +56,7 @@ https://cspiration.com/leetcodeClassification#10306
 #### 1.3.1. Array
 Array 330
 #### 1.3.2. String  
-到提高
+finished 158
 #### 1.3.4. Tree
 finished 99 
 #### 1.3.5. Backtracking

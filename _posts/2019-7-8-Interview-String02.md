@@ -178,10 +178,57 @@ public:
 <hr>
 
 ## 157.Read N Characters Given Read4  
+```
+// Forward declaration of the read4 API.
+int read4(char *buf);
 
-
+class Solution {
+public:
+    int read(char *buf, int n) {
+        int res = 0;
+        int cnt = 0;
+        while(true){
+            
+            int cur = read4(buf+cnt);
+            if(cur == 0) break;
+            cnt += cur;
+        }  
+        if(cnt>n){
+            buf[n] = '\0'
+        } 
+        else{
+            buf[cnt] = '\0'
+        }
+        return min(cnt,n);
+    }
+};
+```
 <hr>
 
 ## 158 Read N Characters Given Read4 II - Call multiple times	(Lintcode 660)
 
+#### Tricky Solution
+```
+int read4(char *buf);
+
+class Solution {
+public:
+    int readPos = 0,writePos = 0;
+    char buffer[4];
+    int read(char *buf, int n) {
+        for(int i=0;i<n;i++){
+            if(writePos == readPos){
+                writePos = read4(buffer);
+                readPos = 0;
+                if(writePos == 0) return i;
+            }
+            buf[i] = buffer[readPos++];
+        }
+        return n;
+    }
+};
+```
+
 <hr>
+
+## 76 Minimum Window Substring    
