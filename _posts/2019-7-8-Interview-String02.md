@@ -343,7 +343,7 @@ public:
 
 <hr>
 
-## 340.Longest Substring with At Most K Distinct Characters	(Lintcode 386)
+## 340.Longest Substring with At Most K Distinct Characters	(Lintcode 386, )
 #### Sliding Window
 Space O(K+1) Time(O(N))
 ```
@@ -370,6 +370,42 @@ public:
 
 <hr>
 
+## 159
+Can use 340's solution
+
+<hr>
+
 ## 395 Longest Substring with At Least K Repeating Characters	
+[blog](https://blog.csdn.net/u010900754/article/details/62159601)
+
+#### 目前处理子串的方法有：
+1. Sliding Windows
+2. dp；
+3. Divide and conqure
+#### Solution 
+class Solution {
+public:
+    int longestSubstring(string s, int k) {
+        return helper(s,k,0,s.size()-1);
+    }
+    int helper(string& s,int k,int left,int right){
+        if(left>right) return 0;
+        vector<int> cnt(26,0);
+        for(int i=left;i<=right;i++) cnt[s[i]-'a']++;
+        for(int i=0;i<26;i++){
+            if(cnt[i]>0 and cnt[i] < k){
+                int pos = -1;
+                for(int j=left;j<=right;j++){
+                    if(s[j] == i+'a'){
+                        pos = j;
+                        break;
+                    }
+                }
+                return max(helper(s,k,left,pos-1), helper(s,k,pos+1,right));
+            }
+        }
+        return right-left+1;
+    }
+};
 
 <hr>
