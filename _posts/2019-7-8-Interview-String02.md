@@ -269,4 +269,107 @@ public:
 <hr>
 
 ## *30. Substring with Concatenation of All Words
+#### Sliding window brute force
+```
+class Solution {
+public:
+    // must be concatenation of each words!
+    vector<int> findSubstring(string s, vector<string>& words) {
+        vector<int> result;
+        int n = words.size();
+        int m = s.size();
+        if(n == 0 or m == 0){
+            return result;
+        }
+        unordered_map<string,int> uMap;
+        for(auto str:words){
+            uMap[str]++;
+        }
+        int length = words[0].size();
+        int totalSize = length * n;
+        for(int i=0;i<=m-totalSize;i++){
+            unordered_map<string,int> tmpMap = uMap;
+            bool Match = true;
+            for(int j=0;j<n;j++){
+                string curStr = s.substr(i+j*length,length);
+                auto it = tmpMap.find(curStr);
+                if(it != tmpMap.end()){
+                    tmpMap[curStr]--;
+                    if(tmpMap[curStr] < 0){
+                        Match = false;
+                        break;
+                    }
+                }
+                else{
+                    Match = false;
+                    break;
+                }
+            }
+            if(Match){
+                result.push_back(i);
+            }
+        }
+        
+        return result;
+    }
+};
+```
 
+<hr>
+
+## 3. Longest Substring Without Repeating Characters
+#### Sliding window brute force
+```
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        unordered_map<char,int> uMap;
+        int maxLen = 0;
+        for(int l=0,r=0;r<s.size();r++){
+            char cur = s[r];
+            uMap[cur]++;
+            while(uMap[cur]>1){
+                uMap[s[l++]]--;
+                if(uMap[cur] == 1){
+                    break;
+                }
+            }
+            maxLen = max(maxLen, r-l+1);
+        }
+        return maxLen;
+    }
+};
+```
+
+<hr>
+
+## 340.Longest Substring with At Most K Distinct Characters	(Lintcode 386)
+#### Sliding Window
+Space O(K+1) Time(O(N))
+```
+class Solution {
+public:
+    int lengthOfLongestSubstringKDistinct(string &s, int k) {
+        unordered_map<char,int> uMap;
+        int charCnt = 0;
+        int maxLen = 0;
+        for(int l=0,r=0; r < s.size() ; r++){
+            uMap[s[r]]++;
+            if(uMap[s[r]] == 1) charCnt++;
+            while(charCnt > k){
+                uMap[s[l]]--;
+                if(uMap[s[l]] == 0) charCnt --;
+                l++;
+            }
+            maxLen = max(maxLen , r-l+1);
+        }
+        return maxLen;
+    }
+};
+```
+
+<hr>
+
+## 395 Longest Substring with At Least K Repeating Characters	
+
+<hr>
