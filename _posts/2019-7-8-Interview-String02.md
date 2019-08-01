@@ -409,3 +409,202 @@ public:
 };
 
 <hr>
+
+## 5. Longest Palindromic Substring
+#### Brute Force O(N^2)
+```
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        string longest;
+        for(int i=0;i<s.size();i++){
+            int left=i,right=i;
+            while(left>=0 and right < s.size() and s[left] == s[right]){
+                if(longest.size() < right-left+1){
+                    longest = s.substr(left,right-left+1);
+                }
+                left--;
+                right++;
+            }
+        }
+        for(int i=1;i<s.size();i++){
+            int left=i-1,right=i;
+            while(left>=0 and right < s.size() and s[left] == s[right]){
+                if(longest.size() < right-left+1){
+                    longest = s.substr(left,right-left+1);
+                }
+                left--;
+                right++;
+            }
+        }
+        return longest;
+    }
+};
+```
+
+#### Manacher's Algorithm 
+[blog](https://blog.csdn.net/dyx404514/article/details/42061017)
+[visualize](http://manacher-viz.s3-website-us-east-1.amazonaws.com/#/)
+
+
+Steps:
+1. Add # to the front and rear of each chacter, so a character of length n will have 2n+1 characters.
+We can add different characters for rear and head. For example, we make "abcde" to "$a#b#c#d#e^"
+2. The key of this alrogithm is to use the result we calculated before to accelerate all calculation later. We use one point 'mx' to keep track of the longest position we have already find as a palindrome string. We also use `lastC` to indicate the last Center. 
+3. If we have calculated this pos, which means `mx > current_position`,then `P[i] = min(mx-i,P[2*lastC-i]`, the reason is because from S[lastC-P[lastC]] to S[mx], it is palidrome string, so from it can at most be mx-i or [2*lastC-i], and we need to choose the smaller one);
+
+```
+string Manacher(string s) {
+    // Insert '#'
+    string t = "$#";
+    for (int i = 0; i < s.size(); ++i) {
+        t += s[i];
+        t += "#";
+    }
+    // Process t
+    vector<int> p(t.size(), 0);
+    int mx = 0, id = 0, resLen = 0, resCenter = 0;
+    for (int i = 1; i < t.size(); ++i) {
+        p[i] = mx > i ? min(p[2 * id - i], mx - i) : 1;
+        while (t[i + p[i]] == t[i - p[i]]) ++p[i];
+        if (mx < i + p[i]) {
+            mx = i + p[i];
+            id = i;
+        }
+        if (resLen < p[i]) {
+            resLen = p[i];
+            resCenter = i;
+        }
+    }
+    return s.substr((resCenter - resLen) / 2, resLen - 1);
+}
+```
+
+<hr>
+
+## 9. Palindrome Number	
+```
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        if(x<0) return false;
+        long long reverse=0;
+        long long tmp = x;
+        while(tmp){
+            reverse*=10;
+            reverse += tmp%10;
+            tmp/=10;
+        }
+        cout<<reverse<<endl;
+        return reverse == x;
+    }
+};
+```
+
+<hr>
+
+## 214. Shortest Palindrome
+Brute force:
+
+<hr>
+
+## 20. Valid Parentheses
+Using hashmap will be better because its harder to make mistakes
+```
+class Solution {
+public:
+    bool isValid(string s) {
+        stack<int> myStack;
+        unordered_map<char,int> uMapl{{'(',0},{'[',1},{'{',2}};
+        unordered_map<char,int> uMap{{')',0},{']',1},{'}',2}};
+        for(int i=0;i<s.size();i++){
+            if(s[i] == '(' or s[i] == '[' or s[i] == '{') myStack.push(uMapl[s[i]]);
+            else{
+                if(myStack.empty()) return false;
+                int topIndex = myStack.top();
+                myStack.pop();
+                cout<<uMap[s[i]]<<" "<<topIndex<<endl;
+                if(uMap[s[i]] != topIndex ) return false;
+            }
+        }
+        return myStack.empty();
+    }
+};
+```
+
+<hr>
+
+## 22. Generate Parentheses
+#### Backtracking
+O(n) space and O(2^N) time complexity
+```
+class Solution {
+public:
+    using vs = vector<string>;
+    void DFS(vs&result,string&cur,int left,int right,int n){
+        if(left+right == n*2){
+            result.push_back(cur);
+            return;
+        }
+        if(left<n){
+            cur.push_back('(');
+            DFS(result,cur,left+1,right,n);
+            cur.pop_back();
+        }
+        if(right<left){
+            cur.push_back(')');
+            DFS(result,cur,left,right+1,n);
+            cur.pop_back();
+        }
+    }
+    vector<string> generateParenthesis(int n) {
+        vs result;
+        string tmp;
+        DFS(result,tmp,0,0,n);
+        return result;
+    }
+};
+```
+
+<hr>
+
+## 32. Longest Valid Parentheses
+Brute force: TLE
+#### Stack
+```
+class Solution {
+public:
+    int longestValidParentheses(string s) {
+        stack<int> myStack;
+        int start = 0;
+        int result = 0;
+        for(int i=0;i<s.size();i++){
+            if(s[i] == '(') myStack.push(i);
+            else{
+                if(myStack.empty()) start = i+1;
+                else{
+                    myStack.pop();
+                    result = myStack.empty()?max(result,i-start+1):max(result,i-myStack.top());
+                }
+            }
+        }
+        return result;
+    }
+};
+```
+
+pay attention to else, if we do
+```
+else{
+    int topI = myStack.top(); myStack.pop();
+    result = myStack.empty()?max(result,i-start+1):max(result,i-topI+1);
+}
+```
+If the test cases is `"(()()"`, it will result 2 not 4, because the start is still 0, so we need to compare the last `(`
+
+<hr>
+
+## 241. Different Ways to Add Parentheses
+
+
+<hr>

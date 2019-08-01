@@ -46,9 +46,9 @@ categories: Interview
 
 * 730-736
 * 770-777
-* 780-867
+* 780-890
 
-15+70+35  + 13
+15+70+35 + 24
 
 ## Reviewed
 https://cspiration.com/leetcodeClassification#10306
@@ -56,7 +56,8 @@ https://cspiration.com/leetcodeClassification#10306
 #### 1.3.1. Array
 Array 330
 #### 1.3.2. String  
-finished 159
+finished 214, skipeed the rest of Palindrome
+finished 32
 #### 1.3.4. Tree
 finished 99 
 #### 1.3.5. Backtracking
