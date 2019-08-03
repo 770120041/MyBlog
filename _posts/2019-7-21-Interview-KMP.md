@@ -16,54 +16,37 @@ The meaning of `Next[j]`: 代表当前字符之前的字符串中，有多大长
 
 
 
-#### Code for searching
+#### Code for searching(Need to test)
+
 ```
-int KmpSearch(char* s, char* p)
-{
-	int i = 0;
+void calNextP(vector<int>&next,string&p){
 	int j = 0;
-	int sLen = strlen(s);
-	int pLen = strlen(p);
-	while (i < sLen && j < pLen)
-	{
-		//①如果j = -1，或者当前字符匹配成功（即S[i] == P[j]），都令i++，j++    
-		if (j == -1 || s[i] == p[j])
-		{
-			i++;
+	int k = -1;
+	while(j < p.size()){
+		if(k == -1 or p[k] == p[j]){
+			next[j] = k
+			k++;
 			j++;
 		}
-		else
-		{
-			//②如果j != -1，且当前字符匹配失败（即S[i] != P[j]），则令 i 不变，j = next[j]    
-			//next[j]即为j所对应的next值      
+		else{
+			k = next[j];
+		}
+	}
+}
+int KMP(string s,string p){
+	vector<int> next(p,0);
+	calNextP(next,p);
+	for(int i=0,j=0;i<s.size() and j < p.size() ; >{
+		if(j == -1 or s[i] == s[j]){
+			i++; j++;
+		}
+		else{
 			j = next[j];
 		}
 	}
-	if (j == pLen)
-		return i - j;
-	else
-		return -1;
+	if(j == p.size()){
+		return i-j;
+	}
+	return -1;
 }
 ```
-
-## Code for finding next[i]
-```
-vector<int> findNext(string&p){
-    vector<int> next(p.size(),0);
-    p[0] = -1;
-    int k=-1,j=0;
-    //k is the matching size of prefix
-    while(j<p.size()){
-        if(k == -1 or p[k] == p[j]){
-            k++;
-            j++;
-            next[j] = k;
-        }
-        else{
-            k = next[k];
-        }
-    }
-}
-```
-
-

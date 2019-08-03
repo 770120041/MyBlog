@@ -504,7 +504,37 @@ public:
 <hr>
 
 ## 214. Shortest Palindrome
-Brute force:
+#### Brute force: TLE
+```
+class Solution {
+public:
+    bool isPalindrome(const string&s,int left,int right){
+        while(left<right){
+            if(s[left++] != s[right--]) return false;
+        }
+        return true;
+    } 
+    
+    string shortestPalindrome(string s) {
+        if(s.size() == 0) return s;
+        int resultPos = 0;
+        for(int i=s.size()-1;i>=0;i--){
+            if(isPalindrome(s,0,i)){
+                resultPos=i;
+                break;
+            }
+        }
+        if(resultPos == s.size()-1) return s;
+        string leftPart = s.substr(resultPos+1);
+        reverse(leftPart.begin(),leftPart.end());
+        return leftPart+s;
+    }
+};
+```
+
+#### KMP
+reverse s stored to t, concatanate s+t, then use KMP
+ 
 
 <hr>
 
