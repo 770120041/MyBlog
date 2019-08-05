@@ -534,6 +534,19 @@ public:
 
 #### KMP
 reverse s stored to t, concatanate s+t, then use KMP
+
+```
+這題第一個出發點是 從頭開始找 最長的回文子串
+如果用naive方法的話 有n個子串 每個要花O(n)時間驗證是不是回文 就O(n^2)了
+
+因為之前讀過KMP算法 知道其中一個核心就是Longest prefix suffix
+假如S = ABAXY
+那我們生成一個新字串K = ABAXY_XYABA
+也就是s + "_" + reversed(s)
+那麼K的Longest prefix suffix 就是S的從頭最長的回文串
+也就是ABA
+```
+
  
 
 <hr>
