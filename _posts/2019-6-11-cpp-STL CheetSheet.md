@@ -221,14 +221,14 @@ We must know the internal working of both to decide which one is to be used.
 Unordered Map way to insert:
 
 ### Insert and [] works differently
-#### []
+#### For []
 it has overload the `[`  `umap[key] = val` 
 
 operator[] returns a reference to the element you are searching for. When no element exists, it creates a new default element. (So requires default constructor)
 
 When used to insert an element: myMap[key] = value;, the value will **override the old value** for the key.
     
-#### Insert
+#### For Insert
 using insert( pair<T,T>(key,value) 
 `insert` Returns an iterator and a bool. The iterator is to the element. The bool indicates if a new element was inserted (true), or it already contained an element for the key (false).
 
@@ -321,7 +321,7 @@ Example: `priority_queue<int, std::vector<int>, std::greater<int> >`
 
 ## lower_bound
 
-**This is not suitable for STL using Hashmap, because HashMap don't have comparator**
+**This is not applicable for STL using Hashmap, because HashMap don't have comparator**
 Syntax:
 ```
 template< class ForwardIt, class T, class Compare >
@@ -335,8 +335,22 @@ The first version uses operator< to compare the elements, the second version use
 
 #### Parameters
 ```
-
 * first, last	-	iterators defining the partially-ordered range to examine
 * value	-	value to compare the elements to
 * comp	-	binary predicate which returns ​true if the first argument is less than (i.e. is ordered before) the second. 
+```
 
+#### Example
+
+[GeeksforGeeks](https://www.geeksforgeeks.org/lower_bound-in-cpp/)
+#### Map
+```
+iterator lower_bound (const key_type& k);
+const_iterator lower_bound (const key_type& k) const;
+```
+[docs](http://www.cplusplus.com/reference/map/map/lower_bound/)
+
+<hr>
+
+## Upper Bound
+[GeeksforGeeks](https://www.geeksforgeeks.org/upper_bound-in-cpp/)

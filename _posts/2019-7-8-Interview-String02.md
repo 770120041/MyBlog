@@ -533,22 +533,33 @@ public:
 ```
 
 #### KMP
-reverse s stored to t, concatanate s+"$"+t, then use KMP, the reason to use "$" to to seperate thouse two strings, so the next of the latter part will start from 0
+reverse s stored to r, concatanate r+"$"+s, then use KMP, the reason to use "$" to to seperate thouse two strings, so the next of the latter part will start from 0
 
+The reason to reverse it is that if this is a palindrome string, then r == s.所以从t的最后一个位置的最长前缀就是palindrome的长度，因为前缀==后缀是回文串的条件 and when we find the next of t = r+"$"+s, then `next[t.size()-1]` is the length of the overlapping part.
 ```
 class Solution {
 public:
+    vector<int> findPrefix(const string&t){
+        vector<int> next(t.size(),-1);
+        int j = -1,i = 0;
+        while(i<t.size()-1){
+            if(j == -1 or t[i] == t[j]){
+                i++;j++;
+                next[i] = j;
+            }
+            else{
+                j = next[j];
+            }
+        }
+        return next;
+    }
     string shortestPalindrome(string s) {
         string r = s;
         reverse(r.begin(), r.end());
         string t = s + "#" + r;
-        vector<int> next(t.size(), 0);
-        for (int i = 1; i < t.size(); ++i) {
-            int j = next[i - 1];
-            while (j > 0 && t[i] != t[j]) j = next[j - 1];
-            next[i] = (j += t[i] == t[j]);
-        }
-        return r.substr(0, s.size() - next.back()) + s;
+        auto next = findPrefix(t);
+        cout<<endl;
+        return r.substr(0, s.size()-next.back()-1) + s;
     }
 };
 ```

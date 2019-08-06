@@ -88,17 +88,15 @@ int findCelebrity(int n) {
 class Solution {
 public:
     int hIndex(vector<int>& citations) {
-        int sum=0;
-        sort(citations.begin(),citations.end(),greater<int>());
-        int i;
-        for(i=0;i<citations.size();i++){
-            // if less, then return last successful
-            if(citations[i] >= i+1){;}
-            else{
-                return i;
-            }
+        int sum = 0;
+        for(int x:citations) sum+=x;
+        if(sum == 0 or citations.size() == 0) return 0;
+        sort(citations.begin(),citations.end());
+        for(int i=0;i<citations.size();i++){
+            int h = citations.size()-i;
+            if(citations[i] >= h) return h;
         }
-        return i;
+        return 0;
     }
 };
 ```
@@ -106,47 +104,132 @@ public:
 <hr>
 
 ## 275 H-Index 2
-```
-int hIndex(vector<int>& citations) {
-    reverse(citations.begin(),citations.end());
-    int i;
-    for(i=0;i<citations.size();i++){
-        // if less, then return last successful
-        if(citations[i] <i+1){
-            return i;
-        }
-    }
-    return i;
-}
-```
-<hr>
-
-## 220. Contains Duplicate III
-First idea: find from nums[i]-t to nums[i]+t for each position; Time complexity would be O(n*t)
-
-If t is large, then too slow
-
-If we scan postion max(0,i-k) and min(n-1,i+k), then time complexity is O(n*k)
-
+#### Brute Force
 ```
 class Solution {
 public:
-    bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
-        map<long long ,int> uMap;
-        int j=0;
-        for(int i=0;i<nums.size();i++){
-            if(i-j >k) uMap.erase(nums[j++]);
-            auto it = uMap.lower_bound((long long)nums[i]-t);
-            if(it != uMap.end() && abs(it->first - nums[i]) <= t) return true;
+    int hIndex(vector<int>& citations) {
+        for(int i=0;i<citations.size();i++){
+            int h = citations.size() - i;
+            if(citations[i] >= h){
+                return h;
+            }
+        }
+        return 0;
+    }
+};
+```
+#### Binary Search
+```
+class Solution {
+public:
+    //找到恰好大于h的点
+    int hIndex(vector<int>& citations) {
+        int n = citations.size();
+        if(n == 0) return 0;
+        int l = 0, r = n-1;
+        //finally l+1 == r
+        while(l+1<r){
+            int mid = (l+r)/2;
+            if(citations[mid] >= n-mid){
+                r = mid;
+            }
+            else{
+                l = mid;
+            }
+        }
+        if(citations[l] >= n-l) return n-l;
+        if(citations[r] >= n-r) return n-r;
+        return 0;
+    }
+};
+```
+
+<hr>
+
+## 219. Contains Duplicate II
+#### Hash 
+```
+class Solution {
+public:
+    bool containsNearbyDuplicate(vector<int>& nums, int k) {
+        unordered_map<int,int> uMap;
+        for(auto i = 0 ; i < nums.size() ; i++){
+            auto it = uMap.find(nums[i]);
+            if(it == uMap.end()){}
+            else{
+                if(i - it->second <= k) return true;
+            }
             uMap[nums[i]] = i;
         }
-        
         return false;
     }
 };
 ```
 
+<hr>
+
+
+## 220. Contains Duplicate III
+
+First idea: find from nums[i]+1 to nums[i]+t for each position; Time complexity would be O(n*t)(O(n^2))
+
+
+
+#### Error solution
+```
+class Solution {
+public:
+    bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
+        map<long long,int> m;
+        for(int i = 0 ; i < nums.size() ; i++){
+
+            auto it = m.lower_bound((long long)nums[i] - t);
+            if(it != m.end() and abs(it->first-nums[i]) <= t and abs(it->second-i)<=k) return true;
+            m[nums[i]] = i;
+        }
+        return false;
+    }
+};
+```
+
+Example Input
+```
+[3,6,0,4]
+2
+2
+```
+The reason is that lower_bound will fetch 3, not 6 as expected. So we need to exclude numbers that the index is not legal.
+
+
+#### Correct solution
 Using lowerBound, time coplexity is O(n*logn) because BST search is O(logn)
+```
+class Solution {
+public:
+    bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
+        map<long long, int > m;
+        for(int i=0,j=0;i<nums.size();i++){
+            if(i-j>k){
+                if(i - m[nums[j]] > k) m.erase(nums[j]);
+                j++;
+            }
+            auto it = m.lower_bound((long long)nums[i]-t);
+            if(it != m.end() and abs(it -> first - nums[i]) <= t) return true;
+            m[nums[i]] = i;
+        }
+        return false;
+    }
+};
+```
+Be careful we shall not remove directly ` if(i-j >k) uMap.erase(nums[j++]);` because from i to j there may be same number as nums[j], so check if the `u[nums[j]]` is filled by `nums[j]` is better
+```
+if(i-j>k){
+    if(i - m[nums[j]] > k) m.erase(nums[j]);
+    j++;
+}
+```
+
 
 ##  122. Best Time to Buy and Sell Stock II
 We can consider that how to get every possible profit.  Once we encouter `nums[i]<nums[i-1]`, we 
