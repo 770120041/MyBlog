@@ -46,9 +46,9 @@ categories: Interview
 
 * 730-736
 * 770-777
-* 780-890
+* 780-899
 
-15+70+35 + 24
+15+70+35 + 33
 
 ## Reviewed
 https://cspiration.com/leetcodeClassification#10306

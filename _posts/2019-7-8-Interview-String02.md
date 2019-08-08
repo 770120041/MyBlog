@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Leetcode String"
+title:  "Leetcode String 02"
 categories: Interview
 ---
 ## 186 Reverse Words in a String II
@@ -130,6 +130,7 @@ All kinds o f States:START, SIGN0, DIG0, DOT, DIG1, EXP, SIGN1, DIG2, UNVALID. C
 So we can construct a table, each line indicates one state, each column indicates one kind of Input
 
 #### State change table
+
 |        States        	| Illegal Char 	| White Space 	|        Numbers       	|         Dot        	|   E   	|    Sign    	| Final 	|
 |:--------------------:	|:------------:	|:-----------:	|:--------------------:	|:------------------:	|:-----:	|:----------:	|-------	|
 |         Start        	|      -1      	|     Self    	|          Num         	|         Dot        	|   -1  	|    Sign    	|       	|
@@ -141,6 +142,7 @@ So we can construct a table, each line indicates one state, each column indicate
 |      Num+E+Sign      	|      -1      	|      -1     	|       Num+E+Num      	|         -1         	|   -1  	|     -1     	|       	|
 |       Num+E+Num      	|      -1      	|   Trailing  	|         Self         	|         -1         	|   -1  	|     -1     	| Legal 	|
 | Trailing             	| -1           	| Self        	| -1                   	| -1                 	| -1    	| -1         	| Legal 	|
+
 
 #### Automaton Solution
 
@@ -565,6 +567,39 @@ public:
 ```
 
 <hr>
+
+## 336. Palindrome Pairs
+#### Brute force:TLE
+```
+class Solution {
+public:
+    bool isPalindrome(const string &s){
+        int l=0,r=s.size()-1;
+        while(l<r){
+            if(s[l++] != s[r--]) return false;
+        }
+        return true;
+    }
+    vector<vector<int>> palindromePairs(vector<string>& words) {
+        vector<vector<int>> result;
+        unordered_map<string,bool> uMap;
+        for(int i=0;i<words.size();i++){
+            for(int j=0;j<words.size();j++){
+                if(j == i) continue;
+                string tmp = words[i]+words[j];
+                if(uMap[tmp] or isPalindrome(tmp)){
+                    uMap[tmp] = true;
+                    result.push_back(vector<int>{i,j});
+                }
+            }
+        }   
+        return result;
+    }
+};
+```
+
+#### Using Hashmap
+
 
 ## 20. Valid Parentheses
 Using hashmap will be better because its harder to make mistakes
