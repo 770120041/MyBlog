@@ -599,7 +599,50 @@ public:
 ```
 
 #### Using Hashmap
-
+Use a set to prevent duplicates. Otherwise for  ` ["abcd","dcba","lls","s","sssll"]`, the result would be ` [[0,1],[1,0],[0,1],[1,0],[3,2],[2,4]] `
+```
+class Solution {
+public:
+    bool isPalindrome(const string&s){
+        int l = 0, r = s.size() - 1;
+        while(l < r){
+            if(s[l++] != s[r--]) return false;
+        }
+        return true;
+    }
+    vector<vector<int>> palindromePairs(vector<string>& words) {
+        unordered_map<string,int> uMap;
+        for(auto i = 0 ; i < words.size() ; i++){
+            uMap[words[i]] = i;
+        }
+        vector<vector<int>> result;
+        set<pair<int,int>> tmpSet;
+        for(auto i = 0 ; i < words.size() ; i++){
+            //j <= to make sure consider both parts of ""
+            for(int j=0;j<=words[i].size();j++){
+                string left = words[i].substr(0,j);
+                string right = words[i].substr(j);
+                if(isPalindrome(left)){
+                    string Rright = right;
+                    reverse(Rright.begin(),Rright.end());
+                    auto it = uMap.find(Rright);
+                    if(it != uMap.end() and it->second != i) tmpSet.insert({it->second,i});
+                }
+                if(isPalindrome(right)){
+                    string Rleft = left;
+                    reverse(Rleft.begin(),Rleft.end());
+                    auto it = uMap.find(Rleft);
+                    if(it != uMap.end() and it->second != i) tmpSet.insert({i,it->second});
+                }
+            }
+        }
+        for(auto x:tmpSet){
+            result.push_back(vector<int>{x.first,x.second});
+        }
+        return result;
+    }
+};
+```
 
 ## 20. Valid Parentheses
 Using hashmap will be better because its harder to make mistakes
