@@ -55,8 +55,8 @@ https://cspiration.com/leetcodeClassification#10306
 #### 1.3.1. Array
 Array 330
 #### 1.3.2. String  
-finished 214, skipeed the rest of Palindrome
-finished 32
+skipped 115 132 because dp
+
 #### 1.3.4. Tree
 finished 99 
 #### 1.3.5. Backtracking

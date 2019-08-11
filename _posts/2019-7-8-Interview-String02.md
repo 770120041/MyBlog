@@ -726,7 +726,103 @@ public:
     } 
 };
 ```
+#### DP
 
+```
+class Solution {
+public:
+    int minCut(string s) {
+        if (s.empty()) return 0;
+        int n = s.size();
+        vector<vector<bool>> p(n, vector<bool>(n));
+        vector<int> dp(n);
+        for (int i = 0; i < n; ++i) {
+            dp[i] = i;
+            for (int j = 0; j <= i; ++j) {
+                if (s[i] == s[j] && (i - j < 2 || p[j + 1][i - 1])) {
+                    p[j][i] = true;
+                    dp[i] = (j == 0) ? 0 : min(dp[i], dp[j - 1] + 1);
+                }
+            }
+        }
+        return dp[n - 1];
+    }
+};
+```
+
+<hr>
+
+## 266 Palindrome Permutation(lint 916)
+```
+class Solution {
+public:
+    bool canPermutePalindrome(string &s) {
+        unordered_map<char,int> uMap;
+        for(auto c:s) uMap[c]++;
+        int cnt = 0;
+        for(auto it = uMap.begin(); it != uMap.end();it++){
+            if(it->second % 2) cnt++;
+            if(cnt == 2) return false;
+        }
+        return true;
+    }
+};
+```
+<hr>
+
+
+## 267 Palindrome Permutation II(lint 917)
+Brute Force
+```
+class Solution {
+public:
+    /**
+     * @param s: the given string
+     * @return: all the palindromic permutations (without duplicates) of it
+     */
+    using umci =  unordered_map<char,int> ;
+    void DFS(vector<string>&result,umci &uMap,umci&used,int cnt,int n,string &cur){
+        if(cnt == n/2){
+            result.push_back(cur);
+            return;
+        }
+        for(auto it = uMap.begin();it!=uMap.end();it++){
+            if(it->second == 1) continue;
+            if(used[it->first] == it->second/2) continue;
+            
+            used[it->first]++;
+            cur.push_back(it->first);
+            DFS(result,uMap,used,cnt+1,n,cur);
+            cur.pop_back();
+            used[it->first]--;
+        }
+    }
+    vector<string> generatePalindromes(string &s) {
+       umci uMap;
+        for(auto c:s) uMap[c]++;
+        vector<string> result;
+        char single;
+        int cnt = 0;
+        for(auto it = uMap.begin();it != uMap.end();it++){
+            if(it->second %2){
+                single = it->first;
+                cnt++;
+            }
+            if(cnt == 2) return result;
+        }
+       umci used;
+       string tmp;
+       DFS(result,uMap,used,0,s.size(),tmp);
+       for(auto i = 0;i<result.size();i++){
+            tmp = result[i];
+           reverse(tmp.begin(),tmp.end());
+           if(cnt) result[i] += single;
+           result[i] += tmp;
+       }
+        return result;
+    }
+};
+```
 <hr>
 
 ## 20. Valid Parentheses
@@ -826,6 +922,201 @@ If the test cases is `"(()()"`, it will result 2 not 4, because the start is sti
 <hr>
 
 ## 241. Different Ways to Add Parentheses
+Simple recursive
+```
+class Solution {
+public:
+    vector<int> diffWaysToCompute(string input) {
+        vector<int> result;
+        for(int i=0;i<input.size();i++){
+            if(input[i] == '+' or input[i] == '-' or input[i] == '*'){
+                auto left = diffWaysToCompute(input.substr(0,i));
+                auto right = diffWaysToCompute(input.substr(i+1));
+                for(int j=0;j<left.size();j++){
+                    for(int k = 0 ; k < right.size() ; k++){
+                        if(input[i] == '+') result.push_back(left[j]+right[k]);
+                        else if(input[i] == '-') result.push_back(left[j]-right[k]);
+                        else  result.push_back(left[j]*right[k]);
+                    }
+                }
+            }
+        }
+        if(result.size() == 0) result.push_back(atoi(input.c_str()));
+        return result;
+    }
+};
+```
 
+<hr>
+
+## 301. Remove Invalid Parentheses
+#### BFS 01
+because use the minimum changes to achieve valid parenthesis, so we can use BFS.
+```
+class Solution {
+public:
+    bool valid(const string&s){
+        int cnt = 0;
+        for(auto c:s){
+            if(c == '(') cnt++;
+            else if(c == ')' and --cnt <0) return false;
+        }
+        return cnt == 0;
+    }
+    vector<string> removeInvalidParentheses(string s) {
+        unordered_set<string> visited{{s}};
+        queue<string> q{{s}};
+        vector<string> result;
+        bool find = false;
+        while(!q.empty()){
+            auto cur = q.front();q.pop();
+            if(valid(cur)){
+                result.push_back(cur);
+                find = true;
+            }
+            if(find) continue;
+            for(int i=0;i<cur.size();i++){
+                if(cur[i]!='(' and cur[i] !=')') continue;
+                string tmp = cur.substr(0,i)+cur.substr(i+1);
+                if(visited.count(tmp) == 0){
+                    visited.insert(tmp);
+                    q.push(tmp);
+                }
+            }
+        }
+        
+        return result;
+    }
+};
+```
+
+The ` if(find) continue;` is the line to make sure they are all in same level.
+
+#### BFS02
+using my way to do bfs
+```
+class Solution {
+public:
+    bool valid(const string&s){
+        int cnt = 0;
+        for(auto c:s){
+            if(c == '(') cnt++;
+            else if(c == ')' and --cnt <0) return false;
+        }
+        return cnt == 0;
+    }
+    vector<string> removeInvalidParentheses(string s) {
+        unordered_set<string> visited{{s}};
+        queue<string> q{{s}};
+        vector<string> result;
+        while(!q.empty()){
+            int s = q.size();
+            bool find = false;
+            for(int i=0;i<s;i++){
+                auto cur = q.front(); q.pop();
+                if(valid(cur)){
+                    find = true;
+                    result.push_back(cur);
+                }
+                for(int j=0;j<cur.size();j++){
+                    if(cur[j] != '(' and cur[j] != ')') continue;
+                    string tmp = cur.substr(0,j)+cur.substr(j+1);
+                    if(visited.count(tmp) == 0){
+                        visited.insert(tmp);
+                        q.push(tmp);
+                    }
+                }
+            }
+            if(find) break;
+        }
+        return result;
+    }
+};
+```
+#### DFS
+The reason why DFS find the minimum is because it try to make `left-right=0` without any redundent steps.
+```
+class Solution {
+public:
+    vector<string> removeInvalidParentheses(string s) {
+        vector<string> res;
+        int cnt1 = 0, cnt2 = 0;
+        for (char c : s) {
+            cnt1 += (c == '(');
+            if (cnt1 == 0) cnt2 += (c == ')');
+            else cnt1 -= (c == ')');
+        }
+        helper(s, 0, cnt1, cnt2, res);
+        return res;
+    }
+    void helper(string s, int start, int cnt1, int cnt2, vector<string>& res) {
+        if (cnt1 == 0 && cnt2 == 0) {
+            if (isValid(s)) res.push_back(s);
+            return;
+        }
+        for (int i = start; i < s.size(); ++i) {
+            if (i != start && s[i] == s[i - 1]) continue;
+            if (cnt1 > 0 && s[i] == '(') {
+                helper(s.substr(0, i) + s.substr(i + 1), i, cnt1 - 1, cnt2, res);
+            }
+            if (cnt2 > 0 && s[i] == ')') {
+                helper(s.substr(0, i) + s.substr(i + 1), i, cnt1, cnt2 - 1, res);
+            }
+        }
+    }
+    bool isValid(string t) {
+        int cnt = 0;
+        for (int i = 0; i < t.size(); ++i) {
+            if (t[i] == '(') ++cnt;
+            else if (t[i] == ')' && --cnt < 0) return false;
+        }
+        return cnt == 0;
+    }
+};
+```
+
+
+<hr>
+
+## 392. Is Subsequence
+#### Brute Force
+```
+class Solution {
+public:
+    bool isSubsequence(string s, string t) {
+        int i=0,j=0;
+        while(i < s.size()){
+            while(s[i] != t[j] and j<t.size() ) j++;
+            if(j == t.size()) return false;
+            i++;
+            j++;
+        }
+        return true;
+    }
+};
+```
+
+<hr>
+
+## 187. Repeated DNA Sequences
+#### Hash
+```
+class Solution {
+public:
+    vector<string> findRepeatedDnaSequences(string s) {
+        unordered_map<string,int> uMap;
+        vector<string> result;
+        for(int i=0;i<=int(s.size())-10;i++){
+            string cur = s.substr(i,10);
+            auto it = uMap.find(cur);
+            if(it != uMap.end() and it->second == 1){
+                result.push_back(cur);
+            }
+            uMap[cur]++;
+        }
+        return result;
+    }
+};
+```
 
 <hr>
