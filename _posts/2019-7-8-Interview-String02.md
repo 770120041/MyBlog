@@ -644,6 +644,91 @@ public:
 };
 ```
 
+<hr>
+
+## 131. Palindrome Partitioning
+#### DFS
+```
+class Solution {
+public:
+    using vs = vector<string>;
+    using vvs = vector<vs>;
+    bool isPalindrome(const string &s){
+        int l = 0, r = s.size() - 1;
+        while(l < r){
+            if(s[l++] != s[r--]) return false;
+        }
+        return true;
+    }
+    void DFS(vvs&result, vs&cur,int index,const string&s){
+        if(index >= s.size()){
+            if(index > s.size());
+            result.push_back(cur);
+            return;
+        }
+        for(int i = 1; i <= s.size()-index ; i++){
+            if(isPalindrome(s.substr(index,i))){
+                cur.push_back(s.substr(index,i));
+                DFS(result,cur,index+i,s);
+                cur.pop_back();
+            }
+        }
+    }
+    vector<vector<string>> partition(string s) {
+        vvs result;
+        vs tmp;
+        DFS(result,tmp,0,s);
+        return result;
+    }
+};
+```
+
+<hr>
+
+## 132. Palindrome Partitioning II
+#### Brute force:TLE
+Even with prune branches and Hashmap, TLE
+```
+class Solution {
+public:
+    bool isPalindrome(const string&s){
+        int l = 0 , r = s.size() - 1;
+        while(l < r) if(s[l++] != s[r--]) return false;
+        return true;
+    }
+    void DFS(int &result,vector<bool>& tmp, int index,const string& s,unordered_map<string,bool> &uMap){
+        if(int(tmp.size()) - 1 >= result){
+            return;
+        }
+        if(index == s.size()){
+            if(int(tmp.size())-1 < result){
+                result = tmp.size() - 1;
+            }
+        }
+        for(int i=1;i<=s.size() - index ; i ++){
+            auto it = uMap.find(s.substr(index,i));
+            if(it == uMap.end()){
+                uMap[s.substr(index,i)] = isPalindrome(s.substr(index,i));
+            }
+            if(uMap[s.substr(index,i)]){
+                tmp.push_back(true);
+                DFS(result,tmp,index+i,s,uMap);
+                tmp.pop_back();
+            }
+        }
+    }
+    int minCut(string s) {
+        unordered_map<string,bool> uMap;
+        int result = INT_MAX;
+        vector<bool> tmp;
+        DFS(result,tmp,0,s,uMap);
+        return result;
+    } 
+};
+```
+
+<hr>
+
 ## 20. Valid Parentheses
 Using hashmap will be better because its harder to make mistakes
 ```
