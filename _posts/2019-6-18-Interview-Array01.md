@@ -314,3 +314,37 @@ else{
 }
 ```
 Why we don't need to update m1 = INT_MAX. The reason is that if `nums[i] > m1`, then there is some numbers before m1 that is smaller than m1(otherwise `m1 = INT_MAX`), if we update m1, we may miss some solutions.
+
+<hr>
+
+## 56. Merge Intervals
+
+```
+class Solution {
+public:
+    static bool cmp(vector<int> &a,vector<int> &b){
+        return a[0]<b[0] or (a[0]==b[0] and a[1] < b[1]);
+    }
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        vector<vector<int>> result;
+        sort(intervals.begin(),intervals.end(),cmp);
+        for(auto interval : intervals){
+            if(result.empty()){
+                result.push_back(interval);
+            }
+            else{
+                auto cur = result.back();
+                if(cur[1] >= interval[0]){
+                    result.pop_back();
+                    cur[1] = max(interval[1],cur[1]);
+                    result.push_back(cur);
+                }
+                else{
+                    result.push_back(interval);
+                }
+            }
+        }
+        return result;
+    }
+};
+```

@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Leetcode String 02"
+title:  "Leetcode String 03"
 categories: Interview
 ---
 ## 186 Reverse Words in a String II
@@ -827,6 +827,7 @@ public:
 
 ## 20. Valid Parentheses
 Using hashmap will be better because its harder to make mistakes
+
 ```
 class Solution {
 public:

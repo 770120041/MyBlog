@@ -3,6 +3,10 @@ layout: post
 title:  "Leetcode DP One dimension"
 categories: Interview
 ---
+# DP symptoms
+**DP 题目的特征：求最大或者最小的值（组合次数），不需要穷举。状态可以保留。多用于String或者搜索数组**
+
+
 ## 70. Climbing Stairs
 `dp[i] = dp[i-1]+dp[i-2]+dp[i], and initially dp = 0 and set dp[1]=dp[2] = 1    `
 
@@ -25,7 +29,7 @@ bool canJump(vector<int>& nums) {
 
 
 ## 62. Unique Paths
-DP or use math
+DP or use math C(m,n) or use DFS to find all pathes
 ```
 int uniquePaths(int m, int n) {
     if(m <=1 || n <= 1) return 1;
@@ -113,8 +117,6 @@ public:
             dp[0][j] = 1;
             
         }
-        
-        
         for(int i=1;i<m;i++){
             for(int j=1;j<n;j++){
                 if(!obstacleGrid[i][j]) dp[i][j] = dp[i-1][j] + dp[i][j-1];
@@ -126,47 +128,65 @@ public:
 ```
 
 ## 120. Triangle
-Be careful for border condition!
+#### Brute Force DP
+Doing this from bottom to top, use the original triangle
 ```
 class Solution {
 public:
+    // do it reversely woudl be better
     int minimumTotal(vector<vector<int>>& triangle) {
-        int n=triangle.size();
-        if(n == 0){ return 0;}
-        if(n == 1) return triangle[0][0];
-        
-        vector<vector<int>> dp;
-        for(int i=0;i<n;i++){
-            vector<int> cur(i+1,INT_MAX);
-            dp.push_back(cur);
-        }
-        
-        dp[0][0] = triangle[0][0];
-        int minValue = INT_MAX;
-        for(int i=1;i<n;i++){
-            int m = dp[i].size();
-            for(int j=0;j<m;j++){
-                if(j == 0){
-                    dp[i][j] = min(dp[i][j], dp[i-1][0] + triangle[i][j]);
-                }
-                else if(j == m-1){
-                    dp[i][j] = min(dp[i][j], dp[i-1][m-2] + triangle[i][j]);
-                }
-                else{
-                    dp[i][j] = min(dp[i][j], dp[i-1][j-1] + triangle[i][j]);
-                    dp[i][j] = min(dp[i][j], dp[i-1][j] + triangle[i][j]);
-                }
-                
-                // printf("i=%d,j=%d,dp[ij]=%d,trig[i,j]=%d\n",i,j,dp[i][j],triangle[i][j]);
-                if(i == n-1){
-                    minValue = min(minValue,dp[i][j]);
-                }
+        int n = triangle.size();
+        if(n == 0) return 0;
+        for(int i=n-1;i>=1;i--){
+            for(int j=1;j<triangle[i].size();j++){
+                triangle[i-1][j-1]= triangle[i-1][j-1] + min(triangle[i][j],triangle[i][j-1]);
             }
         }
-        return minValue;
+        return triangle[0][0];
     }
 };
 ```
+
+#### O(N) solution
+[blog](https://www.cnblogs.com/grandyang/p/4286274.html)
+```
+class Solution {
+public:
+    // Save space for DP
+    int minimumTotal(vector<vector<int>>& triangle) {
+        vector<int> dp(triangle.back());
+        for(int i=triangle.size()-2;i>=0;i--){
+            // careful here must be from 0 to triangle[i].size()
+            // otherwise it might get modified beforehand
+            for(int j=0;j<triangle[i].size();j++){
+                dp[j] = min(dp[j],dp[j+1])+triangle[i][j];
+            }
+        }
+        return dp[0];
+    }
+};
+```
+<hr>
+
+## 279. Perfect Squares
+```
+class Solution {
+public:
+    //完全背包问题。恰好容量为N
+    int numSquares(int n) {
+        vector<int> dp(n+1,INT_MAX);
+        dp[0] = 0;
+        for(int i=1;i*i<=n;i++){
+            for(int j=i*i;j<=n;j++){
+                dp[j] = min(dp[j],dp[j-i*i]+1);
+            }
+        }
+        return dp[n];
+    }
+};
+```
+
+<hr>
 
 ## 139. Word Break
 Brute force, but use an array to record the history of brute force.
@@ -198,29 +218,6 @@ public:
 
 <hr>
 
-## 279. Perfect Squares
-Dp[i] means the minimum number of perfect squres forming number i.
-
-Must start from dp[0] = 0, we can validate that dp[i+j*j] = dp[4] = 1. so i need to be 0
-
-The complexity is O(N*sqrt(N))
-```
-class Solution {
-public:
-    int numSquares(int n) {
-        vector<int> dp(n+1,INT_MAX);
-        dp[0] = 0;
-        for(int i=0;i<=n;i++){
-            for(int j=1;i+j*j<=n;j++){
-                dp[i+j*j] = min(dp[i+j*j],dp[i]+1);
-            }
-        }
-        return dp[n];
-    }
-};
-```
-
-<hr>
 
 ## 375. Guess Number Higher or Lower II
 We can see that
