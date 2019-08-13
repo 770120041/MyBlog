@@ -112,3 +112,31 @@ public:
 
 <hr>
 
+## 209. Minimum Size Subarray Sum
+#### Greedy
+Find all possible sum that is exactly greater or equal to s. And compare.
+```
+class Solution {
+public:
+    int minSubArrayLen(int s, vector<int>& nums) {
+        int len = nums.size();
+        int left=0,right=0;
+        int sum = 0;
+        int result = len+1;
+        while(right < len){
+            while(sum < s and right < len){
+                sum += nums[right++];
+            }
+            while(sum >= s){
+                result = min(result,right-left);
+                sum -= nums[left++];
+            }
+        }
+        return result == len+1 ? 0 : result;
+    }
+};
+```
+#### Binary
+Get prefix sum first, then binary search
+<hr>
+

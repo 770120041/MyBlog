@@ -251,6 +251,32 @@ public:
     }
 };
 ```
+
+#### A more clear Iterative DP 
+The trick here is `dp[start][start+len] = min(dp[start][start+len], k+max(dp[start][k-1],dp[k+1][start+len]));`
+```
+class Solution {
+public:
+    int getMoneyAmount(int n) {
+        vector<vector<int>> dp(n+1,vector<int>(n+1,INT_MAX/2));
+        for(int i=1;i<=n;i++){
+            dp[i][i] = 0;
+            dp[i-1][i] = i-1;
+        } 
+        for(int len=1 ; len<=n ; len++){
+            for(int start = 1;start<=n;start++){
+                if(start+len <= n){
+                    for(int k=start+1;k<start+len;k++){
+                        dp[start][start+len] = min(dp[start][start+len], k+max(dp[start][k-1],dp[k+1][start+len]));
+                    }
+                }
+            }
+        }
+        return dp[1][n];
+    }
+};
+```
+
 #### Recursive DP
 ```
 class Solution {
@@ -291,19 +317,16 @@ public:
 class Solution {
 public:
     int maxCoins(vector<int>& nums) {
-        int n = nums.size(); 
-        if(n==0) return 0;
-        // from 0 to n+1， insert 1 to front and back
+        int n = nums.size();
+        if(n == 0) return 0;
         nums.insert(nums.begin(),1);
         nums.push_back(1);
-        // we need dp[1][n]
         vector<vector<int>> dp(n+2,vector<int>(n+2,0));
         for(int len=0;len<=n;len++){
-            for(int j=1;j<=n-len;j++){
+            for(int j=1;j+len<=n;j++){
                 int globalMax = INT_MIN;
                 for(int k=j;k<=j+len;k++){
-                    int x = dp[j][k-1]+dp[k+1][j+len]+nums[k]*nums[j-1]*nums[j+len+1];
-                    globalMax = max(globalMax, x);
+                    globalMax = max(globalMax, nums[k]*nums[j-1]*nums[j+len+1] + dp[j][k-1]+dp[k+1][j+len]);
                 }
                 dp[j][j+len] = globalMax;
             }
@@ -314,7 +337,7 @@ public:
 ```
 Same as last problem, DP in a interval. `DP[i][j]` means that all ballons are bursted in this interval. So, we need to make sure that `int x = dp[j][k-1]+dp[k+1][j+len]+nums[k]*nums[j-1]*nums[j+len+1];`, becasue when we calculate burst position k and add its neighbors, we need to make sure all its neighbors are actually bursted.
 
-We try from `len=0` because we need to calculate single number situation.
+We try from `len=0` because we need to calculate single number situation. And we increase len so that each subproblem is solved first.
 
 And for k, `k=j and k = j+len`, because we are accessing `dp[k+1][j+len]`, and `k+1 > j+len`, then we can make sure its 0
 
@@ -357,25 +380,66 @@ This is a bag problem template usage, so we can use dp
 class Solution {
 public:
     int coinChange(vector<int>& coins, int amount) {
-        if(amount == 0) return 0;
-        //dp[i] means number of coins
-        vector<long long> dp(amount+2,INT_MAX-1);
-        // we start from 0 to amount, and return dp[amount]
+        //each coins cost 1, 完全背包问题
+        int n = coins.size();
+        vector<int> dp(amount+1,INT_MAX/2);
         dp[0] = 0;
-        for(long long i=0;i<amount;i++){
-            for(int j=0;j<coins.size();j++){
-                if(i+coins[j] <= (long long)amount && dp[i] != INT_MAX-1){
-                    dp[i+coins[j]] = min(dp[i]+1,dp[i+coins[j]]);
-                }
+        for(int i=0;i<coins.size();i++){
+            for(int j=coins[i];j<=amount;j++){
+                dp[j] = min(dp[j],dp[j-coins[i]]+1);
             }
         }
-        if(dp[amount] == INT_MAX-1) return -1;
+        return dp[amount] == INT_MAX/2?-1:dp[amount];
+    }
+};
+```
+
+<hr>
+
+## 518. Coin Change 2
+If no coins and amount = 0, there is 1 combination.
+
+j starts from 0 such that `dp[coins[i]]` will be initialized.
+
+If we do `dp[coins[i]] = 1`, it will make the result larger because `dp[i]` is added every time
+#### confused solution
+```
+class Solution {
+public:
+    int change(int amount, vector<int>& coins) {
+        // number of combinations
+        vector<int> dp(amount+1,0);
+        dp[0] = 1;
+        for(int i=0;i<coins.size();i++){
+            for(int j=0;j<=amount-coins[i];j++){
+                dp[j+coins[i]] += dp[j];
+            }
+        }
         return dp[amount];
     }
 };
 ```
 
-## 518 Coin Change II
 
-What's the difference?
+## More understandale solution
+We only increment `dp[coins[i]]` when encounter this number.
+```
+class Solution {
+public:
+    int change(int amount, vector<int>& coins) {
+        // number of combinations
+        vector<int> dp(amount+1,0);
+        dp[0] = 1;
+        for(int i=0;i<coins.size();i++){
+            if(coins[i] <= amount)
+                dp[coins[i]] ++;
+            for(int j=1;j<=amount-coins[i];j++){
+                dp[j+coins[i]] += dp[j];
+            }
+        }
+        return dp[amount];
+    }
+};
+```
 
+<hr>
