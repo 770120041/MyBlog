@@ -443,3 +443,27 @@ public:
 ```
 
 <hr>
+
+## 152. Maximum Product Subarray
+Tricky DP
+```
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        int n = nums.size();
+        if(n == 0) return 0;
+        vector<int> s(n,0),m(n,0);
+        s[0] = m[0] = nums[0];
+        int result = nums[0];
+        for(int i=1;i<nums.size();i++){
+            m[i] = max(max(nums[i],nums[i]*m[i-1]),nums[i]*s[i-1]);
+            s[i] = min(min(nums[i],nums[i]*m[i-1]),nums[i]*s[i-1]);
+            result = max(result,m[i]);
+        }
+        return result;
+         
+    }
+};
+```
+
+<hr>

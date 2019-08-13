@@ -144,7 +144,7 @@ So we can construct a table, each line indicates one state, each column indicate
 | Trailing             	| -1           	| Self        	| -1                   	| -1                 	| -1    	| -1         	| Legal 	|
 
 
-#### Automaton Solution
+#### deterministic finite automaton, DFA
 
 ```
 class Solution {
