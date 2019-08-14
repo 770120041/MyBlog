@@ -165,7 +165,7 @@ public:
 };
 ```
 
-#### Recursion with memo
+#### Recursion with memo(Recursive DP)
 ```
 class Solution {
 public:
@@ -188,7 +188,124 @@ public:
     }
 };
 ```
-#### DP
-Fill in the memo in recursive solution
+#### Iterative DP
+`dp[i][j]` means the minimum edit numbers for `word[0..i]` to `word[0..j]`
+assume word1 has size m and word2 has size n, we initialize the dp array to size(m+1)*(n+1) for better handling of border conditions.
 
+We initialize the dp array using `dp[0][i] = dp[j][0] = 1` because if word1 or word2 is empty, then the minimum edit operations is to remove or add
+```
+dp[i][j] =  dp[i-1][j-1] if word1[i] == word2[j]
+         =  1 + min(dp[i-1][j-1],dp[i,j-1],dp[i-1,j]) edit,remove and insert
+```
+
+```
+class Solution {
+public:
+    using vi = vector<int>;
+    using vvi = vector<vi>;
+    int minDistance(string word1, string word2) {
+        int n = word1.size();
+        int m = word2.size();
+        vector<vector<int>> dp(n+1,vector<int>(m+1,INT_MAX/2));
+        for(int i=0;i<=m;i++) dp[0][i] = i;
+        for(int i=0;i<=n;i++) dp[i][0] = i;
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=m;j++){
+                if(word1[i-1] == word2[j-1]) dp[i][j] = dp[i-1][j-1];
+                else{
+                    dp[i][j] = 1 + min(dp[i-1][j],min(dp[i-1][j-1],dp[i][j-1]));
+                }
+            }
+        }
+        return dp[n][m];
+    }
+};
+```
+
+<hr>
+
+## 97. Interleaving String
+#### Brute Force Recursive  
+First  idea is to brute force recursive
+```
+class Solution {
+public:
+    bool DFS(const string&s1,int i,const string&s2,int j,const string&s3){
+        if(i + j == s3.size()) return true;
+        if(i != s1.size()){
+             if(s1[i] == s3[i+j]){
+                 if(DFS(s1,i+1,s2,j,s3)) return true;
+             } 
+        }
+        if(j != s2.size()){
+            if(s2[j] == s3[i+j]){
+                if(DFS(s1,i,s2,j+1,s3)) return true;
+            }
+        }
+        return false;
+    }
+    bool isInterleave(string s1, string s2, string s3) {
+        return DFS(s1,0,s2,0,s3);
+    }
+};
+```
+
+#### Recursive with Memo
+```
+class Solution {
+public:
+    bool DFS(const string&s1,int i,const string&s2,int j,const string&s3,vector<vector<bool>>& dp){
+        if(i == s1.size() and j == s2.size()) return true;
+        if(i < s1.size()){
+             if(s1[i] == s3[i+j]){
+                 if(dp[i+1][j] and DFS(s1,i+1,s2,j,s3,dp)) return true;
+                 dp[i+1][j] = false;
+             } 
+        }
+        if(j < s2.size()){
+            if(s2[j] == s3[i+j]){
+                if(dp[i][j+1] and DFS(s1,i,s2,j+1,s3,dp)) return true;
+                dp[i][j+1] = false;
+            }
+        }
+        return false;
+    }
+    bool isInterleave(string s1, string s2, string s3) {
+        int n = s1.size();
+        int m = s2.size();
+        if(n+m != s3.size()) return false;
+        //dp needs to be larger because it may go out of the border
+        vector<vector<bool>> dp(n+1,vector<bool>(m+1,true));
+        return DFS(s1,0,s2,0,s3,dp);
+    }
+};
+```
+
+#### Iterative DP
+
+```
+class Solution {
+public:
+    bool isInterleave(string s1, string s2, string s3) {
+        int m = s1.size();
+        int n = s2.size();
+        if(m+n != s3.size()) return false;
+        // dp[i][j] means if using 1...i from s1 and 1..j from s2 can make up i+j in s3
+        vector<vector<bool>> dp(m+1,vector<bool>(n+1,0));
+        dp[0][0] = true;
+        for(int i=1;i<=m;i++) dp[i][0] = (dp[i-1][0] and s1[i-1] == s3[i-1]);
+        for(int i=1;i<=n;i++) dp[0][i] = (dp[0][i-1] and s2[i-1] == s3[i-1]);
+        
+        for(int i=1;i<=m;i++){
+            for(int j=1;j<=n;j++){
+                if(s1[i-1] == s3[i-1+j] and  dp[i-1][j]) dp[i][j] = true;
+                if(s2[j-1] == s3[i+j-1] and dp[i][j-1]) dp[i][j] = true;
+            }
+        }
+    
+        return dp[m][n];
+    }
+};
+```
+ 
 <hr>
