@@ -62,7 +62,7 @@ finished 99
 #### 1.3.5. Backtracking
 finished 291
 #### 1.3.6. Dynamic Programming
-finished 64
+finished 174
 
 #### 1.3.10. DFS & BFS
 还剩两个N-queen

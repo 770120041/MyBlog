@@ -309,3 +309,112 @@ public:
 ```
  
 <hr>
+
+## 174. Dungeon Game
+
+#### DP
+`Spacce O(n*m) Time O(n*m)`
+
+The tricky part is that each position the minimum hp is 1. And it is much easier to do it from the prince to the knight. Also for the bottom-right position, to make sure it can reach it we need to set the hp of the border of it to 1
+```
+class Solution {
+public:
+    int calculateMinimumHP(vector<vector<int>>& dungeon) {
+        int m = dungeon.size();
+        if(m == 0) return 0;
+        int n = dungeon[0].size();
+        // dp[i][j] is the number minimum hp required to reach m-1,n-1 from i,j
+        vector<vector<int>> dp(m+1,vector<int>(n+1,INT_MAX));
+        // each place minimum hp is 1
+        // reach the bottom right needs 1, so this palce is 1
+        dp[m][n-1] = dp[m-1][n] = 1;
+        for(int i=m-1;i>=0;i--){
+            for(int j=n-1;j>=0;j--){
+                int val = min(dp[i+1][j], dp[i][j+1])-dungeon[i][j];
+                dp[i][j] = max(val, 1);
+            }
+        }
+        return dp[0][0];
+    }
+};
+```
+
+#### O(n) Space DP
+Because it only uses two levels, so we can always optimize the space to `O(2*N)` and `O(N)`
+
+```
+class Solution {
+public:
+    int calculateMinimumHP(vector<vector<int>>& dungeon) {
+        int m = dungeon.size();
+        if(m == 0) return 0;
+        int n = dungeon[0].size();
+        // dp[j] is the number minimum hp required to reach m-1,n-1 from i,j
+        vector<int> dp(n+1,INT_MAX);
+        // each place minimum hp is 1
+        // reach the bottom right needs 1, so this palce is 1
+        // 特别注意这里dp[n]=1会错，因为dp[n]=1会导致每次循环到dp[n-1]=max(dp[n-1],dp[n])的时候都用到了dp[n]=1,会导致结果小
+        dp[n-1] = 1;
+        for(int i=m-1;i>=0;i--){ 
+            for(int j=n-1;j>=0;j--){
+                int val = min(dp[j], dp[j+1])-dungeon[i][j];
+                //if dp[j] <= 0, it means that the hp bonuse can cover all the cost from i,j to m-1,n-1
+                dp[j] = max(val, 1);
+            }
+        }
+        
+        return dp[0];
+    }
+};
+```
+
+<hr>
+
+## 221. Maximal Square
+#### Maximum Rectangle(Wrong)
+``` 
+class Solution {
+public:
+    int maximalSquare(vector<vector<char>>& matrix) {
+        int m = matrix.size();
+        if(m == 0) return 0;
+        int n = matrix[0].size();
+        vector<vector<pair<int,int>>> dp(m+1,vector<pair<int,int>>(n+1,{0,0}));
+        vector<vector<char>> tmpMatrix(m+1,vector<char>(n+1,'0'));
+        for(int i=1;i<=m;i++) for(int j=1;j<=n;j++) tmpMatrix[i][j] = matrix[i-1][j-1];
+        
+        int result = 0;
+        for(int i=1;i<=m;i++){
+            for(int j=1;j<=n;j++){
+                printf("i=%d,j=%d\n",i,j);
+                if(tmpMatrix[i][j] != '0'){
+                    if(tmpMatrix[i-1][j] != '0' or tmpMatrix[i][j-1] != '0'){
+                        if(!tmpMatrix[i-1][j] != '0'){
+                            dp[i][j] = {1+dp[i][j-1].first,1};
+                        }
+                        else if(!tmpMatrix[i][j-1] != '0'){
+                            dp[i][j] = {1,dp[i-1][j].second+1};
+                        }
+                        else{
+                            dp[i][j] = {min(1+dp[i][j-1].first,dp[i-1][j].first), min(1+dp[i-1][j].second,dp[i][j-1].second)};
+                        }
+                    }
+                    else{
+                        dp[i][j] = {1,1};
+                    }
+                    if(dp[i][j].first * dp[i][j].second > result){
+                        printf("max at i=%d,j=%d\n",i,j);
+                        result = dp[i][j].first * dp[i][j].second;
+                    }
+                    result = max(result,dp[i][j].first * dp[i][j].second);
+                }
+            }
+        }
+        return result;
+    }
+};
+```
+
+#### Maximum Square
+
+<hr>
