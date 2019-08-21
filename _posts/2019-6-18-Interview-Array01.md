@@ -348,3 +348,64 @@ public:
     }
 };
 ```
+
+<hr>
+
+## 128. Longest Consecutive Sequence
+#### SET solution
+O(nlogn) but passed leetcode OJ, which is not good
+```
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        set<int> s(nums.begin(),nums.end());
+        int result = 0;
+        int curSize = 1;
+        bool first = true;
+        int last = -1; 
+        for(auto it = s.begin() ; it != s.end() ; it++){
+            if(first == false and *it == last+1){
+                curSize ++;
+            }
+            else{
+                curSize = 1;
+                first = false;
+            }
+            result = max(curSize,result);
+            last = *it;
+        }
+        return result;
+    }
+};
+```
+
+#### Hash Solution
+Very simple, add all to a hash set, for each number, find all its adjacent neighbors and update length. It is O(n) because all number is add to hash and pop to hash only once. **Remember to del it after one number is calculated**, Otherwise it will be O(N^2);
+```
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int> uset;
+        for(auto x : nums) uset.insert(x);
+        int result = 0;
+        for(auto x: nums){
+            int len = 1,tmp=x+1;
+            while(uset.count(tmp)){
+                uset.erase(tmp);
+                len++;
+                tmp++;
+            }
+            tmp = x-1;
+            while(uset.count(tmp)){
+                uset.erase(tmp);
+                len++;
+                tmp--;
+            }
+            result = max(result,len);
+        }
+        return result;
+    }
+};
+```
+
+<hr>
