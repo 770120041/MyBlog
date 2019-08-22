@@ -1131,3 +1131,28 @@ public:
     }
 };
 ```
+
+## 114. Flatten Binary Tree to Linked List
+Preorder traversal
+```
+class Solution {
+public:
+    TreeNode* helper(TreeNode* root){
+        if(!root) return NULL;
+        if(root->left){
+            auto tmp = root->left;
+            while(tmp->right) tmp = tmp->right;
+            tmp->right = root->right;
+        }
+        else root->left = root->right;
+        root->right = helper(root->left);
+        root->left = NULL;
+        return root;
+    }
+    void flatten(TreeNode* root) {
+        helper(root);
+    }
+};
+```
+
+<hr>
