@@ -487,6 +487,8 @@ public:
 ```
 #### O(N^3) dp， 最大sum of an array
 [video](https://www.youtube.com/watch?v=-FgseNO-6Gk)
+
+[TreeSet](https://www.quora.com/Given-an-array-of-integers-A-and-an-integer-k-find-a-subarray-that-contains-the-largest-sum-subject-to-a-constraint-that-the-sum-is-less-than-k)
 ```
 class Solution {
 public:
@@ -503,32 +505,49 @@ public:
                     sum[k] += matrix[k][j];
                 }
                 int curSum = 0;
+                //之后，要找到sum中连续和最大但又不大于limt的数，注意：这里不能求最大的sum(k)，因为最大的可能超过了limit，所以应该找最接近limit的sum，因此要用一个set来搜索
+                //穷举其中的每一段的复杂度是O(M^2)
+                //找到lower bound以后，如果it==st.end(),说明cursum  curSum- sum[X] 就是最接近的。
+                //如果curSum < k ，那么curSum - k 小于0，所以最后就会找到cursum - 0 = curSum;
+                //如果curSum>0 curSum-k就能够找到一个正数使得curSum - k <= 0，如果找不到就忽略这个数
                 set<int> st{{0}};
-                for (auto a : sum) {
-                    curSum += a;
+                for(auto x:sum){
+                    curSum += x;
                     auto it = st.lower_bound(curSum - limit);
-                    if (it != st.end()) res = max(res, curSum - *it);
+                    if(it != st.end()) result = max(result,curSum-*it);
                     st.insert(curSum);
                 }
-                //注意：这里不能求最大的sum(k)，因为最大的可能超过了limit，所以应该找最接近limit的sum，因此要用一个set来搜索
-                // for(int k=0;k<m;k++){
-                //     printf("i=%d,j=%d,k=%d,curSum=%d,sum[k]=%d\n",i,j,k,curSum,sum[k]);
-                //     curSum = max(curSum+sum[k],sum[k]);
-                //     cout<<curSum<<endl;
-                //     if(curSum <=limit and curSum > result) result = curSum;
-                // }
             }
         }
         return result;
     }
 };
 ```
-
+怎么得到以上的结论：
+`x是curSum，y是某个sum， x- y<=limit,那么-y<=limit-x,也就是y>=x-limit,同时为了x-y尽量大， 那么y要尽量小，所以是lower_bound(x-limit)`
 #### Follow up
 Q:What if the number of rows is much larger than the number of columns?
 
 A:change the way how sum formed.
 
+#### Follow up2:
+Find the minimum subarray larger than k in a 1D array
+`x-k >= limit,x-k尽量小，那么k尽量大，同时-k>=limit-x,所以k<=x-limit，那么就要找upper_bound(x-limit)`
+
+```
+int followUp(vector<int> array, int limit) {
+    int curSum = 0;
+    set<int> st{{0}};
+    int result = INT_MAX;
+    for(auto x:array){
+        curSum += x;
+        auto it = st.upper_bound(curSum-limit);
+        if(it != st.end()) result = min(result,curSum - *it);
+        st.insert(curSum);
+    }
+    return result;
+}
+```
 <hr>
 
 
