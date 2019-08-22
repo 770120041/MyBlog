@@ -407,4 +407,128 @@ public:
 ## 85. Maximal Rectangle
 The biggest difference is that for a rectangle, it has many different shapes, while for squre, it has only one shape. So if we only record the maximum size for each position, it is not enough.
 
+#### Method as 84
+```
+class Solution {
+public:
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        int m = matrix.size();
+        if(m == 0) return 0;
+        int n = matrix[0].size();
+        vector<int> height(n+1,0);
+        int result = 0;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                height[j] = matrix[i][j] == '1' ? height[j]+1 : 0;
+            }
+            result = max(result,calMaxArea(height));
+        }
+        return result;
+    }
+    int calMaxArea(vector<int>&height){
+        stack<int> s;
+        s.push(-1);
+        int result = 0;
+        for(int i=0;i<height.size();i++){
+            while(s.size() != 1 and height[s.top()]>=height[i]){
+                int h = height[s.top()]; s.pop();
+                int w = i - s.top() - 1;
+                result = max(result,h*w);
+            }
+            s.push(i);
+        }
+        return result;
+    }
+};
+```
 <hr>
+
+
+## Max sum rectangle in a 2D Matrix
+[G4G](https://www.geeksforgeeks.org/maximum-sum-rectangle-in-a-2d-matrix-dp-27/)
+`dp[i][j]` to calculate the sum from 0,0 to i,j
+
+O(N^4)
+from i,j to k,l is `dp[k][l]-dp[i][l]-dp[k][j]+dp[i][j]`
+
+<hr>
+
+## 363. Max Sum of Rectangle No Larger Than K
+#### Brute Froce
+O(N^4) Brute Force
+```
+class Solution {
+public:
+    int maxSumSubmatrix(vector<vector<int>>& matrix, int limit) {
+        int m = matrix.size();
+        int n = matrix[0].size();
+        //sum from 0,0 to i,j
+        vector<vector<int>> sum(m+1,vector<int>(n+1,0));
+        int result = INT_MIN/2;
+        for(int i=1;i<=m;i++){
+            for(int j=1;j<=n;j++){
+                sum [i][j] = sum[i-1][j]+sum[i][j-1]-sum[i-1][j-1] + matrix[i-1][j-1];
+            }
+        }
+        for(int i=1;i<=m;i++){
+            for(int j=1;j<=n;j++){
+                for(int k = i;k<=m;k++){
+                    for(int l=j;l<=n;l++){
+                      //i,j to k,l 
+                        int tmp = sum[k][l] - sum[i-1][l] - sum[k][j-1] + sum[i-1][j-1];
+                        if(tmp > result and tmp <= limit) result = tmp;
+                    }
+                }
+            }
+        }
+        return result == INT_MIN?0:result;
+    }
+};
+```
+#### O(N^3) dp， 最大sum of an array
+[video](https://www.youtube.com/watch?v=-FgseNO-6Gk)
+```
+class Solution {
+public:
+    int maxSumSubmatrix(vector<vector<int>>& matrix, int limit) {
+        if(matrix.empty() or matrix[0].empty()) return 0;
+        int m = matrix.size();
+        int n = matrix[0].size();
+        int result = INT_MIN;
+        for(int i=0;i<n;i++){
+            vector<int> sum(m,0);
+            //from column i to column j
+            for(int j=i;j<n;j++){
+                for (int k = 0; k < m; ++k) {
+                    sum[k] += matrix[k][j];
+                }
+                int curSum = 0;
+                set<int> st{{0}};
+                for (auto a : sum) {
+                    curSum += a;
+                    auto it = st.lower_bound(curSum - limit);
+                    if (it != st.end()) res = max(res, curSum - *it);
+                    st.insert(curSum);
+                }
+                //注意：这里不能求最大的sum(k)，因为最大的可能超过了limit，所以应该找最接近limit的sum，因此要用一个set来搜索
+                // for(int k=0;k<m;k++){
+                //     printf("i=%d,j=%d,k=%d,curSum=%d,sum[k]=%d\n",i,j,k,curSum,sum[k]);
+                //     curSum = max(curSum+sum[k],sum[k]);
+                //     cout<<curSum<<endl;
+                //     if(curSum <=limit and curSum > result) result = curSum;
+                // }
+            }
+        }
+        return result;
+    }
+};
+```
+
+#### Follow up
+Q:What if the number of rows is much larger than the number of columns?
+
+A:change the way how sum formed.
+
+<hr>
+
+

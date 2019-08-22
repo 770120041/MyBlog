@@ -190,6 +190,7 @@ public:
 
 ## 139. Word Break
 Brute force, but use an array to record the history of brute force.
+#### Brute force1
 ```
 class Solution {
 public:
@@ -215,8 +216,34 @@ public:
     }
 };
 ```
+#### Brute Force 2
+do it reversely
+
+`dp[i] means if string 0...i can be break into two. The answer is dp[n]`
+
+`dp[0] is true beacuse null string can be break into two`
+```
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> uSet;
+        int n = s.size();
+        for(auto word:wordDict) uSet.insert(word);
+        vector<bool> dp(n+1,false);
+        dp[0] = true;
+        for(int i = 1 ; i <= n ; i++){
+            for(int j=1; j+i-1 <= n ; j++){
+                string tmp = s.substr(i-1,j);
+                if(uSet.count(tmp) and dp[i-1]) dp[i-1+j] = true;    
+            }
+        }
+        return dp[n];
+    }
+};
+```
 
 <hr>
+
 
 
 ## 375. Guess Number Higher or Lower II

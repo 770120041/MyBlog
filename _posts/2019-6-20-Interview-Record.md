@@ -52,6 +52,10 @@ categories: Interview
 ## Reviewed
 https://cspiration.com/leetcodeClassification#10306
 
+901
+739
+904
+
 #### 1.3.1. Array
 Array 330
 #### 1.3.2. String  
@@ -62,7 +66,7 @@ finished 99
 #### 1.3.5. Backtracking
 finished 291
 #### 1.3.6. Dynamic Programming
-finished 174
+finished DP2D
 
 #### 1.3.10. DFS & BFS
 还剩两个N-queen

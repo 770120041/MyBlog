@@ -588,3 +588,70 @@ Brute Force
     }
 };
 ```
+
+<hr>
+
+## 140. Word Break II
+#### Brute Force DFS: TLE
+```
+class Solution {
+public:
+    void DFS(vector<string>&result,vector<string>& cur,string&s,int curIndex,unordered_set<string> uSet){
+        if(curIndex == s.size()){
+            string tmp;
+            for(auto i = 0; i <cur.size();i++){
+                tmp += cur[i];
+                if(i == cur.size()-1){}
+                else tmp += " ";
+            }
+            result.push_back(tmp);
+            return;
+        }
+        if(curIndex > s.size()) return;
+        for(int j=1;j<=s.size()-curIndex;j++){
+            string tmp = s.substr(curIndex,j);
+            if(uSet.count(tmp)){
+                cur.push_back(tmp);
+                DFS(result,cur,s,curIndex+j,uSet);
+                cur.pop_back();
+            }
+        }
+    }
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        vector<string> result;
+        unordered_set<string> uSet;
+        vector<string> cur;
+        for(auto str:wordDict) uSet.insert(str);
+        DFS(result,cur,s,0,uSet);
+        return result;
+    }
+};
+```
+#### Using Hash map
+Using hashmap to record if current string is already visited
+```
+class Solution {
+public:
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        unordered_map<string,vector<string>> uMap;
+        return helper(s,wordDict,uMap);
+    }
+    vector<string> helper(string s,vector<string>&wordDict,unordered_map<string,vector<string>>& uMap){
+        if(uMap.count(s)){
+            return uMap[s];
+        } 
+        if (s.empty()) return {""};
+        vector<string> res;
+        for (string word : wordDict) {
+            if (s.substr(0, word.size()) != word) continue;
+            vector<string> rem = helper(s.substr(word.size()), wordDict, uMap);
+            for (string str : rem) {
+                res.push_back(word + (str.empty() ? "" : " ") + str);
+            }
+        }
+        return uMap[s]=res;
+    }
+};
+
+```
+<hr>
