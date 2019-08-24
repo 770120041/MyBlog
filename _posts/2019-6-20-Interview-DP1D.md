@@ -494,3 +494,94 @@ public:
 ```
 
 <hr>
+
+## 198. House Robber
+```
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        int n = nums.size();
+        //dp[i] means the maximum number when rob i and not rob i
+        vector<pair<int,int>> dp(n+1,{0,0});
+        for(int i=1;i<=nums.size();i++){
+            dp[i] = {nums[i-1]+dp[i-1].second , max(dp[i-1].second,dp[i-1].first)};
+        }
+        return max(dp[n].second,dp[n].first);
+    }
+};
+```
+
+<hr>
+
+## 213. House Robber II
+Either rob house No.1 or No.N. Because we can't rob no.1 and no.n at the same time.
+
+if Rob no.1, set No.n to zero
+
+if rob no.n, set No.1 to zero
+```
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        int n = nums.size();
+        if(n == 0) return 0;
+        if(n == 1) return nums[0];
+
+        //either rob house No.1 or No.N
+        vector<pair<int,int>> dp(n+1,{0,0});
+        //if n == 0 return 0
+        int result=0;
+        //Rob NO.1
+        for(int i=1;i<=n;i++){
+            if(i != n){
+                dp[i] = {nums[i-1]+dp[i-1].second,max(dp[i-1].first,dp[i-1].second)};            
+            }
+            else{
+                result = max(dp[i-1].first,dp[i-1].second);
+            }
+        }
+        //Don't rob No.1
+        for(auto &x:dp) x = {0,0};
+        for(int i=2;i<=n;i++){
+            dp[i] = {nums[i-1]+dp[i-1].second,max(dp[i-1].first,dp[i-1].second)};            
+        }
+        result = max(result,max(dp[n].first,dp[n].second));
+        return result;
+    }
+};
+```
+
+<hr>
+
+## 276. Paint Fence(Lint 514)
+Pos i paint same color,paint different color.
+`dp[i] = {same,diff};
+dp[i] = dp[i-1].seocnd,(dp[i-1].first+dp[i-1].second)*(k-1)`
+```
+class Solution {
+public:
+    int numWays(int n, int k) {
+        if(n == 0) return 0;
+        if(n == 1) return k;
+        vector<pair<int,int>> dp(n);
+        dp[0] = {0,k};
+        for(int i=1;i<n;i++){
+            dp[i] = {dp[i-1].second,(dp[i-1].second+dp[i-1].first)*(k-1)};
+        }
+        return dp[n-1].first+dp[n-1].second;
+    }
+};
+```
+<hr>
+
+## 10. Regular Expression Matching
+
+<hr>
+
+## 44. Wildcard Matching
+
+<hr>
+
+## 91. Decode Ways
+
+<hr>
