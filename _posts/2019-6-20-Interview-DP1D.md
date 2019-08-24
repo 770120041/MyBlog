@@ -574,14 +574,35 @@ public:
 ```
 <hr>
 
+## 91. Decode Ways **
+DP[i]代表1-i之间的个数
+
+初始化dp[0] = 1，这题要注意'0'的处理，单独的0没有前面的搭配是非法的。
+
+**注意括起来全部的表达式，防止小错误！！！！！**
+```
+class Solution {
+public:
+    int numDecodings(string s) {
+        if (s.empty() || s[0] == '0') return 0;
+        vector<int> dp(s.size() + 1, 0);
+        dp[0] = 1;
+        for (int i = 1; i < dp.size(); ++i) {
+            dp[i] = (s[i - 1] == '0') ? 0 : dp[i - 1];
+            if (i > 1 && (s[i - 2] == '1' || (s[i - 2] == '2' && s[i - 1] <= '6'))) {
+                dp[i] += dp[i - 2];
+            }
+        }
+        return dp.back();
+    }
+};
+```
+<hr>
+
 ## 10. Regular Expression Matching
 
 <hr>
 
 ## 44. Wildcard Matching
-
-<hr>
-
-## 91. Decode Ways
 
 <hr>
