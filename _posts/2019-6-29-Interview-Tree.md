@@ -1132,6 +1132,66 @@ public:
 };
 ```
 
+<hr>
+
+## 156 Binary Tree Upside Down(Lint 649)
+题意难以理解，这道题让我们把一棵二叉树上下颠倒一下，而且限制了右节点要么为空要么一定会有对应的左节点。上下颠倒后原来二叉树的最左子节点变成了根节点，其对应的右节点变成了其左子节点，其父节点变成了其右子节点，相当于顺时针旋转了一下。
+#### 找右子节点
+这里的tricky的部分是新的子树的最右节点就是原来根节点的左子节点，因为翻转左子树的过程中，原来左子树的根节点会变成最右节点
+```
+TreeNode *upsideDownBinaryTree(TreeNode *root) {
+    if (!root || !root->left) return root;
+    TreeNode *l = root->left, *r = root->right;
+    TreeNode *res = upsideDownBinaryTree(l);
+    root->left = root->right = NULL;
+    TreeNode* rightest = res;
+    while(rightest->right) rightest = rightest->right;
+    rightest->left = r;
+    rightest->right = root;
+    return res;
+}
+```
+#### 不找右子节点
+```
+//顺时针旋转
+    TreeNode *upsideDownBinaryTree(TreeNode *root) {
+        if (!root || !root->left) return root;
+        TreeNode *l = root->left, *r = root->right;
+        TreeNode *res = upsideDownBinaryTree(l);
+        l->left = r;
+        l->right = root;
+        root->left = NULL;
+        root->right = NULL;
+        return res;
+    }
+```
+
+#### 迭代
+注意最后return pre，因为cur = NULL
+```
+
+class Solution {
+public:
+     //不断向左，翻转到最后就是根节点
+    TreeNode * upsideDownBinaryTree(TreeNode * root) {
+        TreeNode* pre=NULL,*tmp=NULL,*next=NULL,*cur=root;
+        while(cur){
+            next = cur->left;
+            cur->left = tmp;
+            tmp = cur->right;
+            cur->right=  pre;
+            pre = cur;
+            cur = next;
+        }
+        return pre;
+    }
+};
+```
+
+<hr>
+
+
+
 ## 114. Flatten Binary Tree to Linked List
 Preorder traversal
 ```
@@ -1154,5 +1214,425 @@ public:
     }
 };
 ```
+
+<hr>
+
+## 255 Verify Preorder Sequence in Binary Search Tree   (Lint 1307)
+#### Brute Force
+Find the first number that is larger than root, which means it shall be the subright tree. Then judge sub-left tree and sub-right tree.
+
+但由于使用了递归，每个节点都被访问了一次，而且每次要寻找一次数组，因此复杂度是O(n^2)
+```
+class Solution {
+public:
+    bool helper(vector<int>&preorder,int l,int r,int upperBound,int lowerBound){
+        if(l > r) return true;
+        int rootVal = preorder[l];
+        if(rootVal >= upperBound or rootVal <= lowerBound) return false;
+        if(l == r) return true;
+        int mid = l+1;
+        while(mid <= r and preorder[mid] < rootVal){
+            mid++;
+        }
+        // cout<<"l="<<l<<",r="<<r<<".mid="<<mid<<endl;
+        //mid find the first number larger than root.
+        //mid > r means all is left sub tree
+        if(mid > r){
+            return helper(preorder,l+1,r,rootVal,lowerBound);
+        }
+        return helper(preorder,l+1,mid-1,rootVal,lowerBound) and helper(preorder,mid,r,upperBound,rootVal);
+    }
+    
+    bool verifyPreorder(vector<int> &preorder) {
+        return helper(preorder,0,preorder.size()-1,INT_MAX,INT_MIN);
+    }
+};
+```
+#### Stack solution
+```
+class Solution {
+public:
+     // we set a lower bound, if cur->val < lower bound, then it is false.
+     // root, left ,right, so we push root and left to stack ,if cur value is smaller than number in stack, it is in left-sub tree. otherwise it is in right subtree. We need to pop the stack to find the root of that right sub tree, the right subtree is exaclty larger than the root. And we push that right node to the stack. So the lower bound would be the value of the root.
+    bool verifyPreorder(vector<int> &preorder) {
+        int lowerBound = INT_MIN;
+        stack<int> s;
+        for(int i=0;i<preorder.size();i++){
+            if(preorder[i] < lowerBound) return false;
+            if(s.empty() or preorder[i]<s.top()) s.push(preorder[i]);
+            else{
+                //preorder[i] > s.top()
+                while(!s.empty() and preorder[i] > s.top()){
+                    lowerBound = s.top(); s.pop();
+                }
+                //the root of right substree
+                s.push(preorder[i]);
+            }
+        }
+        return true;
+    }
+};
+```
+#### O(1) space
+直接把value存到preorder遍历过的点里面,把它作为一个栈
+```
+class Solution {
+public:
+    bool verifyPreorder(vector<int> &preorder) {
+        int lowerBound = INT_MIN; int lowIndex = -1;
+        for(int i=0;i<preorder.size();i++){
+            if(preorder[i] < lowerBound) return false;
+            //using preorder itself as a stack
+            while(lowIndex >= 0 and preorder[i] > preorder[lowIndex]){
+                lowerBound = preorder[lowIndex];
+                lowIndex--;
+            }
+            //store the root of right sub tree
+            preorder[++lowIndex] = preorder[i];
+        }
+        return true;
+    }
+};
+```
+<hr>
+
+## 333 Largest BST Subtree	
+Find the size of the largest binary seach tree
+#### Wrong solution!!! 
+Becasue with this input, the largest subtree is the tree with root 60. But the lower bound of it is actually not 50. other wise we can only find 70 as the result.
+```
+       50
+     /    \
+  30       60
+ /  \     /  \ 
+5   20   45    70
+              /  \
+            65    80
+```
+
+```
+bool isBST(TreeNode** result,TreeNode* root,int LowerBound,int upperBound){
+    if(!root) return true;
+    printf("val=%d,h=%d,l=%d\n",root->val,upperBound,LowerBound);
+    if(root->val < LowerBound or root->val > upperBound) return false;
+    bool l = isBST(result,root->left,LowerBound,root->val);
+    bool r = isBST(result,root->right,root->val,upperBound);
+    if(root->val == 60){
+        cout<<60<<endl;
+        cout<<l<<" "<<r<<endl;
+    }
+    if(l and r){
+        printf("candidate:%d\n",root->val);
+        *result = root; return true;
+    }
+    return false;
+}
+int calSize(TreeNode* root){
+    if(!root) return 0;
+    int l = calSize(root->left);
+    int r = calSize(root->right);
+    return l+r+1;
+}
+int findLargestBSTTree(TreeNode* root){
+    TreeNode* result = NULL;
+    isBST(&result,root,INT_MIN,INT_MAX);
+    if(result == NULL) return 0;
+    cout<<"result Node val = "<<result->val<<endl;
+    return calSize(result);
+}
+```
+
+#### Brute Force
+Travel for each subtree
+
+Time Consuming, we can add a memo for quicker reference
+```
+bool isBST(TreeNode*root,int low,int high){
+    if(!root) return true;
+    if(root->val < low or root->val > high) return false;
+    if(isBST(root->left,low,root->val) and isBST(root->right,root->val,high)){
+        return true;
+    }
+    return false;
+}
+
+int calSize(TreeNode* root){
+    if(!root) return 0;
+    int l = calSize(root->left);
+    int r = calSize(root->right);
+    return l+r+1;
+}
+int findLargestBSTTree(TreeNode* root){
+    if(isBST(root,INT_MIN,INT_MAX)) return calSize(root);
+    return max(findLargestBSTTree(root->left),findLargestBSTTree(root->right));
+}
+```
+
+#### Brute force with memo
+```
+unordered_map<TreeNode*,bool> uMap;
+bool isBST(TreeNode*root,int low,int high){
+    if(!root) return true;
+    auto it = uMap.find(root);
+    if(it!=uMap.end()) return it->second;
+    bool result;
+    if(root->val < low or root->val > high) result =  false;
+    else if(isBST(root->left,low,root->val) and isBST(root->right,root->val,high)){
+        result =  true;
+    }
+    else{
+        result = false;
+    }
+    uMap[root] = result;
+    return result;
+}
+
+int calSize(TreeNode* root){
+    if(!root) return 0;
+    int l = calSize(root->left);
+    int r = calSize(root->right);
+    return l+r+1;
+}
+
+int findLargestBSTTree(TreeNode* root){
+    if(isBST(root,INT_MIN,INT_MAX)) return calSize(root);
+    return max(findLargestBSTTree(root->left),findLargestBSTTree(root->right));
+}
+```
+#### Full runnable C++ code
+Can be run [here](https://www.onlinegdb.com/online_c++_compiler)
+```
+#include <iostream>
+#include <stack>
+#include <vector>
+using namespace std;
+#include <limits.h>
+#include <stdio.h>
+#include <unordered_map>
+
+class TreeNode{
+public:
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(int val,TreeNode* l=NULL,TreeNode* r=NULL){
+        this->val = val;
+        left = l;
+        right = r;
+    }
+};
+
+
+unordered_map<TreeNode*,bool> uMap;
+bool isBST(TreeNode*root,int low,int high){
+    if(!root) return true;
+    auto it = uMap.find(root);
+    if(it!=uMap.end()) return it->second;
+    bool result;
+    if(root->val < low or root->val > high) result =  false;
+    else if(isBST(root->left,low,root->val) and isBST(root->right,root->val,high)){
+        result =  true;
+    }
+    else{
+        result = false;
+    }
+    uMap[root] = result;
+    return result;
+}
+
+int calSize(TreeNode* root){
+    if(!root) return 0;
+    int l = calSize(root->left);
+    int r = calSize(root->right);
+    return l+r+1;
+}
+
+int findLargestBSTTree(TreeNode* root){
+    if(isBST(root,INT_MIN,INT_MAX)) return calSize(root);
+    return max(findLargestBSTTree(root->left),findLargestBSTTree(root->right));
+}
+TreeNode* constructTree(deque<int> &values){
+    if(values.size() == 0) return NULL;
+    if(values[0] == -1){
+        values.pop_front();
+        return NULL;
+    }
+    TreeNode* result = new TreeNode(values[0]);
+    values.pop_front();
+    result->left = constructTree(values);
+    result->right = constructTree(values);
+    return result;
+}
+
+void TravelTree(TreeNode* root){
+    if(!root) return;
+    cout<<root->val<<endl;
+    TravelTree(root->left);
+    TravelTree(root->right);
+}
+
+int main()
+{
+    deque<int> treeValues{50,30,5,-1,-1,20,-1,-1,60,45,-1,-1,70,65,-1,-1,80,-1,-1};
+    auto head = constructTree(treeValues);
+    // TravelTree(head);
+    cout<<"largest BST size = "<<findLargestBSTTree(head)<<endl;
+    return 0;
+}
+
+```
+
+<hr>
+
+## 222. Count Complete Tree Nodes
+```
+class Solution {
+public:
+    int countNodes(TreeNode* root) {
+        if(!root) return 0;
+        return 1 + countNodes(root->left) + countNodes(root->right);
+    }
+};
+```
+
+<hr>
+
+## 105. Construct Binary Tree from Preorder and Inorder Traversal
+#### Bruteforce recursive
+O(N^2) because of the process to find the root in inorder
+```
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>&preorder,int pl,int pr,vector<int>&inorder,int il,int ir){
+        if(pl > pr) return NULL;
+        if(pl == pr) return new TreeNode(preorder[pl]);
+        TreeNode* result = new TreeNode(preorder[pl]);
+        int rootIndex = il;
+        while(inorder[rootIndex] != preorder[pl]){rootIndex++;}
+        //the size of it is rootIndex-il
+        result->left = buildTree(preorder,pl+1,pl+rootIndex-il,inorder,il,rootIndex-1);
+        result->right = buildTree(preorder,pl+rootIndex-il+1,pr,inorder,rootIndex+1,ir);
+        return result;
+    }
+    
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        return buildTree(preorder,0,preorder.size()-1,inorder,0,inorder.size()-1);
+    }
+};
+```
+
+#### Adding hash map
+Add hash map to speed up the process to find the index. Make it faster than 93%
+```
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>&preorder,int pl,int pr,vector<int>&inorder,int il,int ir,unordered_map<int,int>& uMap){
+        if(pl > pr) return NULL;
+        if(pl == pr) return new TreeNode(preorder[pl]);
+        TreeNode* result = new TreeNode(preorder[pl]);
+        int rootIndex = uMap[preorder[pl]];
+        //the size of it is rootIndex-il
+        result->left = buildTree(preorder,pl+1,pl+rootIndex-il,inorder,il,rootIndex-1,uMap);
+        result->right = buildTree(preorder,pl+rootIndex-il+1,pr,inorder,rootIndex+1,ir,uMap);
+        return result;
+    }
+    
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        unordered_map<int,int> uMap;
+        for(auto i=0;i<inorder.size();i++) uMap[inorder[i]] = i;
+        return buildTree(preorder,0,preorder.size()-1,inorder,0,inorder.size()-1,uMap);
+    }
+};
+```
+
+<hr>
+
+## 106. Construct Binary Tree from Inorder and Postorder Traversal
+```
+
+class Solution {
+public:
+    //For post order, the root is the rear
+    TreeNode* buildTreeHelper(vector<int>& inorder,int il,int ir, vector<int>& postorder, int pl,int pr,unordered_map<int,int>& uMap){\
+        if(il > ir) return NULL;
+        TreeNode* result = new TreeNode(postorder[pr]);
+        if(il == ir) return result;
+        int rootIndex = uMap[postorder[pr]];
+        //inorder:left size = rootIndex-il , right size = rootIndex+1 to ir;
+        //postorder:left size: rootIndex-il, right size rootIndex+1 to pr-1
+        result -> left = buildTreeHelper(inorder,il,rootIndex-1,postorder,pl,pl+rootIndex-il-1,uMap);
+        result -> right = buildTreeHelper(inorder,rootIndex+1,ir,postorder,pl+rootIndex-il,pr-1,uMap);
+        return result;
+    }
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        unordered_map<int,int> uMap;
+        for(auto i=0;i<inorder.size();i++) uMap[inorder[i]] = i;
+        return buildTreeHelper(inorder,0,inorder.size()-1,postorder,0,postorder.size()-1,uMap); 
+    }
+};
+```
+
+<hr>
+
+## 116. Populating Next Right Pointers in Each Node
+Simple level order traversal
+```
+
+class Solution {
+public:
+    Node* connect(Node* root) {
+        queue<Node*> q;
+        q.push(root);
+        while(!q.empty()){
+            int size = q.size();
+            Node* pre = NULL;
+            for(int i=0;i<size;i++){
+                auto cur = q.front();q.pop();
+                if(!cur) continue;
+                if(i == size - 1) cur->next = NULL;
+                if(pre) pre->next = cur;
+                pre = cur;
+                q.push(cur->left);
+                q.push(cur->right);
+            }
+        }
+        return root;
+    }
+};
+```
+
+<hr>
+
+## 117. Populating Next Right Pointers in Each Node II
+#### Same solution works
+```
+
+class Solution {
+public:
+    Node* connect(Node* root) {
+        queue<Node*> q;
+        q.push(root);
+        while(!q.empty()){
+            int size = q.size();
+            Node* pre = NULL;
+            for(int i=0;i<size;i++){
+                auto cur = q.front();q.pop();
+                if(!cur) continue;
+                if(i == size - 1) cur->next = NULL;
+                if(pre) pre->next = cur;
+                pre = cur;
+                q.push(cur->left);
+                q.push(cur->right);
+            }
+        }
+        return root;
+    }
+};
+```
+
+<hr>
+
+## 314 Binary Tree Vertical Order Traversal	(Lint 651)
+
 
 <hr>

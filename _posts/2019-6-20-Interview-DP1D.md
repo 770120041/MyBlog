@@ -600,9 +600,104 @@ public:
 <hr>
 
 ## 10. Regular Expression Matching
+#### Recursive
+Simple recursive, brute force
+```
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        if (p.empty()) return s.empty();
+        if (p.size() > 1 && p[1] == '*') {
+            return (isMatch(s,p.substr(2))) || (!s.empty() and ((s[0] == p[0]) or (p[0] == '.')) and isMatch(s.substr(1), p));
+        } else {
+            return (!s.empty() and((s[0]==p[0]) or (p[0] == '.'))) and isMatch(s.substr(1),p.substr(1));
+        }
+    }
+};
+```
 
+#### DP
+我们也可以用 DP 来解，定义一个二维的 DP 数组，其中 dp[i][j] 表示 s[0,i) 和 p[0,j) 是否 match，然后有下面三种情况(下面部分摘自这个帖子)：
+```
+We define dp[i][j] to be true if s[0..i) matches p[0..j) and false otherwise. The state equations will be:
+
+dp[i][j] = dp[i - 1][j - 1], if p[j - 1] != '*' && (s[i - 1] == p[j - 1] || p[j - 1] == '.');
+dp[i][j] = dp[i][j - 2], if p[j - 1] == '*' and the pattern repeats for 0 time;
+dp[i][j] = dp[i - 1][j] && (s[i - 1] == p[j - 2] || p[j - 2] == '.'), if p[j - 1] == '*' and the pattern repeats for at least 1 time.
+```
+
+```
+class Solution {
+public:
+    // dp[i][j] 表示 s[0,i) 和 p[0,j) 是否 match
+    bool isMatch(string s, string p) {
+        int m = s.size(), n = p.size();
+        vector<vector<bool>> dp(m+1,vector<bool>(n+1,false));
+        dp[0][0]=true;
+        // i starts from 0 before 0 s can even match p
+        for(int i=0;i<=m;i++){
+            for(int j=1;j<=n;j++){
+                if(p[j-1] == '*'){
+                    dp[i][j] = dp[i][j-2] or (i>0 and ((s[i-1] == p[j-2]) or p[j-2] == '.') and dp[i-1][j]);
+                }
+                else{
+                    dp[i][j] = (i>0 and (((s[i-1] == p[j-1]) or p[j-1] == '.'))) and dp[i-1][j-1];
+                }
+            }
+        }
+        
+        return dp[m][n];
+    }
+};
+```
 <hr>
 
 ## 44. Wildcard Matching
+#### Brute Force (TLE)
+```
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        if(p.empty()) return s.empty();
+        if(p[0] == '*'){
+            return isMatch(s,p.substr(1)) or (!s.empty() and (isMatch(s.substr(1),p.substr(1)) or isMatch(s.substr(1),p)));
+        }
+        if(!s.empty() and (s[0] == p[0] or p[0] == '?')) return isMatch(s.substr(1),p.substr(1));
+        return false;
+    }
+};
+```
+Time complexity: not polynomial
+
+#### DP
+```
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        int m=s.size(),n=p.size();
+        vector<vector<bool>> dp(m+1,vector<bool>(n+1,false));
+        dp[0][0] = true;
+        //dp[i][j] means s 0...i matchs p 0...j
+        for(int i=0;i<=m;i++){
+            for(int j=1;j<=n;j++){
+                if(p[j-1] == '*'){
+                    // =dp[i][j-1] 的意思是j没有用来匹配，i匹配不匹配取决于0...i和0...j-1匹配不匹配
+                    //use as empty sequence, which means p[j] don't exist, so dp[i][j] = dp[i][j-1]
+                    // =dp[i-1][j-1] 意思是j用来和i匹配了(只使用一次，等同于？），看之前的0...i-1和0...j-1匹配不匹配
+                    //used to match exactly one dp[i][j] = dp[i-1][j-1]
+                    // =dp[i-1][j] 的意思是i被wildcard匹配了，看之前的0...i-1和0..j匹配不匹配
+                    // 0...i-1和0...j的原因是第j个位置可能被使用了很多次，从理解上看是j这个位置不变，i一直增加，也就是说j这个位置被用来匹配了很多个字符
+                    //match more than 1, dp[i][j] = dp[i-1][j]; 
+                    dp[i][j] = dp[i][j-1] or (i>0 and (dp[i-1][j-1] or dp[i-1][j]));   
+                }
+                else{
+                    if(i>0 and ((s[i-1]==p[j-1] ) or (p[j-1] == '?')) ) dp[i][j] = dp[i-1][j-1];
+                }
+            }
+        }
+        return dp[m][n];
+    }
+};
+```
 
 <hr>

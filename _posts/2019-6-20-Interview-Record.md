@@ -62,14 +62,13 @@ Array 330
 skipped 115 132 because dp
 
 #### 1.3.4. Tree
-finished 99 
+finished 106
 #### 1.3.5. Backtracking
 finished 291
-
 for Enumeration	finsihed Word Break II	
-#### 1.3.6. Dynamic Programming
-finished DP2D
 
+#### 1.3.6. Dynamic Programming
+finished DP
 #### 1.3.10. DFS & BFS
 还剩两个N-queen
 #### 1.3.18. Design
