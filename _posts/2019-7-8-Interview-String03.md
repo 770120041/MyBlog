@@ -1098,28 +1098,3 @@ public:
 <hr>
 
 
-
-## 20. Valid Parentheses
-```
-class Solution {
-public:
-    bool isValid(string s) {
-        stack<int> myStack;
-        unordered_map<char,int> uMapl{{'(',0},{'[',1},{'{',2}};
-        unordered_map<char,int> uMap{{')',0},{']',1},{'}',2}};
-        for(int i=0;i<s.size();i++){
-            if(s[i] == '(' or s[i] == '[' or s[i] == '{') myStack.push(uMapl[s[i]]);
-            else{
-                if(myStack.empty()) return false;
-                int topIndex = myStack.top();
-                myStack.pop();
-                cout<<uMap[s[i]]<<" "<<topIndex<<endl;
-                if(uMap[s[i]] != topIndex ) return false;
-            }
-        }
-        return myStack.empty();
-    }
-};
-```
-
-<hr>
