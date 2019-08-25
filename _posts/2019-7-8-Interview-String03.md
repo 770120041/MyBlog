@@ -3,6 +3,7 @@ layout: post
 title:  "Leetcode String 03"
 categories: Interview
 ---
+
 ## 186 Reverse Words in a String II
 If reverse word by word, very very hard, because the length of string would be different. So need to move a lot. And if scan from left and right, then we need to detect `left<= right`
 
@@ -827,7 +828,6 @@ public:
 
 ## 20. Valid Parentheses
 Using hashmap will be better because its harder to make mistakes
-
 ```
 class Solution {
 public:
