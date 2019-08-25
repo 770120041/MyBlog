@@ -1633,6 +1633,156 @@ public:
 <hr>
 
 ## 314 Binary Tree Vertical Order Traversal	(Lint 651)
+#### Hash
+Attention: this one needs to be level order travel. Not DFS
+```
+class Solution {
+public:
+    vector<vector<int>> verticalOrder(TreeNode * root) {
+        unordered_map<int,vector<int>> uMap;
+        int indexMin=INT_MAX,indexMax=INT_MIN;
+        queue<pair<TreeNode*,int>> q;
+        q.push({root,0});
+        vector<vector<int>> result;
+        while(!q.empty()){
+            int size = q.size();
+            for(int i=0;i<size;i++){
+                auto cur = q.front(); q.pop();
+                if(!cur.first) continue;
+                indexMin = min(indexMin,cur.second);
+                indexMax = max(indexMax,cur.second);
+                auto it = uMap.find(cur.second);
+                if(it == uMap.end()){
+                    vector<int> tmp{cur.first->val};
+                    uMap[cur.second] = tmp;
+                }
+                else it->second.push_back(cur.first->val);
+                q.push({cur.first->left,cur.second-1});
+                q.push({cur.first->right,cur.second+1});
+            }
+        }
+        for(int i=indexMin;i<=indexMax;i++){
+            result.push_back(uMap[i]);
+        }
+        return result;
+    }
+};
+```
 
+<hr>
+
+## 96. Unique Binary Search Trees
+#### Brute Force TLE
+```
+class Solution {
+public:
+    int generateHelper(int l,int h){
+        if(l >= h) return 1;
+        int result = 0;
+        for(int i=l;i<=h;i++){
+            auto left = generateHelper(l,i-1);
+            auto right = generateHelper(i+1,h);
+            result += (left*right);
+        }
+        return result;
+    }
+    int numTrees(int n) {
+        if(n == 0) return 0;
+        return generateHelper(1,n);    
+    }
+};
+```
+
+#### Using map as memp
+Don't use unordered_Map because it can' use pair as a key
+```
+class Solution {
+public:
+    int generateHelper(int l,int h,map<pair<int,int>,int>& uMap){
+        if(l >= h) return 1;
+        auto it = uMap.find(pair<int,int>{l,h});
+        if(it != uMap.end()) return it->second;
+        int result = 0;
+        for(int i=l;i<=h;i++){
+            auto left = generateHelper(l,i-1,uMap);
+            auto right = generateHelper(i+1,h,uMap);
+            result += (left*right);
+        }
+        return uMap[{l,h}] = result;
+    }
+    int numTrees(int n) {
+        map<pair<int,int>,int> uMap;
+        if(n == 0) return 0;
+        return generateHelper(1,n,uMap);    
+    }
+};
+```
+<hr>
+
+## 95. Unique Binary Search Trees II
+#### Brute Force
+左边小，右边大即可
+```
+class Solution {
+public:
+    vector<TreeNode*> generateHelper(int l,int h){
+        vector<TreeNode*> result;
+        if(l > h) return {NULL};
+        if(l == h) return {new TreeNode(l)};
+        for(int i=l;i<=h;i++){
+            auto left = generateHelper(l,i-1);
+            auto right = generateHelper(i+1,h);
+            for(int j=0;j<left.size();j++){
+                for(int k=0;k<right.size();k++){
+                    TreeNode* root = new TreeNode(i);
+                    root->left = left[j];
+                    root->right = right[k];
+                    result.push_back(root);
+                }
+            }
+        }
+        return result;
+    }
+    vector<TreeNode*> generateTrees(int n) {
+        if(n == 0) return {};
+        return generateHelper(1,n);
+    }
+};
+```
+
+<hr>
+
+## 331. Verify Preorder Serialization of a Binary Tree
+```
+class Solution {
+public:
+    bool isValidSerialization(string preorder) {
+        vector<string> tokens;
+        string delim = ",";
+        int prev = 0,pos = 0;
+        do{
+            pos = preorder.find(delim,prev);
+            if(pos == string::npos) pos = preorder.length();
+            string token = preorder.substr(prev,pos-prev);
+            if(!token.empty()) tokens.push_back(token);
+            prev = pos+delim.length();
+        }while(pos < preorder.length() and prev < preorder.length());
+        // for(auto s:tokens) cout<<s<<endl;
+        stack<string> s;
+        if(tokens.size() == 0) return true;
+        s.push(tokens[0]);
+        int curIndex = 1;
+        while(!s.empty()){
+            auto cur = s.top(); s.pop();
+            if(cur == "#") continue;
+            if(curIndex == tokens.size()) return false;
+            s.push(tokens[curIndex++]);
+            if(curIndex == tokens.size()) return false;
+            s.push(tokens[curIndex++]);
+        }
+        return curIndex == tokens.size();
+    }
+};
+```
 
 <hr>

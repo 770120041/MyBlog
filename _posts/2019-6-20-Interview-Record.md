@@ -58,19 +58,41 @@ https://cspiration.com/leetcodeClassification#10306
 
 #### 1.3.1. Array
 Array 330
+
 #### 1.3.2. String  
 skipped 115 132 because dp
 
-#### 1.3.4. Tree
-finished 106
+#### 1.3.4. Tree 
+All done
+
 #### 1.3.5. Backtracking
 finished 291
 for Enumeration	finsihed Word Break II	
 
 #### 1.3.6. Dynamic Programming
-finished DP
+All done
+
 #### 1.3.10. DFS & BFS
 还剩两个N-queen
+
+#### 1.3.11. Stack & PriorityQueue
+
+
+#### 1.3.12. Bit Manipulation
+
+#### 1.3.13. Topological Sort
+
+#### 1.3.14. Random
+
+
+#### 1.3.15. Graph
+finished 310   
+
+#### 1.3.16. Union FInd
+
+
+#### 1.3.17. Trie
+
 #### 1.3.18. Design
 finished 281
 
