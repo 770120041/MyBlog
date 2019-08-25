@@ -824,9 +824,11 @@ public:
     }
 };
 ```
+
 <hr>
 
 ## 20. Valid Parentheses
+
 Using hashmap will be better because its harder to make mistakes
 ```
 class Solution {
