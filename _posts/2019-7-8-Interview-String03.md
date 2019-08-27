@@ -3,6 +3,7 @@ layout: post
 title:  "Leetcode String 03"
 categories: Interview
 ---
+
 ## 186 Reverse Words in a String II
 If reverse word by word, very very hard, because the length of string would be different. So need to move a lot. And if scan from left and right, then we need to detect `left<= right`
 
@@ -823,32 +824,6 @@ public:
     }
 };
 ```
-<hr>
-
-## 20. Valid Parentheses
-Using hashmap will be better because its harder to make mistakes
-
-```
-class Solution {
-public:
-    bool isValid(string s) {
-        stack<int> myStack;
-        unordered_map<char,int> uMapl{{'(',0},{'[',1},{'{',2}};
-        unordered_map<char,int> uMap{{')',0},{']',1},{'}',2}};
-        for(int i=0;i<s.size();i++){
-            if(s[i] == '(' or s[i] == '[' or s[i] == '{') myStack.push(uMapl[s[i]]);
-            else{
-                if(myStack.empty()) return false;
-                int topIndex = myStack.top();
-                myStack.pop();
-                cout<<uMap[s[i]]<<" "<<topIndex<<endl;
-                if(uMap[s[i]] != topIndex ) return false;
-            }
-        }
-        return myStack.empty();
-    }
-};
-```
 
 <hr>
 
@@ -1121,3 +1096,5 @@ public:
 ```
 
 <hr>
+
+

@@ -81,7 +81,7 @@ All done
 #### 1.3.12. Bit Manipulation
 
 #### 1.3.13. Topological Sort
-
+last one node done
 #### 1.3.14. Random
 
 
@@ -89,7 +89,6 @@ All done
 finished 310   
 
 #### 1.3.16. Union FInd
-
 
 #### 1.3.17. Trie
 
