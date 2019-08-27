@@ -63,7 +63,7 @@ b) A global function
 <hr>
 
 # Static
-static members are only declared in class declaration, not defined. They must be explicitly defined outside the class using scope resolution operator.
+static members are only declared in class declaration, not defined. They must be explicitly defined outside the class using scope resolution operator. Also a static member can't contain any non-static field. Inside a static member we can't use this. They are initialized out side of the class because they won't be intialized when any objects of that class is created. It can only be declared once.
 
 If we try to access static member ‘a’ without explicit definition of it, we will get compilation error. For example, following program fails in compilation.
 ```
@@ -172,11 +172,27 @@ Basically still vector
 
 ## List
 
+<hr>
+
 # Stack and Heap
 [stackoverflow](https://stackoverflow.com/questions/79923/what-and-where-are-the-stack-and-heap)
 
+<hr>
+
+# Function Pointers
+[link](https://www.learncpp.com/cpp-tutorial/78-function-pointers/)
+
+<hr>
 
 # questions
 https://www.softwaretestinghelp.com/cpp-interview-questions/
 
 what are static, hash table, virtual, STL
+
+# Details
+* When there is a Global variable and Local variable with the same name, how will you access the global variable?
+
+Answer: When there are two variables with the same name but different scope, i.e. one is a local variable and the other is a global variable, the compiler will give preference to a local variable.
+
+
+
