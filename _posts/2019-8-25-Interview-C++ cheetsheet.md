@@ -46,6 +46,8 @@ public:
 # diff between C and C++
 [link](https://www.geeksforgeeks.org/write-c-program-produce-different-result-c/)
 
+<hr>
+
 # Class access control
 ## Friend class
 Friend Class A friend class can access private and protected members of other class in which it is declared as friend. 
@@ -57,6 +59,8 @@ b) A global function
 * Friendship is not mutual. If class A is a friend of B, then B doesn’t become a friend of A automatically.
 
 * Friendship is not inherited (See this for more details)
+
+<hr>
 
 # Static
 static members are only declared in class declaration, not defined. They must be explicitly defined outside the class using scope resolution operator.
@@ -90,6 +94,8 @@ int main()
 
 ```
 
+<hr>
+
 # New and malloc
  Following are the differences between malloc() and operator new.
 
@@ -102,6 +108,8 @@ str = (char *) malloc(15); //malloc()
 free( ) is used on resources allocated by malloc( ), or calloc( ) in C
 
 Delete is used on resources allocated by new in C++
+
+<hr>
 
 # Copy Constructor
 A copy constructor is a member function which initializes an object using another object of the same class. A copy constructor has the following general function prototype: ClassName (const ClassName &old_obj);
@@ -122,3 +130,53 @@ When an object is constructed based on another object of the same class.
 When compiler generates a temporary object.
 
 https://www.geeksforgeeks.org/commonly-asked-oop-interview-questions/
+
+
+<hr>
+
+# Virtual Destructor
+https://www.geeksforgeeks.org/virtual-destructor/
+
+Deleting a derived class object **using a pointer to a base class that has a non-virtual destructor results in undefined behavior**. To correct this situation, the base class should be defined with a virtual destructor. For example, following program results in undefined behavior.
+
+## Pure Virtual destructor
+https://www.geeksforgeeks.org/pure-virtual-destructor-c/
+
+Can a destructor be pure virtual in C++?
+Yes, it is possible to have pure virtual destructor. Pure virtual destructors are legal in standard C++ and one of the most important things to remember is that if a class contains a pure virtual destructor, it must provide a function body for the pure virtual destructor. You may be wondering why a pure virtual function requires a function body. The reason is because destructors (unlike other functions) are not actually ‘overridden’, rather they are always called in the reverse order of the class derivation. This means that a derived class’ destructor will be invoked first, then base class destructor will be called. If the definition of the pure virtual destructor is not provided, then what function body will be called during object destruction? Therefore the compiler and linker enforce the existence of a function body for pure virtual destructors.
+
+<hr>
+
+# STL
+## Map & Set
+For Map and set, everything is sorted, both use Red Black Tree (A self balancing BST). Note that the time complexities of search, insert and delete are O(Log n).
+
+Map is implemented as a self-balancing red-black tree. 
+
+While for unordered_set and unordered_Map, everything is stored in hashed map, thus they are not sorted, and time complexity for insert and fecth is O(1).
+
+Black-Red Tree
+In a hash table, a value is stored by calling a hash function on a key.
+
+Values are not stored in sorted order.
+
+A hash table is traditionally implemented with an **array of linked lists**. When we want to insert a key/Value pair, we map the key to an index in the array using the hash function. The value is then inserted into the linked list at that position.
+
+* Thread safe: STL Maps are not thread safe whereas Hashmaps are thread safe and can be shared with many threads.
+
+## Vector
+dynamically allocated array
+
+## Stack & Queue
+Basically still vector
+
+## List
+
+# Stack and Heap
+[stackoverflow](https://stackoverflow.com/questions/79923/what-and-where-are-the-stack-and-heap)
+
+
+# questions
+https://www.softwaretestinghelp.com/cpp-interview-questions/
+
+what are static, hash table, virtual, STL
