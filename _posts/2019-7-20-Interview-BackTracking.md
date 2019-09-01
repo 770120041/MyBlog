@@ -655,3 +655,90 @@ public:
 
 ```
 <hr>
+
+## 51. N-Queens
+#### Brute force DFS
+```
+class Solution {
+public:
+    using vi = vector<int>;
+    using vs = vector<string>;
+    using vvs = vector<vs>;
+    bool check(const vi&positions,int curIndex,int j){
+        if(curIndex == 0) return true;
+        for(int i=0;i<curIndex;i++){
+            //j - positions[i] is the diff between column, curIndex-i is the diff between row
+            if((positions[i] == j) or (j-positions[i] == curIndex - i) or (j-positions[i] == i - curIndex)) return false;
+        }
+        return true;
+    }
+    void DFS(vvs&result,vi&positions,int curIndex,int n){
+        if(curIndex == n){
+            vector<string> tmp(n,string(n,'.'));
+            for(int i=0;i<positions.size();i++){
+                tmp[i][positions[i]] = 'Q';
+            }
+            result.push_back(tmp);
+            return;
+        }
+        for(int j=0;j<n;j++){
+            if(check(positions,curIndex,j)){
+                positions[curIndex] = j;
+                DFS(result,positions,curIndex+1,n);
+            }
+        }
+    }
+    vector<vector<string>> solveNQueens(int n) {
+        vvs result;
+        vi positions(n,0);
+        DFS(result,positions,0,n);
+        return result;
+    }
+};
+```
+
+<hr>
+
+## 52. N-Queens II
+
+
+```
+class Solution {
+public:
+    using vi = vector<int>;
+    using vs = vector<string>;
+    using vvs = vector<vs>;
+    bool check(const vi&positions,int curIndex,int j){
+        if(curIndex == 0) return true;
+        for(int i=0;i<curIndex;i++){
+            //j - positions[i] is the diff between column, curIndex-i is the diff between row
+            if((positions[i] == j) or (j-positions[i] == curIndex - i) or (j-positions[i] == i - curIndex)) return false;
+        }
+        return true;
+    }
+    void DFS(vvs&result,vi&positions,int curIndex,int n){
+        if(curIndex == n){
+            vector<string> tmp(n,string(n,'.'));
+            for(int i=0;i<positions.size();i++){
+                tmp[i][positions[i]] = 'Q';
+            }
+            result.push_back(tmp);
+            return;
+        }
+        for(int j=0;j<n;j++){
+            if(check(positions,curIndex,j)){
+                positions[curIndex] = j;
+                DFS(result,positions,curIndex+1,n);
+            }
+        }
+    }
+    int totalNQueens(int n) {
+        vvs result;
+        vi positions(n,0);
+        DFS(result,positions,0,n);
+        return result.size();
+    }
+};
+```
+
+<hr>

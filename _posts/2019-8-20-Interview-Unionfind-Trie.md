@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Leetcode UnionFind"
+title:  "Leetcode UnionFind-Trie"
 categories: Interview
 ---
 # 并查集 Union Find
@@ -273,4 +273,144 @@ public:
     }
 };
 ```
+<hr>
+
+# Trie
+## 211 Add and Search Word - Data structure design
+```
+class WordDictionary {
+    
+public:
+    struct TrieNode {
+    public:
+        TrieNode *child[26];
+        bool isWord;
+        TrieNode() : isWord(false) {
+            for (auto &a : child) a = NULL;
+        }
+    };
+    /** Initialize your data structure here. */
+    TrieNode* Root;
+    WordDictionary() {
+        Root = new TrieNode();
+    }
+    
+    /** Adds a word into the data structure. */
+    void addWord(string word) {
+        TrieNode* p = Root;
+        for (auto &a : word) {
+            int i = a - 'a';
+            if (!p->child[i]) p->child[i] = new TrieNode();
+            p = p->child[i];
+        }
+        p->isWord = true;
+    }
+    
+    bool search(string word) {
+        return searchWord(word, Root, 0);
+    }
+    
+    bool searchWord(string &word, TrieNode *p, int i) {
+        if (i == word.size()) return p->isWord;
+        if (word[i] == '.') {
+            for (auto &a : p->child) {
+                if (a && searchWord(word, a, i + 1)) return true;
+            }
+            return false;
+        } else {
+            return p->child[word[i] - 'a'] && searchWord(word, p->child[word[i] - 'a'], i + 1);
+        }
+    }
+};
+
+```
+<hr>
+
+## 208 Implement Trie (Prefix Tree)
+```
+class Trie {
+struct Node{
+    Node* child[26];
+    bool isString;
+    Node():isString(false){
+        for(auto &a:child) a = NULL;
+    }
+};
+public:
+    
+    /** Initialize your data structure here. */
+    Node* Root;
+    Trie() {
+        Root = new Node();
+    }
+    
+    /** Inserts a word into the trie. */
+    void insert(string word) {
+        Node* cur = Root;
+        for(auto &a:word){
+            int pos = a - 'a';
+            if(!cur->child[pos]) cur->child[pos] = new Node();
+            cur = cur->child[pos];
+        }
+        cur->isString = true;
+    }
+    
+    /** Returns if the word is in the trie. */
+    bool search(string word) {
+        stack<pair<Node*,int>> s;
+        s.push({Root,0});
+        while(!s.empty()){
+            auto cur = s.top(); s.pop();
+            if(cur.second == word.size()){
+                if(cur.first->isString) return true;
+                continue;
+            }
+            if(word[cur.second] == '.'){
+                for(int i=0;i<26;i++){
+                    if(cur.first->child[i]){
+                        s.push({cur.first->child[i],cur.second+1});
+                    }
+                }
+            }
+            else{
+                if(cur.first->child[word[cur.second]-'a']){
+                    s.push({cur.first->child[word[cur.second]-'a'],cur.second+1});
+                }
+            }
+        }
+        return false;
+    }
+    
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    bool startsWith(string word) {
+        stack<pair<Node*,int>> s;
+        s.push({Root,0});
+        while(!s.empty()){
+            auto cur = s.top(); s.pop();
+            if(cur.second == word.size()){
+                return true;
+            }
+            if(word[cur.second] == '.'){
+                for(int i=0;i<26;i++){
+                    if(cur.first->child[i]){
+                        s.push({cur.first->child[i],cur.second+1});
+                    }
+                }
+            }
+            else{
+                if(cur.first->child[word[cur.second]-'a']){
+                    s.push({cur.first->child[word[cur.second]-'a'],cur.second+1});
+                }
+            }
+        }
+        return false;
+    }
+};
+
+```
+<hr>
+
+## 212 Word Search II
+
+
 <hr>

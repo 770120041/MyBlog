@@ -73,7 +73,7 @@ for Enumeration	finsihed Word Break II
 All done
 
 #### 1.3.10. DFS & BFS
-还剩两个N-queen
+All done
 
 #### 1.3.11. Stack & PriorityQueue
 
@@ -81,16 +81,18 @@ All done
 #### 1.3.12. Bit Manipulation
 
 #### 1.3.13. Topological Sort
-last one node done
+All done
 #### 1.3.14. Random
 
 
 #### 1.3.15. Graph
 finished 310   
 
-#### 1.3.16. Union FInd
+#### 1.3.16. Union Find
+All done
 
 #### 1.3.17. Trie
+All done
 
 #### 1.3.18. Design
 finished 281
