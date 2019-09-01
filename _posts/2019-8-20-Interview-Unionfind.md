@@ -167,3 +167,110 @@ public:
     }
 };
 ```
+
+<hr>
+
+## 261 Graph Valid Tree (Lint 178)
+
+```
+class Solution {
+public:
+    int findRoot(vector<int>&pre,int cur){
+        if(pre[cur] != cur){
+            pre[cur] = findRoot(pre,pre[cur]);
+        } 
+        return pre[cur];
+    }
+    bool validTree(int n, vector<vector<int>> &edges) {
+        if(n <= 1) return true;
+        vector<int> pre(n,0);
+        for(int i=0;i<n;i++) pre[i] = i;
+        unordered_set<int> visited;
+        for(auto edge:edges){
+            visited.insert(edge[0]); visited.insert(edge[1]);
+            int rootA = findRoot(pre,edge[0]);
+            int rootB = findRoot(pre,edge[1]);
+            if(rootA == rootB) return false;
+            pre[rootA] = rootB;
+        }
+        return visited.size() == n;
+    }
+};
+```
+
+<hr>
+
+## 305. Number of Islands II(Lint 434)
+#### 2D Union Find
+```
+
+class Solution {
+public:
+    using PPoint = pair<int,int>; 
+    PPoint findRoot(PPoint a,map<PPoint,PPoint> &pre,int &rootNum){
+        auto it = pre.find(a);
+        if(it == pre.end()) {
+            rootNum++;
+            return pre[a] = a;
+        }
+        if(pre[a].first != a.first or pre[a].second != a.second){
+            pre[a] = findRoot(pre[a],pre,rootNum);
+        }
+        return pre[a];
+    }
+    void unionF(PPoint a,PPoint b,map<PPoint,PPoint> &pre,int &rootNum,vector<vector<int>>&matrix,int n,int m){
+        int bx = b.first,by=b.second;
+        auto rootA = findRoot(a,pre,rootNum);
+        if(bx < 0 or bx >= n or by<0 or by >= m or matrix[bx][by] == 0) return;
+        auto rootB = findRoot(b,pre,rootNum);
+        if(rootA.first == rootB.first and rootA.second == rootB.second) return;
+        pre[rootA] = rootB;
+        rootNum--;
+    }
+    vector<int> numIslands2(int n, int m, vector<Point> &operators) {
+        vector<int> result;
+        int rootNum=0;
+        vector<vector<int>> matrix(n,vector<int>(m,0));
+        map<PPoint,PPoint> pre;
+        for(int i=0;i<operators.size();i++){
+            int x = operators[i].x, y = operators[i].y;
+            matrix[x][y] = 1;
+            unionF({x,y},{x+1,y},pre,rootNum,matrix,n,m);
+            unionF({x,y},{x-1,y},pre,rootNum,matrix,n,m);
+            unionF({x,y},{x,y-1},pre,rootNum,matrix,n,m);
+            unionF({x,y},{x,y+1},pre,rootNum,matrix,n,m);
+            result.push_back(rootNum);
+        }
+        return result;
+    }
+};
+```
+<hr>
+
+## 323 Number of Connected Components in an Undirected Graph
+Easy union find
+```
+class Solution {
+public:
+    int countComponents(int n, vector<pair<int, int> >& edges) {
+        vector<int> pre(n,0);
+        for(int i=0;i<n;i++) pre[i] = i;
+        int result = n;
+        for(auto edge:edges){
+            int rootA = findPre(pre,edge[0]);
+            int rootB = findPre(pre,edge[1]);
+            if(rootA == rootB) continue;
+            result--;
+            pre[rootA] = rootB;
+        }
+        return result;
+    }
+    int find(vector<int> &pre, int i) {
+        if(pre[i]!=i){
+            pre[i] = find(pre,pre[i]);
+        }
+        return pre[i];
+    }
+};
+```
+<hr>

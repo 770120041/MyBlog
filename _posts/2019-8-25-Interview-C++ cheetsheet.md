@@ -7,7 +7,7 @@ categories: Interview
 ## Compiled-time polymorphism
 Compile time polymorphism: This type of polymorphism is achieved by function overloading or operator overloading. 
 
-### Virtual Function
+### Runtime polymorphism: achieved through Virtual Function
 Virtual function is member function declared in base class, and is required to be redefined in derived class. When using a **Pointer or Reference** of the base class, you can call a virtual function for that object and execute the derived class’s version of the function.
 
 * Virtual functions ensure that the correct function is called for an object, regardless of the type of reference (or pointer) used for function call.
@@ -26,6 +26,12 @@ Compile-time(early binding) VS run-time(late binding) behavior of Virtual Functi
 ## Pure Virtual Functions and Abstract Classes in C++
 A pure virtual function (or abstract function) in C++ is a virtual function for which we don’t have implementation, we **only declare** it. A pure virtual function is declared by assigning 0 in declaration. See the following example.
 
+
+But a pure virtual function can have a body.
+
+All pure virtual means is that you can't call the function using an object that has declared or has inherited the pure virtual function. Because of this, you cannot create objects of classes with pure virtual functions. 
+
+The compiler enforces this by not allowing objects to be created using classes that have pure virtual funcitons or that have inherited pure virtual functions.
 ```
 // An abstract class 
 class Test 
@@ -93,6 +99,8 @@ int main()
 } 
 
 ```
+
+[static](https://stackoverflow.com/questions/3698043/static-variables-in-c)
 
 <hr>
 
@@ -356,8 +364,6 @@ int main()
 ## Associative container: Map & Set
 For Map and set, everything is sorted, both use Red Black Tree (A self balancing BST). Note that the time complexities of search, insert and delete are O(Log n).
 
-Map is implemented as a self-balancing red-black tree. 
-
 While for unordered_set and unordered_Map, everything is stored in hashed map, thus they are not sorted, and time complexity for insert and fecth is O(1).
 
 Black-Red Tree
@@ -472,4 +478,7 @@ Answer: When there are two variables with the same name but different scope, i.e
 * A function becomes const when const keyword is used in function’s declaration. The idea of const functions is not allow them to modify the object on which they are called. It is recommended practice to make as many functions const as possible so that accidental changes to objects are avoided.
 
 * C++11中，在类名后面添加final关键字可以禁止其他类继承它。
+
+* OOP concepts
+[geeksforgeeks](https://www.geeksforgeeks.org/object-oriented-programming-in-cpp/)
 
