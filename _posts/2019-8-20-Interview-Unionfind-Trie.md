@@ -411,6 +411,68 @@ public:
 <hr>
 
 ## 212 Word Search II
+这道题本质上还是搜索字符串存在，如果只需要查找某一个字符串是否存在,那么暴力搜就是最简单的办法。但如果对每个字符串都用DFS找，缺点就是上次查找的结果不能被利用，所以想要使用Trie Tree来帮助存储之前搜索的结果。注意不能用DP+memo，原因是Trie树能保存相同的前缀，但DP with memo不知道是不是有相同的前缀。使用Trie能够尽量利用前缀的特点，尽量少的DFS。
 
+```
+class Solution {
+public:
+    struct TrieNode{
+        string str;
+        TrieNode* child[26];
+        TrieNode(){
+            for(auto &a:child) a = NULL;
+        }
+    };
+    struct TrieTree{
+        TrieNode* root;
+        TrieTree(){
+            root = new TrieNode();
+        }
+        void insert(string s) {
+            TrieNode *p = root;
+            for (auto &a : s) {
+                int i = a - 'a';
+                if (!p->child[i]) p->child[i] = new TrieNode();
+                p = p->child[i];
+            }
+            p->str = s;
+        }
+    };
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        TrieTree* t = new TrieTree(); 
+        vector<string> result;
+        if(board.empty() or words.empty()) return result;
+        int m = board.size();
+        int n = board[0].size();
+        vector<vector<bool>> visited(m,vector<bool>(n,false));
+        for(auto  &s:words) t->insert(s);
+        for(int i=0;i<board.size();i++){
+            for(int j=0;j<board[0].size();j++){
+                char cur = board[i][j];
+                if(t->root->child[cur-'a'] ){
+                    search(board,t->root->child[cur-'a'],i,j,visited,result);
+                }
+            }
+        }
+        return result;
+    }
+    
+    void search(vector<vector<char>>& board, TrieNode* p, int i, int j, vector<vector<bool>>& visit, vector<string>& res) { 
+        if (!p->str.empty()) {
+            res.push_back(p->str);
+            p->str.clear();
+        }
+        int d[][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        visit[i][j] = true;
+        for (auto &a : d) {
+            int nx = a[0] + i, ny = a[1] + j;
+            if (nx >= 0 && nx < board.size() && ny >= 0 && ny < board[0].size() && !visit[nx][ny] && p->child[board[nx][ny] - 'a']) {
+                search(board, p->child[board[nx][ny] - 'a'], nx, ny, visit, res);
+            }
+        }
+        visit[i][j] = false;
+    }
+};
+```
 
 <hr>

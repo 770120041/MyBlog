@@ -72,6 +72,9 @@ for Enumeration	finsihed Word Break II
 #### 1.3.6. Dynamic Programming
 All done
 
+#### 1.3.7. LinkedList
+
+
 #### 1.3.10. DFS & BFS
 All done
 
@@ -82,8 +85,9 @@ All done
 
 #### 1.3.13. Topological Sort
 All done
-#### 1.3.14. Random
 
+#### 1.3.14. Random
+All done
 
 #### 1.3.15. Graph
 finished 310   
