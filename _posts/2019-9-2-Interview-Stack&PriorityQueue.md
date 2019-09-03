@@ -115,5 +115,185 @@ public:
 
 
 ## 225. Implement Stack using Queues
+#### Brute force
+each pop cost O(N) time complexity
+```
+class MyStack {
+public:
+    MyStack() {
+        
+    }
+    
+    /** Push element x onto stack. */
+    void push(int x) {
+        if(q1.empty()){
+        }
+        else{
+            while(!q1.empty()){
+                q2.push(q1.front()); q1.pop();
+            }
+        }
+        q1.push(x);
+    }
+    
+    /** Removes the element on top of the stack and returns that element. */
+    int pop() {
+        int ret = q1.front(); q1.pop();
+        while(!q2.empty() and q2.size()>1){
+            q1.push(q2.front());
+            q2.pop();
+        }
+        swap(q1,q2);
+        return ret;
+    }
+    
+    /** Get the top element. */
+    int top() {
+        return q1.front();
+    }
+    
+    /** Returns whether the stack is empty. */
+    bool empty() {
+        return q1.empty() and q2.empty();
+    }
+private:
+    queue<int> q1,q2;
+};
 
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack* obj = new MyStack();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ * int param_3 = obj->top();
+ * bool param_4 = obj->empty();
+ */
+ ```
+
+#### Another solution
+Make the value appeared later on the top of stack, push(O(N))
+```
+class MyStack {
+public:
+    /** Initialize your data structure here. */
+    MyStack() {
+        
+    }
+    
+    /** Push element x onto stack. */
+    void push(int x) {
+        q2.push(x);
+        while(!q1.empty()){
+            q2.push(q1.front()); q1.pop();
+        }
+        swap(q1,q2);
+    }
+    
+    /** Removes the element on top of the stack and returns that element. */
+    int pop() {
+        int ret = q1.front();
+        q1.pop();
+        return ret;
+    }
+    
+    /** Get the top element. */
+    int top() {
+        return q1.front();
+    }
+    
+    /** Returns whether the stack is empty. */
+    bool empty() {
+        return q1.empty();
+    }
+    queue<int> q1,q2;
+};
+```
+
+<hr>
+
+
+## 232. Implement Queue using Stacks
+#### Brute force
+Put new elements in the bottom of stack
+```
+class MyQueue {
+public:
+    /** Initialize your data structure here. */
+    MyQueue() {
+        
+    }
+    
+    /** Push element x to the back of queue. */
+    void push(int x) {
+        while(!s1.empty()){
+            s2.push(s1.top()); s1.pop();
+        }
+        s2.push(x);
+        while(!s2.empty()){
+            s1.push(s2.top());
+            s2.pop();
+        }
+    }
+    
+    /** Removes the element from in front of queue and returns that element. */
+    int pop() {
+        int ret = s1.top();
+        s1.pop();
+        return ret;
+    }
+    
+    /** Get the front element. */
+    int peek() {
+        return s1.top();
+    }
+    
+    /** Returns whether the queue is empty. */
+    bool empty() {
+        return s1.empty();
+    }
+    stack<int> s1,s2;
+};
+```
+
+<hr>
+
+## 150. Evaluate Reverse Polish Notation
+string to int: `stoi`, string to float `stof`
+```class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+        stack<int> numbers;
+        for(int i=0;i<tokens.size();i++){
+            if(tokens[i] == "+" or tokens[i] == "-" or tokens[i] == "*" or tokens[i] == "/"){
+                int num2 = numbers.top(); numbers.pop(); int num1 = numbers.top(); numbers.pop();
+                char c = tokens[i][0];
+                switch(c){
+                    case '+':
+                        numbers.push(num1+num2);    
+                        break;
+                    case '-':
+                        numbers.push(num1-num2);    
+                        break;
+                    case '*':
+                        numbers.push(num1*num2);    
+                        break;
+                    case '/':
+                        numbers.push(num1/num2);    
+                        break;
+                }
+            }
+            else{
+                numbers.push(stoi(tokens[i]));
+            }
+        }
+        return numbers.top();
+    }
+};
+```
+
+<hr>
+
+## 中缀,前缀，后缀表达式
+[blog](https://blog.csdn.net/sgbfblog/article/details/8001651)
+[blog](https://blog.csdn.net/walkerkalr/article/details/22798365)
 <hr>
