@@ -341,3 +341,103 @@ public:
 ```
 
 <hr>
+
+
+## 335 Self Crossing	
+```
+class Solution {
+public:
+    bool isSelfCrossing(vector<int>& x) {
+        if(x.size()<3) return false;
+        for(int i=3;i<x.size();i++){
+            if(x[i]>=x[i-2] and x[i-1]<=x[i-3]) return true;
+            if(i > 3 and x[i-1] == x[i-3] and x[i]>= x[i-2]-x[i-4]) return true;
+            if(i > 4 and x[i-2] >= x[i-4] and x[i-1]>=x[i-3]-x[i-5] and x[i-3] >= x[i-1]and x[i] >= x[i-2] - x[i-4]) return true;
+        }
+        return false;
+    }
+};
+```
+
+<hr>
+
+## 149. Max Points on a Line
+```
+class Solution {
+public:
+    int maxPoints(vector<vector<int>>& points) {
+        int result = 0;
+        for(int i=0;i<points.size();i++){
+            // if no other points on the same line, the max count would be duplicate
+            // if any other points other than Point i is on same line, then duplicates would be counted in cnt;
+            int duplicate = 1;
+            for(int j=i+1;j<points.size();j++){
+                int cnt = 0;
+                long long x1 = points[i][0], y1 = points[i][1];
+                long long x2 = points[j][0], y2 = points[j][1];
+                if (x1 == x2 && y1 == y2) {++duplicate; continue;}
+                for (int k = 0; k < points.size(); ++k) {
+                    int x3 = points[k][0], y3 = points[k][1];
+                    if (x1 * y2 + x2 * y3 + x3 * y1 - x3 * y2 - x2 * y1 - x1 * y3 == 0) {
+                        ++cnt;
+                    }
+                }
+                result = max(result, cnt);
+            }
+            result = max(result, duplicate);
+        }
+        return result;
+    }
+};
+```
+
+<hr>
+
+## 356. Line Reflection (Lint 908)
+首先想到记录相同y的横坐标，然后计算对称轴，但其实可以用最大和最小的横坐标来计算对称轴，然后对于每个点看是否存在对称与对称轴的点即可。
+
+```
+class Solution {
+public:
+    bool isReflected(vector<vector<int>> &points) {
+        unordered_map<int,unordered_set<int>> uMap;
+        int xmin = INT_MAX;
+        int xmax = INT_MIN;
+        for(int i=0;i<points.size();i++){
+            uMap[points[i][0]].insert(points[i][1]);
+            xmax = max(xmax,points[i][0]);
+            xmin = min(xmin,points[i][0]);
+        }
+        double axis = (xmin+xmax)/2.0;
+        for(int i=0;i<points.size();i++){
+            int ix = points[i][0], iy = points[i][1];
+            if(!uMap.count(2*axis-ix) or !uMap[2*axis-ix].count(iy)) return false;
+        }
+        return true;
+    }
+};
+```
+
+<hr>
+
+## 223. Rectangle Area
+#### 用大面积减去小面积
+
+[blog](https://zxi.mytechroad.com/blog/geometry/leetcode-223-rectangle-area/)
+```
+class Solution {
+public:
+    int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+        int left = max(A,E), right = max(min(C,G), left);//
+        int bottom = max(B,F), top = max(min(D,H), bottom);
+        return (C - A) * (D - B) - (right - left) * (top - bottom) + (G - E) * (H - F);
+    }
+};
+```
+
+<hr>
+
+## 391. Perfect Rectangle
+Skipeed
+
+[blog](https://www.cnblogs.com/grandyang/p/5825619.html)
