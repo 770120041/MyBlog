@@ -413,3 +413,89 @@ public:
     }
 };
 ```
+
+<hr>
+
+## 388. Longest Absolute File Path
+`find_last_of()` will return -1 if not found
+```
+class Solution {
+public:
+   int lengthLongestPath(string input) {
+        int result = 0;
+        vector<string> lines;
+        for(int left=0,i=0;i<input.size();i++){
+            if(i == input.size()-1){
+                lines.push_back(input.substr(left,i-left+1));
+            }
+            else if(input[i]=='\n'){
+                lines.push_back(input.substr(left,i-left));
+                left = i+1;
+            }
+        }
+        stack<pair<int,int>> s;
+        int curSize = 0;
+        for(int i=0;i<lines.size();i++){
+            int level = lines[i].find_last_of('\t')+1;
+            cout<<level<<endl;
+            while(!s.empty() and s.top().second >= level){
+                curSize -= s.top().first;
+                s.pop();
+            }
+            curSize += lines[i].size()-level;
+            s.push({lines[i].size()-level,level});    
+            if(lines[i].find(".") != string::npos)
+                result = max(result,curSize+int(s.size())-1);
+        }
+        return result;
+    }
+};
+```
+
+<hr>
+
+## 394. Decode String
+#### Brute force Stack
+```
+class Solution {
+public:
+    string decodeString(string s) {
+        int index=0;
+        return decodeHelper(s,index,1);
+    }
+    string decodeHelper(const string &s,int&index,int repeat){
+        string result;
+        int repeatCnt = 0;
+        string curStr;
+        while(index<s.size()){
+            char c = s[index];
+            index++;
+            if(c>='0' and c<='9'){
+                repeatCnt = repeatCnt*10 + c-'0';
+            }
+            else if(c == '['){
+                
+                result += decodeHelper(s,index,repeatCnt);
+                repeatCnt = 0;
+            }
+            else if(c == ']'){
+                break;
+            }
+            else{
+                curStr.push_back(c);
+                if(index == s.size() or !(s[index] >='a' and s[index]<='z')){
+                    result += curStr;
+                    curStr.clear();
+                }
+            }
+        }
+        string tmp = result;
+        for(int i=0;i<repeat-1;i++){
+            result += tmp;
+        }
+        return result;
+    }
+};
+```
+
+<hr>

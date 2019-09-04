@@ -79,7 +79,8 @@ All done
 All done
 
 #### 1.3.11. Stack & PriorityQueue
-left 388,394,385
+Finished Stack
+
 
 #### 1.3.12. Bit Manipulation
 
