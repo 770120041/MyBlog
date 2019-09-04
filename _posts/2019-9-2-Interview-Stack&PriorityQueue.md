@@ -297,3 +297,119 @@ public:
 [blog](https://blog.csdn.net/sgbfblog/article/details/8001651)
 [blog](https://blog.csdn.net/walkerkalr/article/details/22798365)
 <hr>
+
+## 224 Basic Calculator && 227 Basic Calculator II && 	772 Basic Calculator III 
+```
+class Solution {
+public:
+    void calWithOp(stack<int>&nums,char op){
+        int result;
+        int num2 = nums.top(); nums.pop();
+        int num1 = nums.top(); nums.pop();
+        switch(op){
+            case '+': result = num1+num2; break;
+            case '-': result = num1-num2; break;
+            case '*': result = num1*num2; break;
+            case '/': result = num1/num2; break;
+        }
+        // printf("num1=%d,num2=%d,op=%c,result=%d\n",num1,num2,op,result);
+        nums.push(result);
+    }
+    void parseOps(stack<int> &nums,stack<char> &ops,char curOp){
+        unordered_map<char,int> uMap{{'(',0},{'+',1},{'-',1},{'*',2},{'/',2}};
+        if(curOp == ')'){
+            while(ops.top() != '('){
+                char prevOP = ops.top();
+                ops.pop();
+                calWithOp(nums,prevOP);
+            }
+            ops.pop();
+        }
+        else{
+            while(!ops.empty()){
+                char prevOP = ops.top();
+                if(uMap[prevOP] and uMap[curOp] and uMap[curOp] <= uMap[prevOP]){
+                    ops.pop();
+                    calWithOp(nums,prevOP);
+                }
+                else{
+                    break;
+                }
+            }
+            ops.push(curOp);
+        }
+    }
+    
+    int calculate(string s) {
+        string tmp;
+        for(int i=0;i<s.size();i++) if(s[i] != ' ') tmp.push_back(s[i]);
+        s = tmp;
+        if(s.empty()) return 0;
+        stack<int> nums;
+        stack<char> ops;
+        int i = 0;
+        while(i < s.size()){
+            // negative is 0 - it
+            if(s[i] >= '0' and s[i] <= '9'){
+                long long x = 0;
+                while(i<s.size() and (s[i]>='0' and s[i]<='9')){
+                    x = x*10 + s[i]-'0';
+                    i++;
+                }
+                nums.push(x);
+                i--;
+            }   
+            else{
+                if(s[i] == '-' and(i==0 or(i>0 and s[i-1]=='('))){
+                    nums.push(0);
+                }
+                parseOps(nums,ops,s[i]);
+            } 
+            i++;
+        }
+        while(!ops.empty()){
+            calWithOp(nums,ops.top());
+            ops.pop();
+        }
+        return nums.top();
+    }
+};
+```
+
+<hr>
+
+## 71. Simplify Path
+```
+class Solution {
+public:
+    string simplifyPath(string path) {
+        if(path.empty()) return path;
+        path.push_back('/');
+        vector<string> s;
+        string curDirName;
+        for(int i=0;i<path.size();i++){
+            char c = path[i];
+            if(c == '/'){
+                if(i>0 and path[i-1] == '/') continue; 
+                if(curDirName == "." or curDirName.empty()){}
+                else if(curDirName == ".."){
+                    if(!s.empty()) s.pop_back();
+                } 
+                else{
+                    s.push_back(curDirName);
+                } 
+                curDirName.clear();
+            }
+            else{
+                curDirName.push_back(c);
+            }
+        }
+        string result;
+        for(int i=0;i<s.size();i++){
+            result+="/";
+            result+=s[i];
+        }
+        return result.empty()?"/":result;
+    }
+};
+```
