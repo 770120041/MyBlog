@@ -229,95 +229,68 @@ public:
 };
 ```
 
+<hr>
+
 ## 339 Nested List Weight Sum	
 Simple DFS
 ```
 class Solution {
 public:
-    void DFS(NestedInteger nestedInteger,int depth,long long& result){
-        if(nestedInteger.isInteger()){
-            result += depth*nestedInteger.getInteger();
-            return ;
-        }
-        vector<NestedInteger> curList = nestedInteger.getList();
-        for(int i=0;i<curList.size();i++){
-            DFS(curList[i],depth+1,result);
-        }
-        
-    }
     int depthSum(const vector<NestedInteger>& nestedList) {
-        // Write your code here
-        long long result = 0;
-        for(int i=0;i<nestedList.size();i++){
-            DFS(nestedList[i],1,result);
+        int result = 0;
+        for(auto nested:nestedList){
+            DFS(result,nested,1);
         }
         return result;
     }
+    void DFS(int &result,NestedInteger cur,int depth){
+        if(cur.isInteger()){
+            result += cur.getInteger()*depth;
+            return;
+        }
+        for(auto child: cur.getList()){
+            DFS(result,child,depth+1);
+        }
+    }
 };
 ```
+
+<hr>
+
 ## 364 Nested List Weight Sum II	
 DFS one pass, the reason why there is replicate code is that we don't have the constructor of NestedInteger, otherwise we can call the DFS directly.
 
 The idea is cal the depth and cal the sum at the same time. When we reach the leaft node, we cal the the result at depth 1, and then for none leaf nodes, we cal the height by firstly go through all none interger nodes then cal the result of interger nodes.
 
-#### DFS ugly solution
+#### Careful
+Be careful the the weight of each level is not 1, so would be wrong
 ```
-#include <stdio.h>
-class Solution {
-public:
-    int DFS(NestedInteger nestedInteger,long long& result){
-        if(nestedInteger.isInteger()){
-            cout<<nestedInteger.getInteger()<<" 1" <<endl;
-            result += 1*nestedInteger.getInteger();
-            return 1;
+int depthSumInverse(vector<NestedInteger> nestedList) {
+    int result = 0;
+    DFS(result,nestedList);
+    return result;
+}
+
+//所有leaves 的level是1是不成的，因为倒着推上去，上一级的深度会冲突。刚开始我也想是不是每个leaf 都是1,最后发现那样的话就没法做题了
+int DFS(int& result,vector<NestedInteger> nestedList){
+    if(nestedList.size() == 0) return 1;
+    int depth = 1;
+    int curNumbers = 0;
+    for(auto child:nestedList){
+        if(child.isInteger()){
+            curNumbers += child.getInteger();
         }
-        // if all same level, then depth 1
-        int maxDepth = 1;
-        vector<NestedInteger> curList = nestedInteger.getList();
-        // solve none cur depth
-        for(int i=0;i<curList.size();i++){
-            if(!curList[i].isInteger()){
-                int curDepth = DFS(curList[i],result)+1;
-                if(maxDepth < curDepth) maxDepth = curDepth;
-                // maxDepth = max(maxDepth, curDepth);
-            }
+        else{
+            depth = max(depth,1+DFS(result,child.getList()));
         }
-        for(int i=0;i<curList.size();i++){
-            if(curList[i].isInteger()){
-                cout<<curList[i].getInteger()<<" "<<maxDepth <<endl;
-                // printf("%d at depth %d\n",curList[i].getInteger(),maxDepth);
-                result += curList[i].getInteger()*maxDepth;
-            }
-        }
-        // cout<<maxDepth<<endl;
-        return maxDepth;
     }
-    int depthSum(const vector<NestedInteger>& nestedList) {
-        // Write your code here
-        long long result = 0;
-        int maxDepth = 1;
-        for(int i=0;i<nestedList.size();i++){
-            if(!nestedList[i].isInteger()){
-                int curDepth = DFS(nestedList[i],result)+1;
-                if(maxDepth < curDepth) maxDepth = curDepth;
-                // maxDepth = max(maxDepth, curDepth);
-            }
-        }
-        // solve cur depth
-        for(int i=0;i<nestedList.size();i++){
-            if(nestedList[i].isInteger()){
-                cout<<nestedList[i].getInteger()<<" "<<maxDepth <<endl;
-                // printf("%d at depth %d\n",curList[i].getInteger(),maxDepth);
-                result += nestedList[i].getInteger()*maxDepth;
-            }
-        }
-        return result;
-    }
-};
+    result += (curNumbers)*depth;
+    cout<<"d:"<<depth<<",nums:"<<curNumbers<<endl;
+    return depth;
+}
 ```
 
-
-#### BFS tricky solution
+#### BFS Level order traversal
 Using weighted and unweighed, so the that each layer can be added to weighted by depth times.
 
 Remeber to add interger first then go to its child, this makes it possible to add depth times cur integer.

@@ -456,26 +456,24 @@ public:
 
 ## 394. Decode String
 #### Brute force Stack
-```
-class Solution {
+```class Solution {
 public:
     string decodeString(string s) {
-        int index=0;
-        return decodeHelper(s,index,1);
+        int index = 0;
+        return helper(s,index,1);
     }
-    string decodeHelper(const string &s,int&index,int repeat){
-        string result;
-        int repeatCnt = 0;
+    string helper(const string&s,int&index,int repeat){
+        string ret;
+        int repeatCnt;
         string curStr;
         while(index<s.size()){
             char c = s[index];
             index++;
-            if(c>='0' and c<='9'){
-                repeatCnt = repeatCnt*10 + c-'0';
+            if(c >= '0' and c <= '9'){
+                repeatCnt = repeatCnt*10 + c - '0';
             }
             else if(c == '['){
-                
-                result += decodeHelper(s,index,repeatCnt);
+                ret += helper(s,index,repeatCnt);
                 repeatCnt = 0;
             }
             else if(c == ']'){
@@ -483,17 +481,55 @@ public:
             }
             else{
                 curStr.push_back(c);
-                if(index == s.size() or !(s[index] >='a' and s[index]<='z')){
-                    result += curStr;
+                if(index == s.size() or !(s[index]>='a' and s[index]<='z' )){
+                    ret+=curStr;
                     curStr.clear();
                 }
             }
         }
-        string tmp = result;
+        string tmp = ret;
         for(int i=0;i<repeat-1;i++){
-            result += tmp;
+            ret += tmp;   
         }
-        return result;
+        return ret;
+    }
+};
+```
+
+<hr>
+
+## 385. Mini Parser
+```
+
+class Solution {
+public:
+    NestedInteger deserialize(string s) {
+        if(s.empty()) return NestedInteger();
+        if(s[0] != '[') return NestedInteger(stoi(s));
+        stack<NestedInteger> st;
+        int start = 1;
+        for(int i=0;i<s.size();i++){
+            if(s[i] == '[') {
+                st.push(NestedInteger());
+                start = i+1;
+            }else if(s[i] == ']' or s[i] == ','){
+                //start might = ]
+                if(i > start){
+                    st.top().add(NestedInteger(stoi(s.substr(start, i - start))));
+                }
+                start=i+1;
+                //marks the end of current level, add current NestedInteger to higher level
+                //st.size > 1 means there are other nestedIntegers above
+                if(s[i] == ']'){
+                    if(st.size() > 1){
+                        auto t = st.top(); st.pop();
+                        st.top().add(t);
+                    }
+                }
+            }
+        }
+        // At the end, there is only one element in the stack
+        return st.top();
     }
 };
 ```
