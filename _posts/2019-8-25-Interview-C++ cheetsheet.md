@@ -482,3 +482,16 @@ Answer: When there are two variables with the same name but different scope, i.e
 * OOP concepts
 [geeksforgeeks](https://www.geeksforgeeks.org/object-oriented-programming-in-cpp/)
 
+* Vector Resize, reserve and assign
+
+1. The resize() method (and passing argument to constructor is equivalent to that) will insert or delete appropriate number of elements to the vector to make it given size (it has optional second argument to specify their value). It will affect the size(), iteration will go over all those elements, push_back will insert after them and you can directly access them using the operator[].
+
+2. The reserve() method only allocates memory, but leaves it uninitialized. It only affects capacity(), but size() will be unchanged. There is no value for the objects, because nothing is added to the vector. If you then insert the elements, no reallocation will happen, because it was done in advance, but that's the only effect.
+
+
+3. Assign vector content
+Assigns new contents to the vector, replacing its current contents, and modifying its size accordingly.
+
+Any elements held in the container before the call are destroyed and replaced by newly constructed elements (no assignments of elements take place).
+
+This causes an automatic reallocation of the allocated storage space if -and only if- the new vector size surpasses the current vector capacity.

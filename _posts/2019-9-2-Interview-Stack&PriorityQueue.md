@@ -500,7 +500,6 @@ public:
 
 ## 385. Mini Parser
 ```
-
 class Solution {
 public:
     NestedInteger deserialize(string s) {
@@ -535,3 +534,91 @@ public:
 ```
 
 <hr>
+
+
+## Priority Queue Implementation
+```
+#include <iostream>
+#include <vector>
+using namespace std;
+
+template <typename T>
+class Heap{
+private:
+    int Size;
+    int curSize;
+    vector<T> arr;
+public:
+    Heap(int Size){
+        this->Size = Size;
+        curSize = 0;
+        arr.reserve(Size+1);
+    }
+    void push(T x){
+        if(curSize == Size){
+            arr[Size] = x;
+            swim(Size);
+        }
+        else{
+            arr[curSize] = x;
+            swim(curSize);
+            curSize++;
+        }
+    }
+    void swim(int pos){
+        while(pos){
+            int next = pos/2;
+            if(arr[pos] < arr[next]) break;
+            swap(arr[pos],arr[next]);
+            pos = next;
+        }
+    }
+    void sink(int pos){
+        while(pos*2<Size){
+            int j = 2*pos;
+            if(j+1<Size and arr[j]<arr[j+1]) j++;
+            if(arr[j] < arr[pos]) break;
+            swap(arr[j],arr[pos]);
+            pos = j;
+        }
+    }
+    T top(){
+        if(curSize!=0){
+            return arr[0]; 
+        }
+        return -1;
+    }
+    T pop(){
+        int ret = top();
+        if(ret > 0){
+            arr[0] = arr[curSize-1];
+            curSize--;
+            arr.pop_back();
+            sink(0);
+        }
+        return ret;
+    }
+};
+int main()
+{
+    Heap<int> h(5);
+    
+    h.push(1);
+    h.push(2);
+    h.push(3);
+    h.push(4);
+    h.push(5);
+        
+    cout<<h.top()<<endl;
+     h.push(6);
+
+    cout<<h.top()<<endl;
+    h.pop();
+    cout<<h.top()<<endl;
+    h.pop();
+    cout<<h.top()<<endl;
+
+    return 0;
+}
+
+```

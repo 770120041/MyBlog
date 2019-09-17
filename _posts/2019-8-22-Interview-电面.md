@@ -82,3 +82,87 @@ int main()
 ## Cadence
 聊C++，匹兹堡，Citrix实习，过
 
+四轮Onsite 过
+
+## OA
+### DRW
+#### Q1 Bike
+Sort `O(N*logN)`
+cal the distance in between, then the `result = (a[i]-a[i-1])/2`
+#### Q2
+```
+class Solution {
+public:
+    int maxTurbulenceSize(vector<int>& A) {
+        int N = A.size();
+        if(N <= 1) return 1;
+        vector<int> up(N,1);
+        vector<int> down(N,1);
+        int result=1;
+        for(int i=1;i<N;i++){
+            if(A[i] > A[i-1]){
+                up[i] = down[i-1]+1;
+            }
+            else if(A[i] < A[i-1]){
+                down[i] = up[i-1]+1;
+            }
+            result = max(result,max(up[i],down[i]));
+        }
+        return result;
+    }
+};
+```
+
+#### Q3 Zero SubArray
+```
+
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+using namespace std;
+int numOfZero(vector<int>&input){
+    vector<int> prefix = input;
+    unordered_map<int,vector<int>> uMap;
+    for(int i=0;i<prefix.size();i++){
+        if(i != 0){
+            prefix[i] += prefix[i-1];
+        }
+        auto it = uMap.find(prefix[i]);
+        if(it == uMap.end()){
+            vector<int> tmp{i};
+            uMap[prefix[i]]=tmp;
+        }
+        else uMap[prefix[i]].push_back(i);
+    }
+    int result=0;
+    for(int i=0;i<prefix.size();i++){
+        if(prefix[i] == 0) result++;
+        int curVal = prefix[i];
+        auto it = uMap.find(curVal);
+        if(it == uMap.end()){}
+        else{
+            for(auto x:it->second){
+                if(x < i){
+                    cout<<"l="<<x<<",r="<<i<<endl;
+                    result++;
+                }
+            }
+        }
+    }
+    return result;
+}
+
+int main()
+{
+    vector<int> input{0,0,0,0,0};
+    cout<<numOfZero(input)<<endl;
+
+    return 0;
+}
+
+```
+
+#### Q4
+Determine if it is possible to choose two requests that will determine an even distribution of requests among 3 works
+
+去掉两个以后能被3个人平分： Sum%3 == 0 and 存在两个sequence和为sum/3
