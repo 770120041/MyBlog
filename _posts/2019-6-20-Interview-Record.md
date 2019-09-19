@@ -81,7 +81,6 @@ All done
 #### 1.3.11. Stack & PriorityQueue
 Finished Stack
 
-
 #### 1.3.12. Bit Manipulation
 
 #### 1.3.13. Topological Sort
