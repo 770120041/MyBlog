@@ -119,3 +119,299 @@ public:
 
 <hr>
 
+## 239. Sliding Window Maximum
+单调队列
+https://blog.csdn.net/roufoo/article/details/78443281
+
+每个元素进出队列1次，复杂度O(N)
+
+
+```
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        // get max in O(1), delete in O(1)
+        if(k == 1) return nums;
+        int front=0,rear=0;
+        vector<int> result;
+        // first is value, second is id
+        deque<pair<int,int>> q;
+        for(int front=0,i=0;i<nums.size();i++){
+            // enqueue, pop smaller numbers in the rear of queue
+            while(!q.empty() and q.back().first<nums[i]){
+                q.pop_back();
+            }
+            q.push_back({nums[i],i});
+            
+            // if the front of queue is out-dated, delete it from the front
+            while(!q.empty() and  q.front().second < front){
+                q.pop_front();
+            }
+            if(i >= k-1){
+                result.push_back(q.front().first);
+                front++;
+            } 
+        }
+        return result;
+    }
+};
+```
+
+<hr>
+
+## LFU cache
+[blog](https://www.cnblogs.com/grandyang/p/6258459.html)
+
+```
+class LFUCache {
+public:
+    LFUCache(int capacity) {
+        cap = capacity;
+    }
+    
+    int get(int key) {
+        if (m.count(key) == 0) return -1;
+        freq[m[key].second].erase(iter[key]);
+        ++m[key].second;
+        freq[m[key].second].push_back(key);
+        iter[key] = --freq[m[key].second].end();
+        if (freq[minFreq].size() == 0) ++minFreq;
+        return m[key].first;
+    }
+    
+    void put(int key, int value) {
+        if (cap <= 0) return;
+        if (get(key) != -1) {
+            m[key].first = value;
+            return;
+        }
+        if (m.size() >= cap) {
+            m.erase(freq[minFreq].front());
+            iter.erase(freq[minFreq].front());
+            freq[minFreq].pop_front();
+        }
+        m[key] = {value, 1};
+        freq[1].push_back(key);
+        iter[key] = --freq[1].end();
+        minFreq = 1;
+    }
+
+private:
+    int cap, minFreq;
+    unordered_map<int, pair<int, int>> m;
+    unordered_map<int, list<int>> freq;
+    unordered_map<int, list<int>::iterator> iter;
+};
+```
+
+<hr>
+
+## 42. Trapping Rain Water
+#### Brute Force
+For each element, iterative to left and right, `O(N^2)`
+```
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int result = 0;
+        for(int i=1;i<(int)height.size()-1;i++){
+            int lh=height[i],rh=height[i];
+            int l=i-1,r=i+1;
+            while(l>=0){
+                lh = max(lh,height[l]);
+                l--;
+            }
+            while(r<=height.size()-1){
+                rh = max(rh,height[r]);
+                r++;
+            }
+            // printf("i=%d,result=%d\n",i,(min(lh,rh)-height[i]));
+            result += (min(lh,rh)-height[i]);
+        }
+        return result;
+    }
+};
+```
+#### DP
+O(N)
+
+Don't need to get lmax height and right max height all the time, record it by an array
+
+```
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int size = height.size();
+        if(size <= 2) return 0;
+        vector<int> lMax = height;
+        vector<int> rMax = height;
+        int result = 0;
+        for(int i=1;i<size;i++){
+            lMax[i] = max(lMax[i-1],height[i]);
+            rMax[size-1-i] = max(rMax[size-i],height[size-1-i]);
+        }
+        for(int i=1;i<size;i++){
+            // printf("i=%d,sum=%d\n",i,min(lMax[i],rMax[i]) - height[i]);
+            result += (min(lMax[i],rMax[i]) - height[i]);
+        }
+        return result;
+    }
+};
+```
+#### Two Pointer
+Simliar idea to LC11 Containers with Most water
+```
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int size = height.size();
+        if(size <= 2) return 0;
+        int result = 0;
+        int left=0,right=height.size()-1;
+        int lmax=0,rmax=0;
+        while(left < right){
+            if(height[left] < height[right]){
+                if(height[left] >= lmax){
+                    lmax = height[left];
+                }
+                else{
+                    result += (lmax - height[left]);
+                }
+                left++;
+            }
+            else{
+                if(height[right] >= rmax){
+                    rmax = height[right];
+                }
+                else{
+                    result += (rmax-height[right]);
+                }
+                right--;
+            }
+        }
+        return result;
+    }
+};
+```
+
+<hr>
+
+## 238. Product of Array Except Self
+#### DP
+```
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        if(nums.size()<=1) return nums;
+        vector<int> left(nums.size()+2,1);
+        vector<int> right(nums.size()+2,1);
+        vector<int> result;
+        for(int i=1;i<=nums.size();i++){
+            left[i] = left[i-1] * nums[i-1];
+        }
+        for(int i=nums.size();i>=1;i--){
+            right[i] = right[i+1] * nums[i-1];
+        }
+        for(int i=1;i<=nums.size();i++){
+            result.push_back(left[i-1]*right[i+1]);
+        }
+        return result;
+    }
+};
+```
+
+#### No extra Space
+Using result as tmp space
+```
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        if(nums.size()<=1) return nums;
+        vector<int> result=nums;
+        result.back() = 1;
+        for(int i=nums.size()-2;i>=0;i--){
+            result[i] = result[i+1]*nums[i+1];
+        }
+        int left = 1;
+        for(int i=0;i<nums.size();i++){
+            result[i] = left*result[i];
+            left*=nums[i];
+        }
+        return result;
+    }
+};
+```
+
+<hr>
+
+## 127. Word Ladder
+```
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        unordered_set<string> uSet;
+        for(auto s:wordList) uSet.insert(s);
+        unordered_set<string> visited;
+        queue<pair<string,int>> q;
+        q.push({beginWord,0});
+        while(!q.empty()){
+            auto cur = q.front(); q.pop();
+            for(int i=0;i<cur.first.size();i++){
+                if(cur.first == endWord) return cur.second+1;
+                for(int j=0;j<26;j++){
+                    string next = cur.first;
+                    next[i] = 'a' + j;
+                    if(uSet.count(next) and !visited.count(next)){
+                        visited.insert(next);
+                        q.push({next,cur.second+1});
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+};
+```
+
+<hr>
+
+## 682. Baseball Game
+
+```
+class Solution {
+public:
+    int calPoints(vector<string>& ops) {
+        stack<int> points;
+        for(auto c:ops){
+            if(c == "C"){
+                points.pop();
+            }
+            else if(c == "+"){
+                int num1 = points.top(); points.pop();
+                int num2 = points.top(); points.pop();
+                points.push(num2);
+                points.push(num1);
+                points.push(num1+num2);
+            }
+            else if(c == "D"){
+                points.push(points.top()*2);
+            }
+            else{
+                int x;
+                sscanf(c.c_str(),"%d",&x);
+                points.push(x);
+            }
+        }
+        
+        int result=0;
+        while(!points.empty()){
+            result+= points.top();
+            points.pop();
+        }
+        return result;
+    }
+};
+```
+
+<hr>
+
