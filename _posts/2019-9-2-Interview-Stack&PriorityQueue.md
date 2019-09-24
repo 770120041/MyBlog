@@ -622,3 +622,28 @@ int main()
 }
 
 ```
+
+<hr>
+
+## 215. Kth Largest Element in an Array
+求最大值要用小根堆，不是大根堆
+```
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        if(k == 0 or nums.size() == 0) return 0;
+        // smaller items goes to the top
+        priority_queue<int,vector<int>,greater<int>> q;
+        for(int i=0;i<k;i++){
+            q.push(nums[i]);
+        }
+        for(int i=k;i<nums.size();i++){
+            if(nums[i] > q.top()){
+                q.pop();
+                q.push(nums[i]);
+            }
+        }
+        return q.top();
+    }
+};
+```
