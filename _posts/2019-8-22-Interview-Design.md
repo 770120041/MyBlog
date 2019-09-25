@@ -208,3 +208,68 @@ private:
 ```
 
 <hr>
+
+## 146 LRU Cache
+Using queue and Hash
+
+O(1) lookup: hashmap
+
+O(1) deletion, insertion and updating: double linked list
+
+ In Which HashMap will hold the keys and address of the Nodes of Doubly LinkedList . And Doubly LinkedList will hold the values of keys.
+
+When get: use hash to get the address of the linked list node, then fetch the value
+
+When put: if it already exist, bring it to the front of the double linked list, if not, put it in the front and delete the rear(also remember to delete it in hashMap)
+
+```
+class LRUCache {
+public:
+    LRUCache(int capacity):capacity(capacity), size(0) {
+        
+    }
+    
+    int get(int key) {
+        if(m1.find(key) == m1.end()) return -1;
+        l.erase(m2[key]);
+        l.push_front(key);
+        m2[key] = l.begin();
+        return m1[key];
+    }
+    
+    void put(int key, int value) {
+        if(m1.find(key) == m1.end()){
+            if(size < capacity){
+                size++;
+            }
+            //clean rear
+            else{
+                int keyVal = l.back();
+                l.pop_back();
+                m1.erase(keyVal);
+                m2.erase(keyVal);
+            }
+        }
+        else{
+            l.erase(m2[key]);
+        }
+        m1[key] = value;
+        l.push_front(key);
+        m2[key] = l.begin();
+    }
+private:
+    int capacity,size;
+    list<int> l;
+    unordered_map<int,int> m1;
+    unordered_map<int,list<int>::iterator> m2;
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
+ ```
+
+<hr>

@@ -3,12 +3,18 @@ layout: post
 title:  "Leetcode Random"
 categories: Interview
 ---
+
+## 水塘抽样
+```
+https://blog.csdn.net/My_Jobs/article/details/48372399
+```
+
 ## Fisher–Yates shuffle
 [website](https://gaohaoyang.github.io/2016/10/16/shuffle-algorithm/)
 
 ```
 -- To shuffle an array a of n elements (indices 0..n-1):
-for i from n−1 downto 1 do
+for i from n−1 down to 1 do
      j ← random integer such that 0 ≤ j ≤ i
      exchange a[j] and a[i]
 ```
