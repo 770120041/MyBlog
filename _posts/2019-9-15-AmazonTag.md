@@ -213,6 +213,7 @@ public:
             if(m1 == m2) result.push_back(i-p.size()+1);
 Can use floyid algorithm to speed up?
 ```
+```
 class Solution {
 public:
     static bool cmp(vector<int> &a,vector<int> &b){
@@ -269,3 +270,96 @@ public:
 ```
 
 <hr>
+
+## 390. Elimination Game
+[post](https://leetcode.com/problems/elimination-game/discuss/87128/C-1-line-solution-with-explanation)
+
+@zhangyiwei 's solution is great and the core idea is to find that ML(1..n) + MR(1..n) = 1 + n which is mentioned by @storypku.
+Here I gave a simple proof of the equation if it can help.
+Suppoese ML(1...n) = r;
+We can replace each element in array 1...n by newValue = (n + 1) - oldValue to get a new array n...1;
+Then we can easily find the result of MR(n...1) = r also;
+Consider the the location of r in array n...1, it should be the same with the location of the result of MR(1...n) since following the same elimination rule;
+Then the corresponding value of r in array 1...n should be (n + 1) - r, which gives the result of MR(1...n).
+This proves ML(1..n) + MR(1..n) = 1 + n
+
+
+After first elimination, all the numbers left are even numbers.
+Divide by 2, we get a continuous new sequence from 1 to n / 2.
+For this sequence we start from right to left as the first elimination.
+Then the original result should be two times the mirroring result of lastRemaining(n / 2).
+```
+class Solution {
+public:
+    int lastRemaining(int n) {
+        return n == 1 ? 1 : 2 * (1 + n / 2 - lastRemaining(n / 2));    
+    }
+};
+```
+<hr>
+
+## 442. Find All Duplicates in an Array
+#### method1
+using minus
+```
+class Solution {
+public:
+    vector<int> findDuplicates(vector<int>& nums) {
+        vector<int> res;
+        for (int i = 0; i < nums.size(); ++i) {
+            int idx = abs(nums[i]) - 1;
+            if (nums[idx] < 0) res.push_back(idx + 1);
+            nums[idx] = -nums[idx];
+        }
+        return res;
+    }
+};
+```
+#### method2
+下面这种方法是在nums[nums[i]-1]位置累加数组长度n，注意nums[i]-1有可能越界，所以我们需要对n取余，最后要找出现两次的数只需要看nums[i]的值是否大于2n即可，最后遍历完nums[i]数组为[12, 19, 18, 15, 8, 2, 11, 9]，我们发现有两个数字19和18大于2n，那么就可以通过i+1来得到正确的结果2和3了，参见代码如下：
+
+ 
+ ```
+class Solution {
+public:
+    vector<int> findDuplicates(vector<int>& nums) {
+        vector<int> result;
+        int n = nums.size();
+        for(int i=0;i<n;i++){
+            nums[(nums[i]-1)%n] += n;
+        }
+        for(int i=0;i<n;i++){
+            if(nums[i]>2*n){
+                result.push_back(i+1);
+            }
+        }
+        return result;
+    }
+};
+```
+<hr>
+
+## 215. Kth Largest Element in an Array
+#### Priority queue
+```
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        priority_queue<int,vector<int>,greater<int>> q;
+        for(int i=0;i<nums.size();i++){
+            if(i<k){
+                q.push(nums[i]);
+            }
+            else{
+                if(nums[i]>q.top()){
+                    q.pop();
+                    q.push(nums[i]);
+                }
+            }
+        }
+        return q.top();
+    }
+};
+```
+#### Partition
+
