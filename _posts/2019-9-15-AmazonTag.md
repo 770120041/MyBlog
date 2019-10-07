@@ -362,4 +362,100 @@ public:
 };
 ```
 #### Partition
+```
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        int left = 0, right = nums.size() - 1;
+        while (true) {
+            int pos = partition(nums, left, right);
+            if (pos == k - 1) return nums[pos];
+            if (pos > k - 1) right = pos - 1;
+            else left = pos + 1;
+        }
+    }
+    int partition(vector<int>& nums, int left, int right) {
+        int pivot = nums[left], l = left + 1, r = right;
+        while (l <= r) {
+            if (nums[l] < pivot && nums[r] > pivot) {
+                swap(nums[l++], nums[r--]);
+            }
+            if (nums[l] >= pivot) ++l;
+            if (nums[r] <= pivot) --r;
+        }
+        swap(nums[left], nums[r]);
+        return r;
+    }
+};
+```
 
+<hr>
+
+## 355. Design Twitter
+
+```
+class Twitter {
+public:
+    /** Initialize your data structure here. */
+    int timeStamp;
+    unordered_map<int,vector<pair<int,int>>> m1;
+    unordered_map<int,unordered_set<int>> m2;
+    Twitter() {
+        timeStamp = 0;
+    }
+    
+    /** Compose a new tweet. */
+    void postTweet(int userId, int tweetId) {
+        auto it = m1.find(userId);
+        if(it == m1.end()){
+            vector<pair<int,int>> tmp;
+            m1[userId] = tmp;
+        }
+        m1[userId].push_back(make_pair(timeStamp++,tweetId));
+    }
+    
+    /** Retrieve the 10 most recent tweet ids in the user's news feed. Each item in the news feed must be posted by users who the user followed or by the user herself. Tweets must be ordered from most recent to least recent. */
+    vector<int> getNewsFeed(int userId) {
+        if(!m2[userId].count(userId)) m2[userId].insert(userId);
+        vector<pair<int,int>> tmp;
+        for(auto neighbor:m2[userId]){
+            for(auto x:m1[neighbor]) tmp.push_back(x);
+        }
+        sort(tmp.begin(),tmp.end(),[](pair<int,int> a, pair<int,int> b){
+            return a.first > b.first;
+        });
+        vector<int> result;
+        for(int i=0;i<min((int)tmp.size(),10);i++)  result.push_back(tmp[i].second);
+        return result;
+    }
+    
+    /** Follower follows a followee. If the operation is invalid, it should be a no-op. */
+    void follow(int followerId, int followeeId) {
+        auto it = m2.find(followerId);
+        if(it == m2.end()){
+            unordered_set<int> tmp;
+            m2[followerId] = tmp;
+        }
+        m2[followerId].insert(followeeId);
+    }
+    
+    /** Follower unfollows a followee. If the operation is invalid, it should be a no-op. */
+    void unfollow(int followerId, int followeeId) {
+        auto it = m2.find(followerId);
+        if(it == m2.end()){
+        }
+        else{
+            m2[followerId].erase(followeeId);   
+        }
+    }
+};
+
+/**
+ * Your Twitter object will be instantiated and called as such:
+ * Twitter* obj = new Twitter();
+ * obj->postTweet(userId,tweetId);
+ * vector<int> param_2 = obj->getNewsFeed(userId);
+ * obj->follow(followerId,followeeId);
+ * obj->unfollow(followerId,followeeId);
+ */
+ ```

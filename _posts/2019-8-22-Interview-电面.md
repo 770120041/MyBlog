@@ -84,85 +84,72 @@ int main()
 
 四轮Onsite 过
 
-## OA
-### DRW
-#### Q1 Bike
-Sort `O(N*logN)`
-cal the distance in between, then the `result = (a[i]-a[i-1])/2`
-#### Q2
-```
-class Solution {
-public:
-    int maxTurbulenceSize(vector<int>& A) {
-        int N = A.size();
-        if(N <= 1) return 1;
-        vector<int> up(N,1);
-        vector<int> down(N,1);
-        int result=1;
-        for(int i=1;i<N;i++){
-            if(A[i] > A[i-1]){
-                up[i] = down[i-1]+1;
-            }
-            else if(A[i] < A[i-1]){
-                down[i] = up[i-1]+1;
-            }
-            result = max(result,max(up[i],down[i]));
-        }
-        return result;
-    }
-};
-```
+## Yahoo Verizon Media
+Yeah, I used `yahoo.com` a lot when I was in elementry school. And I think Yahoo is really a great company for providing people with valuuable contents.
 
-#### Q3 Zero SubArray
-```
+1. Virtual Function/non-virtual function
+When we use the pointer or reference of the base class, we will be able to run different versions of the funtion.
 
-#include <iostream>
-#include <vector>
-#include <unordered_map>
-using namespace std;
-int numOfZero(vector<int>&input){
-    vector<int> prefix = input;
-    unordered_map<int,vector<int>> uMap;
-    for(int i=0;i<prefix.size();i++){
-        if(i != 0){
-            prefix[i] += prefix[i-1];
-        }
-        auto it = uMap.find(prefix[i]);
-        if(it == uMap.end()){
-            vector<int> tmp{i};
-            uMap[prefix[i]]=tmp;
-        }
-        else uMap[prefix[i]].push_back(i);
-    }
-    int result=0;
-    for(int i=0;i<prefix.size();i++){
-        if(prefix[i] == 0) result++;
-        int curVal = prefix[i];
-        auto it = uMap.find(curVal);
-        if(it == uMap.end()){}
-        else{
-            for(auto x:it->second){
-                if(x < i){
-                    cout<<"l="<<x<<",r="<<i<<endl;
-                    result++;
-                }
-            }
-        }
-    }
-    return result;
-}
+Why virtual destructor:
+Deleting a derived class object using a pointer to a base class that has a non-virtual destructor results in undefined behavior. To correct this situation, the base class should be defined with a virtual destructor. For example, following program results in undefined behavior.
 
-int main()
-{
-    vector<int> input{0,0,0,0,0};
-    cout<<numOfZero(input)<<endl;
+2. SQL Join
+A join is an SQL operation performed to establish a connection between two or more database tables based on matching columns, thereby creating a relationship between the tables. Most complex queries in an SQL database management system involve join commands. There are different types of joins.
 
-    return 0;
-}
+inner join:[website](https://www.w3schools.com/sql/sql_join_inner.asp)
+The INNER JOIN keyword selects records that have matching values in both tables.
 
-```
+LeftJoin: left outter join
+[website](https://www.w3schools.com/sql/sql_join_left.asp)
+The LEFT JOIN keyword returns all records from the left table (table1), and the matched records from the right table (table2). The result is NULL from the right side, if there is no match.
 
-#### Q4
-Determine if it is possible to choose two requests that will determine an even distribution of requests among 3 works
+SQL RIGHT JOIN Keyword
+The RIGHT JOIN keyword returns all records from the right table (table2), and the matched records from the left table (table1). The result is NULL from the left side, when there is no match.
 
-去掉两个以后能被3个人平分： Sum%3 == 0 and 存在两个sequence和为sum/3
+
+SQL FULL OUTER JOIN Keyword
+The FULL OUTER JOIN keyword return all records when there is a match in left (table1) or right (table2) table records.
+
+Note: FULL OUTER JOIN can potentially return very large result-sets!
+
+Tip: FULL OUTER JOIN and FULL JOIN are the same.
+
+3. External Sort
+when the data is too large to be fit into the memory
+
+10份数据，先每一份都排好放到10个地方，然后执行完以后执行10路归并排序，然后把结果放到缓冲区，当缓冲区满输出到persistent layer.
+
+* 并行计算
+用多个磁盘驱动器并行处理数据，可以加速顺序磁盘读写。[4]
+在计算机上使用多线程，可在多核心的计算机上得到优化。
+使用异步输入输出，可以同时排序和归并，同时读写。
+使用多台计算机用高速网络连接，分担计算任务。[5]
+* 提高硬件速度
+增大内存，减小磁盘读写次数，减小归并次数。
+使用快速的外存设备，比如15000 RPM的硬盘或固态硬盘。
+使用性能更优良个各种设备，比如使用多核心CPU和延迟时间更短的内存。
+* 提高软件速度
+对于某些特殊数据，在第一阶段的排序中使用基数排序。
+压缩输入输出文件和临时文件。
+
+4. 线程进程区别
+A computer process is composed of 
+Level1: Register,Counter, Stack
+Level2: Heap
+Level3: Code
+
+All the threads in a process may share same code an heap, but they have their own set of stack and reigster
+
+
+Processes vs. Threads — Advantages and Disadvantages
+
+Processes are heavyweight operations	Threads are lighter weight operations
+Each process has its own memory space	Threads use the memory of the process they belong to
+Inter-process communication is slow as processes have different memory addresses	Inter-thread communication can be faster than inter-process communication because threads of the same process share memory with the process they belong to
+Context switching between processes is more expensive	Context switching between threads of the same process is less expensive
+Processes don’t share memory with other processes	Threads share memory with other threads of the same process
+
+https://www.backblaze.com/blog/whats-the-diff-programs-processes-and-threads/
+
+
+http://www.ruanyifeng.com/blog/2013/04/processes_and_threads.html
