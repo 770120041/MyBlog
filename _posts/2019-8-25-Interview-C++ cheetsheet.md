@@ -495,3 +495,9 @@ Assigns new contents to the vector, replacing its current contents, and modifyin
 Any elements held in the container before the call are destroyed and replaced by newly constructed elements (no assignments of elements take place).
 
 This causes an automatic reallocation of the allocated storage space if -and only if- the new vector size surpasses the current vector capacity.
+
+
+* Abstract class vs Interface
+C++ don't have interface
+
+An abstract class would be used when some common implementation was required. An interface would be if you just want to specify a contract that parts of the program have to conform too. By implementing an interface you are guaranteeing that you will implement certain methods. By extending an abstract class you are inheriting some of it's implementation. Therefore an interface is just an abstract class with no methods implemented (all are pure virtual).
