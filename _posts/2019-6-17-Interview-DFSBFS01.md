@@ -263,7 +263,7 @@ DFS one pass, the reason why there is replicate code is that we don't have the c
 The idea is cal the depth and cal the sum at the same time. When we reach the leaft node, we cal the the result at depth 1, and then for none leaf nodes, we cal the height by firstly go through all none interger nodes then cal the result of interger nodes.
 
 #### Careful
-Be careful the the weight of each level is not 1, so would be wrong
+Be careful the the weight of each leaf is not 1, so would be wrong
 ```
 int depthSumInverse(vector<NestedInteger> nestedList) {
     int result = 0;
@@ -288,6 +288,31 @@ int DFS(int& result,vector<NestedInteger> nestedList){
     cout<<"d:"<<depth<<",nums:"<<curNumbers<<endl;
     return depth;
 }
+```
+#### DFS solution:
+get depth first then dfs
+```py
+class Solution:
+    # when we meet [1,7,[7,[9]],[12],[],[]], the height of [12] is actually 2, not 1, another way is we dfs the height first, then calculate
+    def depthSumInverse(self, nestedList):
+        self.sum = 0
+        def getDepth(nl):
+            h = 1
+            for ni in nl:
+                if ni.isInteger(): pass
+                else: h = max(h,1+getDepth(ni.getList()))
+            return h
+        def dfs(nls,h):
+            cur = 0
+            for ni in nls:
+                if ni.isInteger():
+                    cur += ni.getInteger()
+                else:
+                    dfs(ni.getList(),h-1)
+            self.sum += cur * h
+        h = getDepth(nestedList)
+        dfs(nestedList,h)
+        return self.sum
 ```
 
 #### BFS Level order traversal
