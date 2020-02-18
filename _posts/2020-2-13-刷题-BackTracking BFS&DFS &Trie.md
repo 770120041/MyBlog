@@ -730,8 +730,113 @@ class Solution:
 
 
 ## 208	Implement Trie (Prefix Tree)
+```py
+class TrieNode:
+    def __init__(self,char,word_end = False):
+        self.char = char
+        self.children = []
+        self.word_end = word_end
+    
+    def add(self,s):
+        if not s: 
+            self.word_end = True
+            return
+        exist = False
+        for child in self.children:
+            if child.char == s[0]:
+                exist = True
+                child.add(s[1:])
+                break
+        if not exist:
+            self.children.append(TrieNode(s[0]))
+            self.children[-1].add(s[1:])
+        
+    def search(self,s,prefix = False):
+        if not s:
+            if prefix: return True
+            return self.word_end
+        for child in self.children:
+            if child.char == s[0]:
+                return child.search(s[1:],prefix)
+        return False
+        
+class Trie:
+
+    def __init__(self):
+        self.root = TrieNode("")
+
+    def insert(self, word: str) -> None:
+        self.root.add(word)
+        
+
+    def search(self, word: str) -> bool:
+        return self.root.search(word)
+
+    def startsWith(self, prefix: str) -> bool:
+            return self.root.search(prefix,True)
+        
+```
+
+## 211	Add and Search Word - Data structure design
+One line change
+```py
+class TrieNode:
+    def __init__(self,char,word_end = False):
+        self.char = char
+        self.children = []
+        self.word_end = word_end
+    
+    def add(self,s):
+        if not s: 
+            self.word_end = True
+            return
+        exist = False
+        for child in self.children:
+            if child.char == s[0]:
+                exist = True
+                child.add(s[1:])
+                break
+        if not exist:
+            self.children.append(TrieNode(s[0]))
+            self.children[-1].add(s[1:])
+        
+    def search(self,s):
+        if not s:
+            return self.word_end
+        for child in self.children:
+            if child.char == s[0]:
+                return child.search(s[1:])
+            elif s[0] == "." and child.search(s[1:]):
+                return True
+        return False
+    
+class WordDictionary:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.root = TrieNode("")
+
+    def addWord(self, word: str) -> None:
+        """
+        Adds a word into the data structure.
+        """
+        self.root.add(word)
+
+    def search(self, word: str) -> bool:
+        """
+        Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter.
+        """
+        return self.root.search(word)
+        
+
+```
+
 ## 212	Word Search II
-## 17	Letter Combinations of a Phone Number
+Tricky trie tree
+```py
+```
 
 
 ## 282	Expression Add Operators    
