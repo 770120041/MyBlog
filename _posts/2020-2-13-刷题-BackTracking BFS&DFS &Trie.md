@@ -835,12 +835,153 @@ class WordDictionary:
 
 ## 212	Word Search II
 Tricky trie tree
+直接用Trie会TLE
 ```py
+class TrieNode:
+    def __init__(self,char,word_end = False):
+        self.char = char
+        self.children = []
+        self.word_end = word_end
+    
+    def add(self,s):
+        exist = False
+        ret = None
+        for child in self.children:
+            if child.char == s[0]:
+                exist = True
+                ret = child
+                break
+        if not exist:
+            self.children.append(TrieNode(s[0],True))
+            ret = self.children[-1]
+        return ret
+    
+    def search(self,s):
+        if not s:
+            return self.word_end
+        for child in self.children:
+            if child.char == s[0]:
+                return child.search(s[1:])
+        return False
+
+class Solution:        
+    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+        def dfs(board,x,y,m,n,node,visited=set()):
+            if x < 0 or x>=m or y < 0 or y >= n: return
+            dire = [(-1,0),(1,0),(0,1),(0,-1)]
+            node = node.add(board[x][y])
+            for i in range(4):
+                nextx,nexty = x + dire[i][0], y + dire[i][1]
+                if (nextx,nexty) not in visited:
+                    visited.add((x,y))
+                    dfs(board,nextx,nexty,m,n,node,visited)
+                    visited.remove((x,y))
+            
+        root = TrieNode("")
+        m,n = len(board),len(board[0])
+        for i in range(m):
+            for j in range(n):
+                dfs(board,i,j,m,n,root)
+        res = []
+        for word in words:
+            if root.search(word):
+                res += [word]
+        return res
+
 ```
 
+聪明的做法是用单词创建Trie，然后再搜索。因为单词的组合比board上词的组合少，可以提前剪枝。（这里的search就是提前剪枝）
+```py
+   
+class Trie:
+    def __init__(self,char,word_end = False):
+        self.char = char
+        self.children = []
+        self.word_end = word_end
+    def add(self,word):
+        if not word:
+            self.word_end = True
+            return
+        for child in self.children:
+            if child.char == word[0]:
+                child.add(word[1:])
+                return
+        self.children.append(Trie(word[0]))
+        self.children[-1].add(word[1:])
+        
+    def search(self,w):
+        if not w: 
+            if self.word_end:
+                return 1
+            else:
+                return 2
+        for child in self.children:
+            if child.char == w[0]:
+                return child.search(w[1:])
+        return 3
+        
+        
+class Solution:
+    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+        def dfs(board,x,y,m,n,curWord,root,visited = set()):
+            if x < 0 or x>=m or y<0 or y>=n or (x,y) in visited: return
+            curWord+=board[x][y]            
+            visited.add((x,y))
+            ret = root.search(curWord)
+            if ret == 1:
+                self.res.add(curWord)
+            if ret != 3: 
+                dfs(board,x-1,y,m,n,curWord,root,visited)
+                dfs(board,x+1,y,m,n,curWord,root,visited)
+                dfs(board,x,y+1,m,n,curWord,root,visited)
+                dfs(board,x,y-1,m,n,curWord,root,visited)
+            visited.remove((x,y))
+            
+        root = Trie("")
+        for word in words:
+            root.add(word)
+        m,n = len(board),len(board[0])
+        self.res = set()
+        for i in range(m):
+            for j in range(n):
+                dfs(board,i,j,m,n,"",root)
+        return list(self.res)
+ 
+```
 
 ## 282	Expression Add Operators    
-looks Too hard
+Using back tracking
+注意
+https://www.cnblogs.com/grandyang/p/4814506.html
+
+乘法为什么是diff*curNum: 比如2*3*5,这样做相当于: 减去2*3 再6*5
+```py 
+dfs(num,target,curNum,Sum+curNum,i,out+"+"+num[idx:i])
+dfs(num,target,-curNum,Sum-curNum,i,out+"-"+num[idx:i])
+dfs(num,target,diff*curNum,Sum-diff + diff*curNum,i,out+"*"+num[idx:i])
+```
+```py
+class Solution:
+    def addOperators(self, num: str, target: int) -> List[str]:
+        self.res = []
+        def dfs(num,target,diff=0,Sum=0,idx=0,out=""):
+            # print(out,idx,Sum,diff)
+            if idx == len(num):
+                # print(out)
+                if target ==Sum : self.res += [out]
+                return
+            for i in range(idx+1,len(num)+1):
+                curNum = int(num[idx:i])
+                if i-idx+1>2 and num[idx]=="0": return
+                if out:
+                    dfs(num,target,curNum,Sum+curNum,i,out+"+"+num[idx:i])
+                    dfs(num,target,-curNum,Sum-curNum,i,out+"-"+num[idx:i])
+                    dfs(num,target,diff*curNum,Sum-diff + diff*curNum,i,out+"*"+num[idx:i])
+                else:
+                    dfs(num,target,curNum,curNum,i,num[:i])
+        dfs(num,target)
+        return self.res
+```
 
 ## 377. Combination Sum IV
 DP
