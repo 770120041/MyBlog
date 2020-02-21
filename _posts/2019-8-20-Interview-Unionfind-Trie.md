@@ -412,8 +412,8 @@ public:
 
 ## 212 Word Search II
 这道题本质上还是搜索字符串存在，如果只需要查找某一个字符串是否存在,那么暴力搜就是最简单的办法。但如果对每个字符串都用DFS找，缺点就是上次查找的结果不能被利用，所以想要使用Trie Tree来帮助存储之前搜索的结果。注意不能用DP+memo，原因是Trie树能保存相同的前缀，但DP with memo不知道是不是有相同的前缀。使用Trie能够尽量利用前缀的特点，尽量少的DFS。
-
-```
+<!-- 
+```cpp
 class Solution {
 public:
     struct TrieNode{
@@ -473,6 +473,6 @@ public:
         visit[i][j] = false;
     }
 };
-```
+``` -->
 
 <hr>
