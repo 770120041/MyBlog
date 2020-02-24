@@ -647,3 +647,87 @@ public:
     }
 };
 ```
+
+## 394. Decode String
+```
+class Solution:
+    def decodeString(self, s: str) -> str:
+        self.idx = 0
+        def helper(s):
+            cur = ""
+            while self.idx < len(s):
+                if s[self.idx] in "0123456789":
+                    curNum = 0
+                    while self.idx < len(s) and s[self.idx] in "0123456789":
+                        curNum = curNum * 10 + int(s[self.idx])
+                        self.idx += 1
+                    #skip "["
+                    self.idx+=1
+                    cur += curNum * helper(s)
+                elif s[self.idx] == "]":
+                    self.idx+=1
+                    break
+                else:
+                    cur += s[self.idx]
+                    self.idx += 1
+            return cur
+        return helper(s)
+        
+```
+
+## (lint)849. Basic Calculator III
+## 224. Basic Calculator
+
+https://www.lintcode.com/problem/basic-calculator-iii/description
+
+```class Solution:
+    def calculate(self, s: str) -> int:
+        def level(c):
+            if c in "+-": return 0
+            elif c in "*/": return 1
+            elif c in "(":return -2
+            else:return -1
+        def calWithOp(num_s,op):
+            num2 = num_s.pop()
+            num1 = num_s.pop()
+            print(num1,num2,op)
+            if op == "+": num_s.append(num1+num2)
+            if op == "-": num_s.append(num1-num2)
+            if op == "*": num_s.append(num1*num2)
+            if op == "/": num_s.append(num1//num2)
+            # print(num_s)
+        s2 = ""
+        for c in s:
+            if c in "0123456789":
+                s2+= c
+            else: s2 += " "+c+" "
+        tokens = s2.split()
+        num_s = []
+        op_s = []
+        for token in tokens:
+            if token[0] in "0123456789":
+                num_s.append(int(token))
+            else:
+                op_level = level(token)
+                # print(token,op_level)
+                if op_level == -1:
+                    while True:
+                        cur_op = op_s.pop()
+                        if level(cur_op) == -2:
+                            break
+                        else:
+                            calWithOp(num_s,cur_op)
+                elif op_level == -2:
+                    op_s.append(token)
+                elif len(op_s) == 0 or level(token) > level(op_s[-1]):
+                    op_s.append(token)
+                else:
+                    while op_s and level(token) <= level(op_s[-1]):
+                        cur_op = op_s.pop()
+                        calWithOp(num_s,cur_op)
+                    op_s.append(token)
+            # print(token,num_s)
+        while op_s:
+            calWithOp(num_s,op_s.pop())
+        return num_s[-1]
+```
