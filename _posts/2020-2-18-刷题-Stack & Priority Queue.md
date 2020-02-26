@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Python - Stack
+title:  Python - Stack & priority Queue
 categories: Interview
 ---
 ```py
@@ -647,6 +647,42 @@ class Solution:
 
 
 ## 218	The Skyline Problem
+https://www.youtube.com/watch?v=GSBLe8cKu0s
+https://www.cnblogs.com/grandyang/p/4534586.html
+```cpp
+class Solution {
+public:
+    vector<vector<int>> getSkyline(vector<vector<int>>& buildings) {
+        vector<vector<int>> res;
+        vector<pair<int,int>> height;
+        for(auto building : buildings){
+            height.push_back(make_pair(building[0],-building[2]));
+            height.push_back(make_pair(building[1],building[2]));
+        }
+        multiset<int> m;
+        sort(height.begin(), height.end());
+        int pre=0,cur;
+        // init height is 0, after all operations, it should go back to 0
+        m.insert(0);
+        for(auto h:height){
+            if(h.second < 0){
+                m.insert(-h.second);
+            }
+            else{
+                m.erase(m.find(h.second));
+            }
+            cur = *m.rbegin();
+            if(pre != cur){
+                vector<int> tmp{h.first,cur};
+                res.push_back(tmp);
+                pre = cur;
+            }
+            
+        }
+        return res;
+    }
+};
+```
 
 https://briangordon.github.io/2014/08/the-skyline-problem.html
 
