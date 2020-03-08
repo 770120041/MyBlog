@@ -177,3 +177,35 @@ class Solution:
         return res
 
 ```
+
+## 1377. Frog Position After T Seconds
+
+```py
+class Solution:
+    def frogPosition(self, n: int, edges: List[List[int]], t: int, target: int) -> float:
+        # DFS from first node
+        # same way, use adj list to represent a tree
+        def dfs(pos,dis,children,val,possi=1,visited=set()):
+            num_child = len(children[pos])
+            if dis == 0 or num_child == 0: 
+                val[pos] = possi
+                return
+            for child in children[pos]:
+                if child not in visited:
+                    children[child].remove(pos)
+                    visited.add(child)
+                    dfs(child,dis-1,children,val,possi*num_child,visited)
+                    visited.remove(child)
+                    children[child].add(pos)
+
+            
+        children = [set() for i in range(n+1)]
+        val= [0.0 for i in range(n+1)]
+        for edge in edges:
+            children[edge[0]].add(edge[1])
+            children[edge[1]].add(edge[0])
+        dfs(1,t,children,val)
+        print(val)
+        if val[target] == 0: return 0
+        return 1/val[target]
+```
