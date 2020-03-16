@@ -649,6 +649,8 @@ class Solution:
 ## 218	The Skyline Problem
 https://www.youtube.com/watch?v=GSBLe8cKu0s
 https://www.cnblogs.com/grandyang/p/4534586.html
+
+Each time, we record the index when the max height changes. So we use a multiset, for each building, when it starts, we push it to the multiset, when it ends, we pop if from the multiset, both operations is O(N) time, and after each opeartions, we check if the max height is changing, if so we record the index.
 ```cpp
 class Solution {
 public:
@@ -671,6 +673,7 @@ public:
             else{
                 m.erase(m.find(h.second));
             }
+            // rbegin is the maximum value
             cur = *m.rbegin();
             if(pre != cur){
                 vector<int> tmp{h.first,cur};
