@@ -71,7 +71,7 @@ class Solution:
         # so dp[i][j] = max(dp[i][j-1],satisfaction[j]*i+dp[i-1][j-1])
         n = len(satisfaction)
         satisfaction.sort()
-        dp = [[-99999999 for i in range(n+1)] for j in range(n+1)]
+    dp = [[-99999999 for i in range(n+1)] for j in range(n+1)]
         res = 0
         # if we have 0 dishes, the satisfaction will be 0
         for j in range(n+1):
