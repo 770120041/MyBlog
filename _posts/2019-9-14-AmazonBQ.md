@@ -33,7 +33,7 @@ C++ QT
 I think my strength is that I am hard workindg and devoted. For example, when I am doing my intern, I was very devoted because I think what I was doing was really interested, and also I think that my job will really be helpful to the team, so I would usually work till 7 or 8 every day so I was able to finish the project 2 weeks in advance.
 
 ## 4. Your Weakness
-In the past, Procrastination was a huge challenge for me. I’d get jobs done in the last moment. Later, I realized this was hindering my progress when I am working with my homework or working in group projects.So I decided to trying to plan ahead and pushing myself to finishing the job before deadline. After I sticking to my plans and finishing all the jobs in advance, I would say that I am starting to enjoy finishing things earlier. 
+In the past, Procrastination was a huge challenge for me. I’d get jobs done in the last moment. Later, I realized this was hindering my progress when I am working with my homework or working.So I decided to trying to plan ahead and pushing myself to finishing the job before deadline. After I sticking to my plans and finishing all the jobs in advance, I would say that I am starting to enjoy finishing things earlier. 
 
 Most recently, When I was working at Citrix as a summer intern, I was able to finish the project in only 8 weeks, much faster than every one expected before I plan everything in advance and try my best to finish it quickly. And my manager and mentor even said they were so surpised that I finished it so quickly that they can't believe that I havn't learned CI pipelines before.
 
