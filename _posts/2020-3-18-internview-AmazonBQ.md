@@ -88,16 +88,31 @@ b)        Tell me a time when you exceed the expectation
 c)        Tell me a time when you took a risk / without approval then succeed
 d)        Tell me a goal you achieved
 
-So let me talk about the project I was working on at Citrix. So the goal of this project is to build a CI pipe for the team, and all they have is a bunch of tests scripts and testing environments.
+So let me talk about the project I was working on at Citrix. So the goal of this project is to build a CI pipeline for the team, and all they have is a bunch of tests scripts and testing environments.
 
+[
 So the first thing I was to choose between different CI tools. Like gitlab, teamcity and Jenkins.
 So teamcity it like more expensive and complicated. Since I am in a kinda small sub team, have only 10 team members and we are building a pipeline only being used inside the team. So my manager told me that the pipeline should be simple so everyone can understand and maintain it. So finally I chose jenkins.
+]
 
-So the project requirement was to set it up in 12 weeks, for my whole intern project. But I was able to set it up in 8 weeks. So I had some time to develop some features with ohter members and my manager is very happy with this.
+So the project requirement was to set it up in 12 weeks, for my whole intern project. But I was able to set it up in 8 weeks. So I had some time to develop some features with other members and my manager is very happy with this.
+
+
+Why did you choose jenkins?
+I have used Gitlab CI before. But one thing that gitlab CI lacks is the plugins, so the team I was workign on is using perforce to keep some binary files, and also they want to use some plugins to support showing the CI in a TV screen.
+
+The other reason is that when I searched only most people said that jenkins is the best CI tool now. So I think I should try using jenkins. So finally I choose Jenkins.
 
 Why can you do that fast?
+The first reason is because I had some experiences using Gitlab CI. So I am kinda familiar with the procudure of settting up a ci pipeline.
+
+But I think the most important reason is that I can sync up with other team members all the time. So each time I have some questions or issues, I can unblock my self quickly. So the way I am doing this is to set up a google DOC and share that to all team members. So whenever I have some questions or some ideas, I will post to there. And whenever anyone have time they can answer my questions or give me some suggestions. 
+
+Throught this way, all the team members can Sync up quickly and since this google doc is more like a diary, so even if a new hire joins the team, they can still understand the design and implementations of this pipeline by reading this cdocument.
+
 
 What did you learn from it?
+The most important thing is to communicate with others often. Because everyone is expertise in some areas so asking them can give me the besting understanding of the issues I am facing and they may also encountered same questions before some it would be much more effective for them to give me the answer instead of working that out on my own.
 
 
 4.        Conflict
