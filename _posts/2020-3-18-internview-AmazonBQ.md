@@ -39,13 +39,7 @@ For my past working experiences, I was working on Citrix Boston last summer as a
 
 ## The biggest mistake you made and what did you learn from it? (earn trust, customer obsession)
 # STAR
-Situation: “A customer rang up complaining that they’d waited more than two weeks for a reply from our sales team regarding a product query.”
-
-Task: “I needed to address the client’s immediate query and find out what went wrong in the normal process.”
-
-Activity: “I apologised, got the details and passed them to our head salesperson, who contacted the client within the hour. I investigated why the query hadn’t been answered. I discovered that it was a combination of a wrong mobile number and a generic email address that wasn’t being checked. I let the client know and we offered a goodwill discount on her next order.”
-
-Result: “The client not only continued to order from us but posted a positive customer service tweet.”
+Customer issue. Tell them to solve it too early.
 
 # List
 
@@ -115,6 +109,10 @@ What did you learn from it?
 The most important thing is to communicate with others often. Because everyone is expertise in some areas so asking them can give me the besting understanding of the issues I am facing and they may also encountered same questions before some it would be much more effective for them to give me the answer instead of working that out on my own.
 
 
+#### What you would do differently?
+The think I think I would do differently is to using a Powershell scirpt or Python scirpt rather than Jenkinsfile to call the build scirpt, the reason is that for jenkins, the Jenkinsfile is triggered and executed by the Jenkins Server, not the actually slave that building the product, so it is very tricky to query the environments of the building slaves. The reason why I would prefer not using Jenkinsfile is because the requirement was to build different versions of the product according to the .Net version and Visual Studio version, so they can use same code to build different versions. So I need to qeury the environment variables to decided to target version.
+
+
 4.        Conflict
 a)        Tell me a time when you resolved a conflict on your team
 b)        Tell me a time when you disagreed with your manager
@@ -124,10 +122,7 @@ e)        Tell me a time when you had to go behind your manager's back to do som
 
 Citrix intern, developing a feature,
 
-1.research lab example.
-
-
-
+Using two different algorithm
 
 So when facing a conflct, the first thing I would like to do is to talk to my coworkers and understand their opions and how they think about the current issues. I think another very import point is not to be emotional and think things logically, don't take things personally.
 
@@ -142,6 +137,15 @@ d)        Tell me a time when you overcame an obstacle and delivered the result
 e)        Tell me a time when you overcame a challenge
 f)        Tell me a time when you worked under close supervision or extremely loose supervision
 
+When I was on call at thouguhtSpot. Customer reported a very important bug that impacting the SingleSign-On system. And many big customers are impacted by this bug and they are't able to login once in a while. So since I was on-call so after discussing with my manager. He suggests I tried to fix this bug myself and try to ask others wheneven I am blocked.
+
+After looking at logs and stack traces. I leart that this bug is hard because it needs to refactor some logic and also it is appeared in many different versions.
+
+[Working on this is a big challenge and under a lot of pressure. because this bug is impacting many customers so there are 3 SRES will send me a message every day asking the updates.]
+ But after 2 weeks of hard work, I was able to solve this with the help of other team members. And looking back I am very grateful to my manager to give me the chance to solve a big problem on my own and it also give me a chance to learn the codebase in a hard way.
+
+REaons:
+devoted
 
 6.        Leadership / Relationship
 a)        Tell me a time when you helped a peer / other
@@ -152,6 +156,11 @@ e)        Tell me a time when you persuaded someone to do something
 f)        Tell me a time when you showed leadership
 g)        Tell me about a time when you had to deal with a poor performer on your team.
 h)        Tell me about a time when you had to convince your team on some design decision.
+Hackathon. Python script.
+
+Spend some time for tooling is definitely helpful because the more automate the process .the better result we can achieve. It was actually a webpage built by one of a start up company, and we found that the sumbition and the received part is actually a json file. But like the most difficult part is actually the authentication of the website.
+
+Citrix intern. google doc thing.
 
 
 7.        Responsibility / High Standard / Deep Dive
@@ -162,7 +171,7 @@ d)        Tell me about a time you were dissatisfied in your work. What could ha
 e)        Tell me a time when you improved a process
 f)        Tell me about a time when you could have stopped working but persisted.
 g)        Tell me about a time when you had to dive deep into the system / data to solve some technical bug / problems.
-
+On call. 
 
 8.        Decision
 a)        Tell me a time when you made a difficult decision / choice
@@ -173,6 +182,13 @@ e)        Tell me a time when you dealt with ambiguity
 f)        Tell me a time when you broke the rule
 g)        Tell me about a time when you had to take a decision in your project where the complete data was not available
 h)        Tell me about a time when you had to make some changes backward because it was impacting your customer.
+Course project(毕设)
+
+which language to use
+
+professor told me to use C++ since he has a student has been working on that.
+
+But finally we found we need more algorithms and it is costly to implemetn them in C++ and we finally switched to usinge Python.
 
 
 9.        New ideas, Innovations, Inventions
@@ -181,13 +197,38 @@ b)        Tell me a time when you propose a new business
 c)        Tell me a time when you learned something about yourself
 d)        Tell me a time when you learned something new
 
+Jenkins pipeline google doc rather than a document 
+
 
 10.        Deadline / Efficiency
 a)        Tell me a time when you missed a deadline
+
+Hackathon project in my company.
+
+The upgrader is a py script.
+I working on moving the upgrader into the logic of our middleware
+Also working with front end team to make sure the user operations are queued.
+
+I was mostly focusing on the  user operations are queued. But as the deadline is approaching. I realized I won't have enough time to move the logic of the py scirp to the middleware(which is written by java). So I modified the upgrader so if it finishes it will write a dummy file and I create a logic to trigger the script and waiting for that script to finish by checking the dummy file. And finnally our team was able to finish all the requirements and I was able to actually move the logic into java file after the hackthon. 
+
+
+I think this expericene teach me to be careful about deadline, and try my best to use some methods to develiver the result.
+
+
 b)        Tell me a time when you had to deal with a tight deadline but deliver in time
 c)        Tell me a time when you provided a simple solution to a complex problem
 d)        Tell me a time you had to be very strategic in multitasks and meet all your top priorities.
 e)        Describe a long-term project that you managed. How did you keep everything moving along in a timely manner?
+
+
+Hackathon project in my company.
+
+The upgrader is a py script.
+I working on moving the upgrader into the logic of our middleware
+Also working with front end team to make sure the user operations are queued.
+
+I was mostly focusing on the  user operations are queued. But as the deadline is approaching. I realized I won't have enough time to move the logic of the py scirp to the middleware(which is written by java). So I modified the upgrader so if it finishes it will write a dummy file and I create a logic to trigger the script and waiting for that script to finish by checking the dummy file. And finnally our team was able to finish all the requirements and I was able to actually move the logic into java file after the hackthon. 
+
 
 
 11.        Frugality
@@ -195,6 +236,13 @@ a)        Tell me about a time where you thought of a new way to save money for 
 b)        Describe a time when you had to manage a budget (or manage time/money/resources/etc.). Were you able to get more out of less?
 c)        Tell me about a time when you had to work with limited time and resources / no resource.
 
+## Tell me about a time when you had to work with limited time or resources.
+So when once I attended the hackerthon in my school, the projecf of my team was to develop a algorithm for a 
+self driving car. So the rule is who can move faster than others while staying on the road can wins, and there are more 30 teams in the competition. The duration of this hackerton is 48 hours, but the problem is that if we want to test the result, it takes around 10 minutes for training and there are many variables in this contest, like the angle of each turn, and speed of the car. So actually the time is really limited for developing a good algorithm.
+
+So the idea I have is that I wrote a python script to sumbit for testing with different parameters and try to compare the result of the submittion.
+
+. And I have figured out all the possible combinations of the parameters and I write a script to submit the parameters for testing all the time. So I can save the time for mannual submitting and waiting and be focusing on the best parameters. Also, I can submit the test even when I go sleep so I can make the best use of the time. And finally with such method, I found the optimum parameters and finally ranked 1st in this competition. 
 
 
 ## 3. Your strength
@@ -206,7 +254,7 @@ Also I am enjoying makeing plans and stick to it. Citrix intern only 8 weeks.
 ## 4. Your Weakness
 In the past, Procrastination was a huge challenge for me. I’d get jobs done in the last moment. Later, I realized this was hindering my progress when I am working. So I decided to trying to plan ahead and pushing myself to finishing the job before deadline. After I sticking to my plans and finishing all the jobs in advance, I would say that I am starting to enjoy finishing things earlier. 
 
-Most recently, When I was working at Citrix as a summer intern, I was able to finish the project in only 8 weeks, much faster than every one expected before I plan everything in advance and try my best to finish it quickly. And my manager and mentor even said they were so surpised that I finished it so quickly that they can't believe that I havn't learned CI pipelines before.
+Most recently, When I was working at Citrix as a summer intern, I was able to finish the project in only 8 weeks, much faster than every one expected before I plan everything in advance and try my best to finish it quickly. And my manager and mentor even said they were so surpised that I finished it so quickly that they can't believe that I havn't learned jenkins CI pipelines before.
 
 
 
