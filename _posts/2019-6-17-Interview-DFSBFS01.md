@@ -570,10 +570,3 @@ vector<string> generateParenthesis(int n) {
     return result;
 }
 ```
-
-## 518. Coin Change 2
-Can't use DP, because `dp[5]!=dp[0]+dp[3]+dp[4]`, there may be some overlap situations. Because `dp[4]` may already contains `dp[3]`. But we want not duplicate combinations.
-``` 
-amount = 5, coins = [1, 2, 5]
-```
-So bruteforce search

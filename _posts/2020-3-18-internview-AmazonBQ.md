@@ -24,7 +24,7 @@ The reason why I’m willing to join is because Amazon has a lot of impressive p
    a variety of things.
 
 My career is young and I believe that Amazon offers an exceptional place
- for me to learn things and be able to make a bigger impact on people live's
+ for me to learn things and have a larger impact.
 
 ## Introduce yourself
 - My name is Zhe. I am currently a software engineer at thoughtspot, 
@@ -270,6 +270,8 @@ h)        Why did you think that decision was appropriate
 i)        Do you think you could have done better
 j)        How did you find / fix this problem
 k)        How deep did you track down the problem
+
+
 
 
 
