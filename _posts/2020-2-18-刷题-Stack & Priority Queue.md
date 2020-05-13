@@ -690,3 +690,27 @@ public:
 https://briangordon.github.io/2014/08/the-skyline-problem.html
 
 ## 84	Largest Rectangle in Histogram
+
+## 1046. Last Stone Weight
+```py
+class Solution {
+    public int lastStoneWeight(int[] stones) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>(stones.length,(a,b) -> (b-a));
+        for(int stone : stones){
+            pq.offer(stone);
+        }
+        while (pq.size() > 1){
+            int a = pq.poll();
+            int b = pq.poll();
+            // System.out.print(a+" "+b+"\n");
+            if (Math.abs(a-b) != 0){
+                pq.offer(Math.abs(a-b));
+            }
+        }
+        if (pq.size() == 0){
+            return 0;
+        }
+        return pq.poll();
+    }
+}
+```

@@ -297,10 +297,241 @@ class Solution(object):
 
 ## 650. 2 Keys Keyboard
 
-从后往前递推就是recursion
-从前往后思考变成了DP
+主要难点：如何转化这个cost和paste的操作:
+可以堪称coins change,每次copy相当于使用这个coin，但这个coin只能使用一次
 ```py
-   # dp[i]: the min numbers to reach i
-   # 从前往后。需要考虑上一次copy的东西
-   # 从后往前递推
-```   
+class Solution(object):
+    def minSteps(self, n):
+        # dp[i]: the min numbers to reach i
+        # 从前往后？可以，相当于有1到i个硬币,所以dp[i+n*i] = dp[i]+n
+        dp = [10*n for i in range(n+1)]
+        dp[1] = 0
+        for i in range(1,n+1):
+            k = 1
+            while i+k*i<=n:
+                dp[i+k*i] = min(dp[i+k*i],dp[i]+k+1)
+                k+=1          
+        return dp[n]        
+```
+
+## 279. Perfect Squares
+
+```py
+class Solution(object):
+    def numSquares(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        #不能贪心，因为12=9+1+1+1 = 4+4+4
+        #只能dp
+        perf = []
+        k = 1
+        while k*k<=n:
+            perf.append(k*k)
+            k+=1
+        dp = [n for i in range(n+1)]
+        for i in range(len(perf)):
+            dp[perf[i]] = 1
+            for j in range(1,n+1):
+                if j + perf[i] <= n:
+                    dp[j+perf[i]] = min(dp[j+perf[i]],dp[j]+1)
+        return dp[n]
+```
+
+## 1049. Last Stone Weight II
+
+#### Explaining why this problem is equals to finding the difference between the sum of two groups
+
+
+NOTE: I previously explained this in another post. But I'm posting it now as a standalone post to help others finding this answer easily. Link to the post where I answered this in the form of reply
+
+Suppose you have rock a, b, c and d.
+If you subtract them in the following order: b-c, then d-b-c. Then it is the same as doing d-(b+c).
+Then doing [d-(b+c)]-a is the same as -a+d-(b+c), which is d-a-(b+c), which is d-[a+(b+c)], which is d-(a+b+c). (So doing things in that order will lead to this shortcut).
+
+Lets try another order.
+Suppose you have rock a, b, c and d.
+If you do a-d, then b-c, then (a-d)-(b-c).
+Then (a-d)-(b-c) is the same as a-d-b+c, which is the same as -d-b+a+c, which is -(d+b)+(a+c), which is (a+c)-(d+b). Another shortcut.
+
+Then you can see that depending on the order of the subtractions, we get a different setting of difference between two groups.
+
+#### Solution
+Very classic knapsack problem solved by DP.
+In this solution, I use dp to record the achievable sum of the smaller group.
+dp[x] = 1 means the sum x is possible.
+
+这里很tricky
+
+第一点：注意当total是奇数的情况，因为我们找到的是smaller sum，所以total-2*smaller
+第二点：dp的j的range要注意是从后往前for j in range(min(total,1501),stones[i]-1,-1)，原因是因为每个石头只能用一次，背包问题中如果从前往后的话每个石头可以用多次。
+
+```py
+class Solution:
+    def lastStoneWeightII(self, stones: List[int]) -> int:
+        dp = [False for _ in range(1501)]
+        dp[0] = True
+        n = len(stones)
+        total = sum(stones)
+        for i in range(n):
+            for j in range(min(total,1501),stones[i]-1,-1):
+                dp[j] = dp[j] | dp[j-stones[i]]
+        for i in range(total//2,-1,-1):
+            if dp[i]:
+                return total-i-i
+```
+
+## 474. Ones and Zeroes
+背包问题的变种，每个物品需要两种资源
+#### O(N^3) 空间
+注意这里的j，k必须从前往后，不能从后往前，因为dp[i][j][k]还没有值,
+只有dp[i-1][j][k]有值
+
+```py
+class Solution:
+    def findMaxForm(self, strs: List[str], m: int, n: int) -> int:
+        arr = []
+        for s in strs:
+            a,b = 0,0
+            for c in s:
+                if c == "0": a+=1
+                else: b+=1
+            arr.append((a,b))
+        l = len(arr)
+        dp = [[[0 for _ in range(n+1)] for _ in range(m+1)] for _ in range(l+1)]
+        for i in range(1,l+1):
+            a,b = arr[i-1][0],arr[i-1][1]
+            # 注意j和k要从零开始，因为可能没有1或者0
+            for j in range(m+1):
+                for k in range(n+1):
+                    if j < a or k < b:
+                        dp[i][j][k] = dp[i-1][j][k]
+                    else:
+                        dp[i][j][k] = max(dp[i-1][j-a][k-b]+1,dp[i-1][j][k])
+        print(dp)
+        return dp[l][m][n]
+```
+
+#### O(N^2) 空间
+注意这里必须从后往前，因为每个物品只能用一次，为了节省空间我们重复利用了之前的数组。
+```py
+class Solution:
+    def findMaxForm(self, strs: List[str], m: int, n: int) -> int:
+        k = len(strs)
+        arr = []
+        for s in strs:
+            a,b = 0,0
+            for c in s:
+                if c == "0": a+=1
+                else: b+=1
+            arr.append((a,b))
+        dp = [[0 for _ in range(n+1)] for _ in range(m+1)]
+        dp[0][0] = 0
+        for i in range(len(arr)):
+            a,b = arr[i][0],arr[i][1]
+            if a <= m and b <= n:
+                dp[a][b] = 1
+                for j in range(m,a-1,-1):
+                    for k in range(n,b-1,-1):
+                        dp[j][k] = max(dp[j-a][k-b]+1,dp[j][k])
+        return dp[m][n]
+```
+
+## 174. Dungeon Game
+
+
+## 871. Minimum Number of Refueling Stops
+https://leetcode.com/problems/minimum-number-of-refueling-stops/
+#### DP
+Approach 1: 1D DP, O(N^2)
+dp[t] means the furthest distance that we can get with t times of refueling.
+
+So for every station s[i],
+if the current distance dp[t] >= s[i][0], we can refuel:
+dp[t + 1] = max(dp[t + 1], dp[t] + s[i][1])
+
+In the end, we'll return the first t with dp[i] >= target,
+otherwise we'll return -1.
+
+每次使用一个station，使用以后判断能不能根据之前的来更新。
+
+为什么从i-1 到 0？ 比如1被update，然后再更新2，会利用1update以后的结果，这样dp[i]会比实际的大。
+```py
+class Solution:
+    def minRefuelStops(self, target: int, startFuel: int, stations: List[List[int]]) -> int:
+        # dp[i]: furthest dis we can get with i fueling
+        # if dp[i] > stations[i][0], we can fuel there
+        # then dp[i+1] = max(dp[i+1],dp[i]+stations[i][1])
+        # dp[0] = startFuel
+        if startFuel >= target: return 0
+        n = len(stations)
+        dp = [startFuel for _ in range(n+1)]
+        for i in range(1,n+1):
+            # update using smaller than i number of stations
+            for j in range(i-1,-1,-1):
+                if dp[j]<stations[i-1][0]:
+                    break
+                dp[j+1] = max(dp[j+1],dp[j]+stations[i-1][1])
+        for i in range(n+1):
+            if dp[i] >= target:
+                return i
+        return -1
+```
+
+#### Priority Queue
+i - is the index of next stops to refuel.
+res - is the times that we have refeuled.
+pq - is a priority queue that we store all available gas.
+
+We initial res = 0 and in every loop:
+
+We add all reachable stop to priority queue.
+We pop out the largest gas from pq and refeul once.
+If we can't refuel, means that we can not go forward and return -1
+
+```py
+class Solution {
+    public int minRefuelStops(int target, int startFuel, int[][] stations) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        int i=0;
+        int cur = startFuel;
+        int counter = 0;
+        // greedy, using pq to add the larest fuel each time
+        // 用负号用最小堆来代替最大堆
+        while(cur < target){
+            // 每次都使用一个加油站，然后加能到达的加油站内最多的油
+            while(i < stations.length && cur >= stations[i][0]){
+                pq.offer(-stations[i++][1]);
+            }
+            if(pq.isEmpty()){
+               return -1; 
+            }
+            cur += -pq.poll();
+            counter += 1;
+        }
+        return counter;
+    }
+}
+```
+
+## 174. Dungeon Game
+```py
+class Solution:
+    def calculateMinimumHP(self, dungeon: List[List[int]]) -> int:
+        # dp[i][j] represents the min hp needed at position (i, j)
+        # Add dummy row and column at bottom and right side        
+        # if need < 0: 这个格子补血了，或者之后的格子补血了
+        # hp[i][j] = min(hp[i+1][j],hp[i][j+1]) - dungeon[i][j]
+        # 为什么是min(hp[i+1][j],hp[i][j+1]),因为要找最小的need，所以找最小的hp
+        # dp[i][j] = need <= 0? 0 : need
+        m,n = len(dungeon),len(dungeon[0])
+        dp = [[99999999 for _ in range(n+1)] for _ in range(m+1)]
+        dp[m][n-1] = dp[m-1][n] = 1
+        for i in range(m-1,-1,-1):
+            for j in range(n-1,-1,-1):
+                need = min (dp[i+1][j],dp[i][j+1]) - dungeon[i][j]
+                dp[i][j] = need if need > 0 else 1
+        return dp[0][0]
+
+```
