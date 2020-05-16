@@ -102,11 +102,19 @@ int main()
 
 [static](https://stackoverflow.com/questions/3698043/static-variables-in-c)
 
+A static variable declared in a header file outside of the class would be file-scoped in every .c file which includes the header. That means separate copy of a variable with same name is accessible in each of the .c files where you include the header file.
+
+A static class variable on the other hand is class-scoped and the same static variable is available to every compilation unit that includes the header containing the class with static variable.
+
 <hr>
 
 # Memory
 
 ## New and malloc
+
+https://www.geeksforgeeks.org/malloc-vs-new/
+
+
  Following are the differences between malloc() and operator new.
 
 new is an operator, while malloc() is a function.
@@ -311,7 +319,7 @@ struct NoCopy
 
 # Lvalue and RValue
 Lvalue: an Object that occupies some identifiable location in memory
-Rvalue: any object that is not Rvalue
+Rvalue: any object that is not Lvalue
 ```
 int i
 int &r = i

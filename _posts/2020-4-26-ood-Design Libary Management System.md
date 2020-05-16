@@ -422,6 +422,12 @@ Type of buttons:
 2. Emergency Button
 3. Close, open the door
 
+Buttons has the api of sending requests.
 
+What elevatos do:
+moving upward,downward,maintainace,
+waiting, 
 
+Buttons : making request
+Elevator: change status according to requests
 
