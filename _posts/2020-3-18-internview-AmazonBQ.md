@@ -23,8 +23,12 @@ The reason why I’m willing to join is because Amazon has a lot of impressive p
   I think joining amazon will give me a great opportunity to learn
    a variety of things.
 
-My career is young and I believe that Amazon offers an exceptional place
- for me to learn things and have a larger impact.
+
+Amazon is a big company  and I believe joining Amazon will give me an great opportunity to learn new skills like building scalable systems and also a great chance me to learn thing from very smart people.
+
+Also I think I am intertest about the Amazon Aurora. The first reason is that I am pretty interested about this area, since relational database is widely used by people and aurora is a great solution for a lot of issues. Like high availabilty and migartion is a very important feature. For example since I am in the graph database team in my company and we are using postgres as the serialization layer, but currently thoughtspot is trying to migrating to saas, so we are even thinking about using aurora since it has high avaialbility and and it is easier to migrate.
+
+So I think aurora will also be a very convenient tool for other companys especially small companies and people.
 
 ## Introduce yourself
 - My name is Zhe. I am currently a software engineer at thoughtspot, 
@@ -41,19 +45,18 @@ For my past working experiences, I was working on Citrix Boston last summer as a
 # STAR
 Customer issue. Tell them to solve it too early.
 
+
 # List
 
 What’s your role in this project
-What were the challenges and how you made sure that you finished it perfectly
+What were the challenges and how you made sure that you finished it perfectly.
 
  What did your manager / peer say, how did they like it
- What did you do afterward
+ What did you do afterward.
 
  1.        Basics
-a)        Tell me about yourself
-b)        Why this company
-c)        Why this position / this team
 d)        Why leave your last position
+pay cut和layoff
 e)        Walk me through your typical day at work.
 
 
@@ -62,9 +65,14 @@ a)        Tell me a time when you failed on something
 b)        Tell me a time when you made a mistake
 c)        Tell me a time when you received a negative feedback
 d)        Tell me a time when you showed resilience
-e)        Tell me a time when you didn't meet the expectation
+e)        Tell me a time when you didn't meet the expectation.
 f)        Tell me a time when you took a risk / without approval then you failed
+
+//TODO fill here
+Image processing program, C++ or qt??
 g)        Tell me a goal you didn't achieve
+
+
 
 So let me talk about a recent customer issue I was working on at thougthSpot. So when I was on call and I received a customer issue from SRE, and the SRE said that customers are chasing them and this issue is very important. Since I was working on that issue before , so I thought it would be easy so I told customer I will be able to solve it in 2 weeks. But later it ended up taking 3 weeks and the customer and unhappy. 
 
@@ -275,3 +283,11 @@ k)        How deep did you track down the problem
 
 
 
+
+
+## Questions I have
+1. How did aurora achieved zero down time when upgrading.
+2. How did aurora be faster than standard postgres, how did amazon make sure that the cost of aurora is lower than other competitors?
+3. How did aurora make sure that the migration from a local RDBS is able to migrate to aurora safely and quickly.
+4. what will be the major task for me if I was able to join aurora team? What kind of technologies is mostly used in Aurora?
+5. Is is still available when doing restoring to another snapshot.

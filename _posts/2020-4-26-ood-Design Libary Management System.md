@@ -430,4 +430,87 @@ waiting,
 
 Buttons : making request
 Elevator: change status according to requests
+Button: 
+   push button will send a request, different types of buttons will send different types of requests
 
+OpenDoor
+MaintainSystem
+Floor
+
+Request:
+   has multiple types(use enum to denote them)
+
+ElevatorStatus:
+   Moving
+   Maintaining
+   Open 
+
+
+
+## design a Juke box
+```java
+class Song:
+   ablum
+   length(time)
+   current(time)
+
+   Have the ability to seek back and forth
+   seek(int){
+      change current
+   }
+   play(){
+
+   }
+
+class JukeBox{
+   bool power // power on and off
+   Map<int,Song> songMap;
+   Song currentSong;
+
+   playSong(int number){
+
+   }
+   void play(){
+
+   }
+   void stop(){
+
+   }
+   void goBack(){
+
+   }
+   void goForward(){
+
+   }
+   void sendErrorNotice(){
+      errorSound.play();
+   }
+}
+
+
+```
+
+## design an ATM
+http://www.math-cs.gordon.edu/courses/cs211/ATMExample/
+
+How user interact with ATM
+```java
+insert their card -> atm chekc the validaty of this card
+-> enter system
+-> check information button
+->
+
+enum ATMStatus{
+   Unauthorized,
+   MainMenu,
+   MoneyTransaction,
+   FetchMoney,
+   storeMoney
+}
+
+class ATM{
+   ATMStatus status;
+
+}
+
+```
