@@ -68,15 +68,13 @@ d)        Tell me a time when you showed resilience
 e)        Tell me a time when you didn't meet the expectation.
 f)        Tell me a time when you took a risk / without approval then you failed
 
-//TODO fill here
-Image processing program, C++ or qt??
 g)        Tell me a goal you didn't achieve
 
 
 
 So let me talk about a recent customer issue I was working on at thougthSpot. So when I was on call and I received a customer issue from SRE, and the SRE said that customers are chasing them and this issue is very important. Since I was working on that issue before , so I thought it would be easy so I told customer I will be able to solve it in 2 weeks. But later it ended up taking 3 weeks and the customer and unhappy. 
 
-Looking back, I realized that I should be more conservative for my estimation to customers since they would very upset if you promise something that you can't deliver.
+Looking back, I realized that I should be more conservati   ve for my estimation to customers since they would very upset if you promise something that you can't deliver.
 
 So I learned to managing the expectections of customers. And it would be much better if we told them we need 1 month to deliver this but actually it takes only 2 weeks. 
 
@@ -88,6 +86,9 @@ Another thing I would think about is to make plans for every details so we can h
 a)        Tell me a time when you succeed / a project you proud of
 b)        Tell me a time when you exceed the expectation
 c)        Tell me a time when you took a risk / without approval then succeed
+
+Jenkins and TeamCity.
+
 d)        Tell me a goal you achieved
 
 So let me talk about the project I was working on at Citrix. So the goal of this project is to build a CI pipeline for the team, and all they have is a bunch of tests scripts and testing environments.
@@ -128,9 +129,13 @@ c)        Tell me a time when you disagreed with your team / peer
 d)        Tell me a time when you provided suggestion but had not been considered, what was the impact of it
 e)        Tell me a time when you had to go behind your manager's back to do something
 
-Citrix intern, developing a feature,
+Citrix intern, developing the pipeline 
 
-Using two different algorithm
+Using two different CI tools, jenkins and teamcity
+
+Tests results is more convincible than arguing. Try testing two different tools before making the decisions.
+
+Cheaper, so the cost of testing it is cheap, and also althought the set up of Jenkins is harder than team city and the built-in features is less than Teamciy, it has more plugins thus it will be better when we have some special requirements.
 
 So when facing a conflct, the first thing I would like to do is to talk to my coworkers and understand their opions and how they think about the current issues. I think another very import point is not to be emotional and think things logically, don't take things personally.
 
@@ -144,6 +149,25 @@ c)        Tell me a time when you worked under pressure / managed numerous respo
 d)        Tell me a time when you overcame an obstacle and delivered the result
 e)        Tell me a time when you overcame a challenge
 f)        Tell me a time when you worked under close supervision or extremely loose supervision
+
+First on call,
+Having problem, save a question.
+
+Worked very hard at late and we were able to work that out in 3 days. 
+
+[Working on this is a big challenge and under a lot of pressure. because this bug is impacting many customers so there are 3 SRES will send me a message every day asking the updates.]
+
+
+From this thing I learnt that customer obsession is a very important thing.
+
+And also it is very important to work extra hours for a issue when in important situations.
+
+
+After looking at logs and stack traces. I leart that this bug is hard because it needs to refactor some logic and I don't have a very clear idea what is the right track to fix it. So I talked with my .
+
+Customer first.
+
+
 
 When I was on call at thouguhtSpot. Customer reported a very important bug that impacting the SingleSign-On system. And many big customers are impacted by this bug and they are't able to login once in a while. So since I was on-call so after discussing with my manager. He suggests I tried to fix this bug myself and try to ask others wheneven I am blocked.
 
@@ -159,11 +183,28 @@ devoted
 a)        Tell me a time when you helped a peer / other
 b)        Tell me a time when you lead a team to achieve
 c)        Tell me a time when you earned trust of others
+
+
 d)        Tell me a time when you motivated others
+
 e)        Tell me a time when you persuaded someone to do something
+
+
 f)        Tell me a time when you showed leadership
 g)        Tell me about a time when you had to deal with a poor performer on your team.
+
+Let me talk about a team project I worked on univeristy. The project was about using Unity to design a 3D game. So we have 3 members in a team and since I have played some video games before and I have some ideas about design the game, so I was the team leader.
+
+The first we do is of course learning unity, but one of our team members is also taking other courses so he is very busy working on projects. And later are we assign the tasks for each other, he is responsible for the nagivation of the game, but laterwe found that he can't finish the tasks time. 
+
+So the first thing I do is to talk with him to understand if he knows how to use unity and also investigate if this issues is hard solve. And after understanding her situation that he is very busy, we schedueled some time to work together so I can guide him how to use the features of unity and also we worked togerther to help him to understand the fram
+
 h)        Tell me about a time when you had to convince your team on some design decision.
+
+Qt and Java Script
+
+
+
 Hackathon. Python script.
 
 Spend some time for tooling is definitely helpful because the more automate the process .the better result we can achieve. It was actually a webpage built by one of a start up company, and we found that the sumbition and the received part is actually a json file. But like the most difficult part is actually the authentication of the website.
@@ -179,7 +220,11 @@ d)        Tell me about a time you were dissatisfied in your work. What could ha
 e)        Tell me a time when you improved a process
 f)        Tell me about a time when you could have stopped working but persisted.
 g)        Tell me about a time when you had to dive deep into the system / data to solve some technical bug / problems.
-On call. 
+
+Let me talk about a course project when I was studying in university.
+
+
+Team member leave the team in the middle of that term.
 
 8.        Decision
 a)        Tell me a time when you made a difficult decision / choice
@@ -190,9 +235,12 @@ e)        Tell me a time when you dealt with ambiguity
 f)        Tell me a time when you broke the rule
 g)        Tell me about a time when you had to take a decision in your project where the complete data was not available
 h)        Tell me about a time when you had to make some changes backward because it was impacting your customer.
+
 Course project(毕设)
 
 which language to use
+
+C++ or QT for the front end.
 
 professor told me to use C++ since he has a student has been working on that.
 
@@ -210,22 +258,18 @@ Jenkins pipeline google doc rather than a document
 
 10.        Deadline / Efficiency
 a)        Tell me a time when you missed a deadline
-
-Hackathon project in my company.
-
-The upgrader is a py script.
-I working on moving the upgrader into the logic of our middleware
-Also working with front end team to make sure the user operations are queued.
-
-I was mostly focusing on the  user operations are queued. But as the deadline is approaching. I realized I won't have enough time to move the logic of the py scirp to the middleware(which is written by java). So I modified the upgrader so if it finishes it will write a dummy file and I create a logic to trigger the script and waiting for that script to finish by checking the dummy file. And finnally our team was able to finish all the requirements and I was able to actually move the logic into java file after the hackthon. 
-
-
-I think this expericene teach me to be careful about deadline, and try my best to use some methods to develiver the result.
-
+Missed a deadline: custoemr issue
 
 b)        Tell me a time when you had to deal with a tight deadline but deliver in time
+
+
 c)        Tell me a time when you provided a simple solution to a complex problem
+
+
 d)        Tell me a time you had to be very strategic in multitasks and meet all your top priorities.
+
+On-call and also testing my code in a cluster.
+
 e)        Describe a long-term project that you managed. How did you keep everything moving along in a timely manner?
 
 
@@ -242,6 +286,11 @@ I was mostly focusing on the  user operations are queued. But as the deadline is
 11.        Frugality
 a)        Tell me about a time where you thought of a new way to save money for the company.
 b)        Describe a time when you had to manage a budget (or manage time/money/resources/etc.). Were you able to get more out of less?
+
+Jenkins instead of team City, saves money.
+I analyzed the level of effort it would take me and the team to build the same core functionality of the third-party tools, and I included maintenance cost over time.
+
+
 c)        Tell me about a time when you had to work with limited time and resources / no resource.
 
 ## Tell me about a time when you had to work with limited time or resources.
